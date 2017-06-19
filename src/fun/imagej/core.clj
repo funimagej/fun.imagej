@@ -1,7 +1,7 @@
 (ns fun.imagej.core
   (:require [clojure.pprint :as pprint]
             [clojure.string :as string]
-            [fun.imagej.img :as img])
+            #_[fun.imagej.img :as img])
   (:import [net.imagej ImageJ]))
 
 (let [context (org.scijava.Context.) 

@@ -51,3 +51,55 @@
   (net.imglib2.type.numeric.integer.UnsignedLongType.))
 
 
+(defmulti get-type-val class);"Return the value of an imglib2 type."
+(defmethod get-type-val net.imglib2.type.numeric.real.FloatType [tpe] 
+  (.get ^net.imglib2.type.numeric.real.FloatType tpe))
+(defmethod get-type-val net.imglib2.type.numeric.integer.UnsignedShortType [tpe] 
+  (.get ^net.imglib2.type.numeric.integer.UnsignedShortType tpe))
+(defmethod get-type-val net.imglib2.type.numeric.real.DoubleType [tpe] 
+  (.get ^net.imglib2.type.numeric.real.DoubleType tpe))
+(defmethod get-type-val net.imglib2.type.numeric.integer.IntType [tpe] 
+  (.get ^net.imglib2.type.numeric.integer.IntType tpe))   
+(defmethod get-type-val net.imglib2.type.numeric.integer.LongType [tpe] 
+  (.get ^net.imglib2.type.numeric.integer.LongType tpe))
+(defmethod get-type-val net.imglib2.type.numeric.integer.ByteType [tpe] 
+  (.get ^net.imglib2.type.numeric.integer.ByteType tpe))
+(defmethod get-type-val net.imglib2.type.logic.BitType [tpe] 
+  (.get ^net.imglib2.type.logic.BitType tpe))
+(defmethod get-type-val net.imglib2.type.numeric.ARGBType [tpe] 
+  (.get ^net.imglib2.type.numeric.ARGBType tpe))
+(defmethod get-type-val net.imglib2.type.numeric.ARGBDoubleType [tpe] 
+  (.get ^net.imglib2.type.numeric.ARGBDoubleType tpe))
+(defmethod get-type-val net.imglib2.type.numeric.integer.UnsignedByteType [tpe] 
+  (.get ^net.imglib2.type.numeric.integer.UnsignedByteType tpe))
+(defmethod get-type-val net.imglib2.type.numeric.integer.UnsignedIntType [tpe] 
+  (.get ^net.imglib2.type.numeric.integer.UnsignedIntType tpe))
+(defmethod get-type-val net.imglib2.type.numeric.integer.UnsignedLongType [tpe] 
+  (.get ^net.imglib2.type.numeric.integer.UnsignedLongType tpe))
+
+(defmulti set-type-val (fn [tpe val] (class tpe)));"Return the value of an imglib2 type."
+(defmethod set-type-val net.imglib2.type.numeric.real.FloatType [tpe val] 
+  (.set ^net.imglib2.type.numeric.real.FloatType tpe ^float val))
+(defmethod set-type-val net.imglib2.type.numeric.integer.UnsignedShortType [tpe val] 
+  (.set ^net.imglib2.type.numeric.integer.UnsignedShortType tpe ^int val))
+(defmethod set-type-val net.imglib2.type.numeric.real.DoubleType [tpe val] 
+  (.set ^net.imglib2.type.numeric.real.DoubleType tpe ^double val))
+(defmethod set-type-val net.imglib2.type.numeric.integer.IntType [tpe val] 
+  (.set ^net.imglib2.type.numeric.integer.IntType tpe ^int val))
+(defmethod set-type-val net.imglib2.type.numeric.integer.LongType [tpe val] 
+  (.set ^net.imglib2.type.numeric.integer.LongType tpe ^long val))
+(defmethod set-type-val net.imglib2.type.numeric.integer.ByteType [tpe val] 
+  (.set ^net.imglib2.type.numeric.integer.ByteType tpe ^byte val))
+(defmethod set-type-val net.imglib2.type.logic.BitType [tpe val] 
+  (.set ^net.imglib2.type.logic.BitType tpe ^boolean val))
+(defmethod set-type-val net.imglib2.type.numeric.ARGBType [tpe val] 
+  (.set ^net.imglib2.type.numeric.ARGBType tpe ^int val))
+#_(defmethod set-type-val net.imglib2.type.numeric.ARGBDoubleType [tpe a r g b] 
+   (.set ^net.imglib2.type.numeric.ARGBDoubleType tpe ^double a ^double r ^double g ^double b))
+(defmethod set-type-val net.imglib2.type.numeric.integer.UnsignedByteType [tpe val] 
+  (.set ^net.imglib2.type.numeric.integer.UnsignedByteType tpe ^int val))
+(defmethod set-type-val net.imglib2.type.numeric.integer.UnsignedIntType [tpe val] 
+  (.set ^net.imglib2.type.numeric.integer.UnsignedIntType tpe ^long val))
+(defmethod set-type-val net.imglib2.type.numeric.integer.UnsignedLongType [tpe val] 
+  (.set ^net.imglib2.type.numeric.integer.UnsignedLongType tpe ^long val))
+

@@ -3,6 +3,7 @@
         [clojure.test])
   (:require [fun.imagej.img :as img]
             [fun.imagej.img.cursor :as cursor]
+            [fun.imagej.img.type :as imtype]
             [fun.imagej.core :as ij]
             [fun.imagej.ops :as ops]))
 
@@ -23,6 +24,12 @@
                              (imp->img (create-imp :width w :height h))))
         img-sum (img/sum img1)]
     (is (= img-sum (* w h)))))
+
+(deftest test-get-val
+  (let [w 5 h 5
+        img1 (first (img/map-img cursor/inc
+                                 (imp->img (create-imp :width w :height h))))]
+    (is (= 1 (imtype/get-type-val (.firstElement img1))))))
     
 (deftest test-replace-subimg
   (let [img1 (fun.imagej.ops.create/img (net.imglib2.FinalInterval. (long-array [100 100]))

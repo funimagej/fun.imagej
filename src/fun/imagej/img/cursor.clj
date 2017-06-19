@@ -1,6 +1,7 @@
 (ns fun.imagej.img.cursor
   (:require [clojure.string :as string]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [fun.imagej.img.type :as imtype])
   (:import [net.imglib2.algorithm.neighborhood Neighborhood RectangleShape]
            [net.imglib2.util Intervals]
            [net.imglib2.img ImagePlusAdapter Img]
@@ -9,20 +10,20 @@
            [net.imglib2.type.numeric NumericType ARGBType]
            [net.imglib2.type.numeric.real FloatType]
            [net.imglib2.view Views IntervalView]
-           [net.imglib2 Cursor RandomAccess RandomAccessibleInterval Interval]))
+           [net.imglib2 Cursor RandomAccess RandomAccessibleInterval Interval]))  
     
 (defn get-val
-  "Get the value of a numeric (RealType) cursor."
+  "Get the value of a numeric cursor."
   [^Cursor cur]
-  (.get ^net.imglib2.type.numeric.RealType (.get cur)))
+  (imtype/get-type-val (.get cur)))
 
 (defn set-val
-  "Get the value of a numeric (RealType) cursor."
+  "Get the value of a numeric cursor."
   [^Cursor cur val]
-  (.set ^net.imglib2.type.numeric.RealType (.get cur) val))
+  (imtype/set-type-val (.get cur) val))
 
 (defn set-byte-val
-  "Get the value of a numeric (RealType) cursor."
+  "Get the value of a numeric cursor."
   [^Cursor cur ^long val]
   (.setInteger ^net.imglib2.type.numeric.integer.GenericByteType (.get cur) val))
 

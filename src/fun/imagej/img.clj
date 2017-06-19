@@ -1,7 +1,9 @@
 (ns fun.imagej.img
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
-            [fun.imagej.img.cursor :as cursor])
+            [fun.imagej.img.cursor :as cursor]
+            [fun.imagej.img.type :as imtype]
+            [fun.imagej.ops :as ops])
   (:import [net.imglib2.algorithm.neighborhood Neighborhood RectangleShape]
            [net.imglib2.util Intervals]
            [net.imglib2.img ImagePlusAdapter Img]
@@ -59,6 +61,21 @@
   "Return the class type of an image."
   [^Img img]
   (net.imglib2.util.Util/getTypeFromInterval img))
+
+(defn get-val
+  "Return the value at a given position."
+  [^Img img ^longs position]
+  (let [^RandomAccess ra (.randomAccess img)]
+    (.setPosition ra position)
+    (.get (.get ra))))
+
+(defn set-val
+  "Set the value at a given position."
+  [^Img img ^longs position new-val]
+  (let [^RandomAccess ra (.randomAccess img)]
+    (.setPosition ra position)
+    (.set (.get ra) new-val))
+  img)
 
 (defn map-img
    "Walk all images (as cursors) applying f at each step.
@@ -203,6 +220,21 @@ If you have an ImagePlus, then use funimage.conversion"
   [^Img img1 ^Img img2]
   (first (map-img cursor/mul img1 img2)))
 
+(defn difference
+  "Take the difference between two images."
+  [^Img img1 ^Img img2]
+  (first (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2]
+                    (if (not= (cursor/get-val cur1) (cursor/get-val cur2)) 1 0))
+                  img1 img2)))
+
+(defn filter-vals
+  "Create a Bit Img that according to a function f, which should return true/false."
+  [f ^Img img1]
+  (let [bimg (create-img-like img1 (imtype/bit-type))]
+    (second (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2]
+                       (cursor/set-val cur2 (f (cursor/get-val cur1))))
+                     img1 bimg))))
+    
 (defn scale
   "Scale the image."
   [^Img img scalar]
@@ -334,17 +366,32 @@ Rectangle only"
         subimg replacement)))
     img)
 
-(defn get-val
-  "Return the value at a given position."
-  [^Img img ^longs position]
-  (let [^RandomAccess ra (.randomAccess img)]
-    (.setPosition ra position)
-    (.get (.get ra))))
-
-(defn set-val
-  "Set the value at a given position."
-  [^Img img ^longs position new-val]
-  (let [^RandomAccess ra (.randomAccess img)]
-    (.setPosition ra position)
-    (.set (.get ra) new-val))
-  img)
+(defn confusion-img
+  "Return an img that encodes the confusion matrix at each pixel."
+  [^Img target ^Img pred]
+  (last (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2 ^net.imglib2.Cursor cur3]
+                   (let [val1 (cursor/get-val cur1)
+                         val2 (cursor/get-val cur2)]
+                     (cursor/set-val cur3
+                                     (if (or (pos? val1) (and (not (number? val1)) val1)); True target
+                                       (if (or (pos? val2) (and (not (number? val2)) val2)); True prection
+                                         1; t/t
+                                         2);t/f
+                                       (if (or (pos? val2) (and (not (number? val2)) val2)); True prection
+                                         3; f/t
+                                         4)))));f/f
+                 target pred (create-img-like target (imtype/unsigned-byte-type)))))
+  
+(defn confusion-matrix
+  "Return the confusion matrix from 2 images. The first image is taken to be the target and the second is the prediction."
+  [^Img target ^Img pred]
+  (let [confusion-img (confusion-img target pred)
+        tp (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 1) confusion-img)))
+        tn (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 2) confusion-img)))
+        fp (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 3) confusion-img)))
+        fn (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 4) confusion-img)))]
+    {:TP tp
+     :TN tn
+     :FP fp
+     :FN fn
+     :F1 (/ (* tp 2) (+ tp tp fp fn))}))

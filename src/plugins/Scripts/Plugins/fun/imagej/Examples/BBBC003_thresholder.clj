@@ -11,7 +11,7 @@
          '[fun.imagej.conversion :as convert]
          '[fun.imagej.segmentation.imp :as ij1seg]
          '[fun.imagej.imp.roi :as roi]
-         '[fun.imagej.img.type :as type])
+         '[fun.imagej.img.type :as imtype])
 
 ;(def input-img (ij/open-img "/Users/kharrington/Data/BBBC/mouse_embryos_dic_images/7_19_M1E3.tif"))
 ;(def target-img (ij/open-img "/Users/kharrington/Data/BBBC/mouse_embryos_dic_foreground/7_19_M1E3.png"))
@@ -36,7 +36,7 @@
                             (convert/img->imp
                               (fun.imagej.ops.threshold/isoData
                                 (fun.imagej.ops.filter/variance
-                                  (img/create-img-like input-img (type/double-type))
+                                  (img/create-img-like input-img (imtype/double-type))
                                   input-img
                                   (shape/sphere-shape radius)))))))
       (repeat 255))))
@@ -44,10 +44,20 @@
 (let [input-img (first input-imgs)
       target-img (first target-imgs)
       radius 25
-      result-img (extract-embryo input-img radius)]
+      result-img (extract-embryo input-img radius)
+      confusion (img/confusion-img target-img result-img)]
    (ij/show input-img "Input")
    (ij/show target-img "Target")
-   (ij/show result-img "Result"))
+   (ij/show result-img "Result")
+   (ij/show confusion "Confusion")
+   (ij/save-img confusion "/Users/kharrington/Data/BBBC/BBBC006_confusion.tif")
+   (let [cmat (img/confusion-matrix target-img result-img)]
+     (println cmat))
+   (println (map (fn [radius]
+                   (let [result-img (extract-embryo input-img radius)
+                         cmat (img/confusion-matrix target-img result-img)]
+                     [radius (:F1 cmat)]))
+                 (range 10 25))))
 
 #_(let [input-img (first input-imgs)
        target-img (first target-imgs)
