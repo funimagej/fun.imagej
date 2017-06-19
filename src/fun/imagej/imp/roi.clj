@@ -76,13 +76,15 @@
 
 (defn fill-rois
   "Fill ROIs, colors should by the same format as imp, which probably has to be single channel at the moment."
-  [imp rois colors]
-  (let [mask (create-imp-like imp)]
-    (.setSnapshotCopyMode (.getProcessor mask) false)
-    (dotimes [k (count rois)]      
-      (.setColor ^ij.process.ImageProcessor (.getProcessor mask) (nth colors k))
-      (.fill ^ij.process.ImageProcessor (.getProcessor mask) ^ij.gui.Roi (nth rois k)))
-    mask))
+  ([imp rois]
+    (fill-rois (repeat 255)))
+  ([imp rois colors]
+    (let [mask (create-imp-like imp)]
+      (.setSnapshotCopyMode (.getProcessor mask) false)
+      (dotimes [k (count rois)]      
+        (.setColor ^ij.process.ImageProcessor (.getProcessor mask) (nth colors k))
+        (.fill ^ij.process.ImageProcessor (.getProcessor mask) ^ij.gui.Roi (nth rois k)))
+      mask)))
 
 (defn fill-rois-convex-hull
   "Fill ROIs, colors should by the same format as imp, which probably has to be single channel at the moment."

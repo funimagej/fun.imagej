@@ -11,7 +11,8 @@
          '[fun.imagej.conversion :as convert]
          '[fun.imagej.segmentation.imp :as ij1seg]
          '[fun.imagej.imp.roi :as roi]
-         '[fun.imagej.img.type :as imtype])
+         '[fun.imagej.img.type :as imtype]
+         '[fun.imagej.imp :as ij1])
 
 ;(def input-img (ij/open-img "/Users/kharrington/Data/BBBC/mouse_embryos_dic_images/7_19_M1E3.tif"))
 ;(def target-img (ij/open-img "/Users/kharrington/Data/BBBC/mouse_embryos_dic_foreground/7_19_M1E3.png"))
@@ -38,40 +39,23 @@
                                 (fun.imagej.ops.filter/variance
                                   (img/create-img-like input-img (imtype/double-type))
                                   input-img
-                                  (shape/sphere-shape radius)))))))
-      (repeat 255))))
-
-(let [input-img (first input-imgs)
-      target-img (first target-imgs)
-      radius 25
-      result-img (extract-embryo input-img radius)
-      confusion (img/confusion-img target-img result-img)]
-   (ij/show input-img "Input")
-   (ij/show target-img "Target")
-   (ij/show result-img "Result")
-   (ij/show confusion "Confusion")
-   (ij/save-img confusion "/Users/kharrington/Data/BBBC/BBBC006_confusion.tif")
-   (let [cmat (img/confusion-matrix target-img result-img)]
-     (println cmat))
-   (println (map (fn [radius]
-                   (let [result-img (extract-embryo input-img radius)
-                         cmat (img/confusion-matrix target-img result-img)]
-                     [radius (:F1 cmat)]))
-                 (range 10 25))))
+                                  (shape/sphere-shape radius))))))))))
 
 #_(let [input-img (first input-imgs)
        target-img (first target-imgs)
-       filtered (fun.imagej.ops.filter/variance (img/create-img-like input-img (type/double-type))
-                                                input-img
-                                                (shape/sphere-shape 25))
-       thresholded (fun.imagej.ops.threshold/isoData filtered)
-       rois (ij1seg/imp-to-rois (convert/img->imp thresholded))
-       biggest-roi (convert/imp->img 
-                     (roi/fill-rois (convert/img->imp (img/create-img-like thresholded))
-                                    (take-last 1 (sort-by roi/area rois))
-                                    (repeat 255)))]
-   (ij/show filtered "Filtered")
-   (ij/show thresholded "Thresholded")
-   (ij/show biggest-roi "Biggest roi")
-   (ij/show input-img "Input")
-   (ij/show target-img "Target"))
+       accuracies (sort-by second >
+                           (map (fn [radius]
+                                  (let [result-img (extract-embryo input-img radius)
+                                        cmat (img/confusion-matrix target-img result-img)]
+                                    [radius (float (:ACC cmat))]))
+                                (range 10 35)))]
+    (println "Best result:" (first accuracies))
+    (doall
+      (map (fn [target input-img]
+             (ij1/show-imp
+               (ij1/imps-to-rgb 
+                 (map convert/img->imp              
+                      [target (extract-embryo input-img (ffirst accuracies))]))))
+           target-imgs input-imgs)))
+
+

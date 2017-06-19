@@ -47,6 +47,7 @@
                                       :password :env/CI_DEPLOY_PASSWORD
                                       :sign-releases false}]]
   ; Try to use lein parent when we can
+  :plugins [[lein-cloverage "1.0.9"]]
 ;  :plugins [[lein-parent "0.3.1"]]
   :jvm-opts ["-Xmx32g" "-server"
              ;"-javaagent:/Users/kyle/.m2/repository/net/imagej/ij1-patcher/0.12.3/ij1-patcher-0.12.3.jar=init"

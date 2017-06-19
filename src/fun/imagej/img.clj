@@ -386,12 +386,13 @@ Rectangle only"
   "Return the confusion matrix from 2 images. The first image is taken to be the target and the second is the prediction."
   [^Img target ^Img pred]
   (let [confusion-img (confusion-img target pred)
-        tp (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 1) confusion-img)))
-        tn (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 2) confusion-img)))
-        fp (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 3) confusion-img)))
-        fn (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 4) confusion-img)))]
-    {:TP tp
-     :TN tn
-     :FP fp
-     :FN fn
-     :F1 (/ (* tp 2) (+ tp tp fp fn))}))
+        tt (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 1) confusion-img)))
+        tf (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 2) confusion-img)))
+        ft (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 3) confusion-img)))
+        ff (sum (fun.imagej.ops.convert/uint8 (filter-vals #(= % 4) confusion-img)))]
+    {:TT tf
+     :TF tf
+     :FT ft
+     :FF ff
+     :F1 (/ (* tt 2) (+ tt tt ft ff))
+     :ACC (/ (+ tt ff) (+ tt tf ft ff))}))
