@@ -6,8 +6,8 @@ script:
 - curl -O https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
 - chmod a+x lein
 - lein test
-- chmod a+x funimage_deploy.sh
-- bash funimage_deploy.sh
+- chmod a+x funimagej_deploy.sh
+- bash funimagej_deploy.sh
 
 env:
   matrix:
