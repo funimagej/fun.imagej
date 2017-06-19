@@ -1,0 +1,33 @@
+(ns fun.imagej.conversion
+  (:require [clojure.string :as string]
+            [clojure.java.io :as io])
+  (:import [java.io File]
+           [ij IJ ImagePlus]
+           [java.awt.image BufferedImage]
+           [net.imglib2.img ImagePlusAdapter Img]
+           [net.imglib2.img.display.imagej ImageJFunctions]))
+
+(defn imp->img
+  "Convert and ImagePlus to an Img"
+  [imp]
+  (ImagePlusAdapter/wrap ^ImagePlus imp))
+
+(defn img->imp
+  "Convert an Img to an ImagePlus"
+  [img]
+  (ImageJFunctions/wrap ^Img img "Wrapped Img"))
+
+(defn imp->awt-image
+  "Return a java.awt.Image from this imageplus."
+  [imp]
+  (.createImage ^ImagePlus imp))
+
+(defn imp->buffered-image
+  "Return a BufferedImage from an ImagePlus."
+  [^ImagePlus imp]
+  (.getBufferedImage imp))
+
+(defn buffered-image->imp
+  "Return an ImagePlus from a BufferedImage."
+  [^BufferedImage bi]
+  ^ImagePlus (ImagePlus. "ConvertedBufferedImage" bi))
