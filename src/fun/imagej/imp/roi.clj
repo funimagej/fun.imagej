@@ -28,12 +28,12 @@
   [filename]
   ^Roi (ij.io.RoiDecoder/open filename))
 
-(defn rectangle-roi
+(defn make-rectangle
   "Make a rectangular ROI."
   [x y w h]
   ^Roi (Roi. x y w h))
 
-(defn oval-roi
+(defn make-oval
   "Make an oval ROI."
    [x y w h]
    ^Roi (OvalRoi. x y w h))
@@ -95,35 +95,35 @@
       #_(.fill ^ij.process.ImageProcessor (.getProcessor mask) ^ij.gui.Roi (nth rois k)))
     mask))
 
-(defn roi-angle
+(defn angle
   "Get the angle of a ROI."
   [^ij.gui.Roi roi]
   (.getAngle roi))
 
-(defn rois-angle
+(defn angles
   "Get the angles of each ROI."
   [rois]
-  (doall (map roi-angle rois)))
+  (doall (map angle rois)))
 
-(defn roi-ferets-diameter
+(defn ferets-diameter
   "Return Feret's diameter for each ROI. This is the greatest distance between any 2 points along the perimeter/ROI boundary."
   [^ij.gui.Roi roi]
   (.getFeretsDiameter  roi))
 
-(defn rois-ferets-diameter
+(defn ferets-diameters
   "Return Feret's diameter for each ROI. This is the greatest distance between any 2 points along the perimeter/ROI boundary."
   [rois]
-  (doall (map roi-ferets-diameter rois)))
+  (doall (map ferets-diameter rois)))
 
-(defn roi-perimeter-length
+(defn perimeter-length
   "Return the perimeter length of each ROI."
   [^ij.gui.Roi roi]
   (.getLength ^ij.gui.Roi roi))
 
-(defn rois-perimeter-length
+(defn perimeter-lengths
   "Return the perimeter length of each ROI."
   [rois]
-  (doall (map roi-perimeter-length rois)))
+  (doall (map perimeter-length rois)))
   
 (defn poly-area
   "Return the area of a polygon."
@@ -144,11 +144,11 @@
             (recur (inc x) y 
                    (if (.contains poly x y) (inc tally) tally))))))
 
-#_(defn roi-area
-    "Compute the area of an roi using an integer grid + tally mechanism."
-    [roi]
-    (let [poly (.getFloatPolygon roi)]
-      (poly-area poly)))
+(defn area
+   "Compute the area of an roi using an integer grid + tally mechanism."
+   [roi]
+   (let [poly (.getFloatPolygon roi)]
+     (poly-area poly)))
 
 #_(defn roi-area
   "Compute the area of an roi using an integer grid + tally mechanism."
@@ -170,7 +170,7 @@
             (recur (inc x) y 
                    (if (.contains poly x y) (inc tally) tally))))))
 
-(defn roi-area
+(defn area
   "Compute the area of an roi using an integer grid + tally mechanism."
   [roi]
   (let [poly ^ij.process.FloatPolygon (.getFloatPolygon roi)
@@ -199,7 +199,7 @@
         
         xpoints (.xpoints poly)
         ypoints (.ypoints poly)
-        area (roi-area roi)
+        area (area roi)
         cx (/ (apply +
                      (for [idx (range (dec (count xpoints)))]
                        (* (+ (nth xpoints idx)
