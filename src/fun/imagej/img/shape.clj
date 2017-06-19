@@ -1,16 +1,5 @@
 (ns fun.imagej.img.shape
-  (:import [net.imglib2.algorithm.neighborhood Neighborhood RectangleShape]
-           [net.imglib2.util Intervals]
-           [net.imglib2.img ImagePlusAdapter Img]
-           [net.imglib2.img.display.imagej ImageJFunctions]
-           [net.imglib2.type NativeType]
-           [net.imglib2.type.numeric NumericType ARGBType]
-           [net.imglib2.type.numeric.real FloatType]
-           [net.imglib2.view Views IntervalView]
-           [net.imglib2 Cursor RandomAccess RandomAccessibleInterval Interval])
-  (:require [fun.imagej.img :as img]
-            [fun.imagej.img.cursor :as cursor]
-            [fun.imagej.ops :as ops]))
+  (:import [net.imglib2.algorithm.neighborhood Neighborhood RectangleShape]))
 
 (defn rectangle-shape
   "Return a RectangleShape."
