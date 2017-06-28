@@ -77,7 +77,7 @@
 (defn fill-rois
   "Fill ROIs, colors should by the same format as imp, which probably has to be single channel at the moment."
   ([imp rois]
-    (fill-rois (repeat 255)))
+    (fill-rois imp rois (repeat 255)))
   ([imp rois colors]
     (let [mask (create-imp-like imp)]
       (.setSnapshotCopyMode (.getProcessor mask) false)

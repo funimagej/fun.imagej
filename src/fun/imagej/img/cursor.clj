@@ -1,7 +1,7 @@
 (ns fun.imagej.img.cursor
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
-            [fun.imagej.img.type :as imtype])
+            [fun.imagej.img.type :as tpe])
   (:import [net.imglib2.algorithm.neighborhood Neighborhood RectangleShape]
            [net.imglib2.util Intervals]
            [net.imglib2.img ImagePlusAdapter Img]
@@ -10,17 +10,17 @@
            [net.imglib2.type.numeric NumericType ARGBType]
            [net.imglib2.type.numeric.real FloatType]
            [net.imglib2.view Views IntervalView]
-           [net.imglib2 Cursor RandomAccess RandomAccessibleInterval Interval]))  
-    
+           [net.imglib2 Cursor RandomAccess RandomAccessibleInterval Interval]))      
+
 (defn get-val
   "Get the value of a numeric cursor."
   [^Cursor cur]
-  (imtype/get-type-val (.get cur)))
+  (tpe/get-type-val (.get cur)))
 
 (defn set-val
   "Get the value of a numeric cursor."
   [^Cursor cur val]
-  (imtype/set-type-val (.get cur) val))
+  (tpe/set-type-val (.get cur) val))
 
 (defn set-byte-val
   "Get the value of a numeric cursor."
@@ -40,45 +40,52 @@
 (defn set-one
   "Set a cursor's value to one."
   [^Cursor cur]
-  (.setOne ^net.imglib2.type.numeric.RealType (.get cur)))
+  (.setOne ^net.imglib2.type.operators.SetOne (.get cur)))
 
 (defn set-zero
   "Set a cursor's value to zero."
   [^Cursor cur]
-  (.setZero ^net.imglib2.type.numeric.RealType (.get cur)))
+  (.setZero ^net.imglib2.type.operators.SetZero (.get cur)))
 
 (defn copy
   "Copy one cursor to another."  
   [^Cursor cur1 ^Cursor cur2]
   (.set ^net.imglib2.type.numeric.RealType (.get cur1) (.get cur2)))
 
+(defn copy-real
+  "Copy one cursor to another."  
+  [^Cursor cur1 ^Cursor cur2]
+  (.setReal ^net.imglib2.type.numeric.ComplexType (.get cur1) 
+    (.getRealDouble ^net.imglib2.type.numeric.ComplexType (.get cur2))))
+
 (defn add
   "Add 2 cursors together."
   [^Cursor cur1 ^Cursor cur2]
   (.add 
-    ^net.imglib2.type.numeric.RealType (.get cur1)
-    ^net.imglib2.type.numeric.RealType (.get cur2)))
+    ^net.imglib2.type.operators.Add (.get cur1)
+    ^net.imglib2.type.operators.Add (.get cur2)))
 
 (defn mul
   "Multiply 2 cursors together."
   [^Cursor cur1 ^Cursor cur2]
   (.mul 
-    ^net.imglib2.type.numeric.RealType (.get cur1)
-    ^net.imglib2.type.numeric.RealType (.get cur2)))
+    ^net.imglib2.type.operators.Mul (.get cur1)
+    ^net.imglib2.type.operators.Mul (.get cur2)))
+;; Not having this might be an issue, consider multimethod net.imglib2.type.operators.MulFloatingPoint
 
 (defn sub
   "Subtract 2 cursors together."
   [^Cursor cur1 ^Cursor cur2]
   (.sub
-    ^net.imglib2.type.numeric.RealType (.get cur1)
-    ^net.imglib2.type.numeric.RealType (.get cur2)))
+    ^net.imglib2.type.operators.Sub (.get cur1)
+    ^net.imglib2.type.operators.Sub (.get cur2)))
 
 (defn div
   "Divide one cursor by another."  
   [^Cursor cur1 ^Cursor cur2]
   (.div
-    ^net.imglib2.type.numeric.RealType (.get cur1)
-    ^net.imglib2.type.numeric.RealType (.get cur2)))
+    ^net.imglib2.type.operators.Div (.get cur1)
+    ^net.imglib2.type.operators.Div (.get cur2)))
 
 (defn sum-neighborhood
   "Sum a neighborhood"

@@ -4,7 +4,8 @@
             [fun.imagej.imp :as imp]
             [fun.imagej.core :as ij]
             [fun.imagej.ops :as ops]
-            [fun.imagej.conversion :as iconv]))
+            [fun.imagej.conversion :as iconv]
+            [clojure.java.io :as io]))
 
 (defn vertex-to-vector3d
   "Convert a Vertex to Vector3D."
@@ -34,3 +35,10 @@
         stl-facets))
     (.close ofile)))
 
+(defn read-stl-mesh
+  "Read a mesh."
+  [stl-filename]
+  (let [facets (.read (BinarySTLFormat.) (io/file stl-filename))]
+    (for [facet facets
+          vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
+      vertex)))

@@ -14,14 +14,31 @@
            [net.imglib2.algorithm.gauss3 Gauss3]
            [net.imglib2.algorithm.dog DifferenceOfGaussian]
            [net.imglib2.view Views IntervalView]
-           [net.imglib2 Cursor RandomAccess RandomAccessibleInterval Interval]
+           [net.imglib2 Cursor RandomAccess RandomAccessibleInterval Interval IterableInterval]
+           [net.imglib2.converter Converters]
            [net.imglib2.algorithm.binary Thresholder]
+           [net.imglib2.algorithm.gradient PartialDerivative HessianMatrix]
+           [net.imglib2.algorithm.linalg.eigen TensorEigenValues]
            ))
+
+(defn num-dimensions
+  "Return the number of dimensions of a EuclideanSpace."
+  [^net.imglib2.EuclideanSpace input]
+  (.numDimensions input))
+
+(defn dimensions
+  "Return the number of pixels in each dimension for something
+with Dimensions."
+  [^net.imglib2.Dimensions input]
+  (let [dims ^longs (long-array (num-dimensions input))]
+    (.dimensions input dims)
+    dims))
 
 (defn show
   "Display an Img."
-  [^Img img]
-  (net.imglib2.img.display.imagej.ImageJFunctions/show img))
+  [^net.imglib2.RandomAccessibleInterval img]
+  (net.imglib2.img.display.imagej.ImageJFunctions/show img)
+  img)
 
 (defn copy
   "Create a copy of an img."
@@ -39,39 +56,39 @@
 
 (defn get-size-dimension
   "Return the size along the specified dimension."
-  [^Img img d]
+  [^net.imglib2.Dimensions img d]
   (.dimension img d))
 
 (defn get-width
   "Return the width of the img."
-  [^Img img]
+  [^net.imglib2.Dimensions img]
   (.dimension img 0))
 
 (defn get-height
   "Return the height of the img."
-  [^Img img]
+  [^net.imglib2.Dimensions img]
   (.dimension img 1))
 
 (defn get-depth
   "Return the depth of the image."
-  [^Img img]
+  [^net.imglib2.Dimensions img]
   (.dimension img 2))
 
 (defn get-type
   "Return the class type of an image."
-  [^Img img]
+  [^net.imglib2.RandomAccessibleInterval img]
   (net.imglib2.util.Util/getTypeFromInterval img))
 
 (defn get-val
   "Return the value at a given position."
-  [^Img img ^longs position]
+  [^net.imglib2.RandomAccessibleInterval img ^longs position]
   (let [^RandomAccess ra (.randomAccess img)]
     (.setPosition ra position)
     (.get (.get ra))))
 
 (defn set-val
   "Set the value at a given position."
-  [^Img img ^longs position new-val]
+  [^net.imglib2.RandomAccessibleInterval img ^longs position new-val]
   (let [^RandomAccess ra (.randomAccess img)]
     (.setPosition ra position)
     (.set (.get ra) new-val))
@@ -83,7 +100,7 @@ f is a function that operates on cursors in the same order as imgs
 If you have an ImagePlus, then use funimage.conversion
 Note: this uses threads to avoid some blocking issues."
    ([f img1]
-     (let [cur1 (.cursor ^Img img1)
+     (let [cur1 (.cursor ^IterableInterval img1)
            t (Thread.
                (fn []
                  (loop []
@@ -95,8 +112,8 @@ Note: this uses threads to avoid some blocking issues."
        (.join t)
        [img1]))
    ([f img1 img2]
-     (let [cur1 (.cursor ^Img img1)
-           cur2 (.cursor ^Img img2)
+     (let [cur1 (.cursor ^IterableInterval img1)
+           cur2 (.cursor ^IterableInterval img2)
            t (Thread.
                (fn []
                  (loop []
@@ -111,7 +128,7 @@ Note: this uses threads to avoid some blocking issues."
        [img1 img2]))
    ([f img1 img2 & imgs]
      (let [imgs (concat [img1 img2] imgs)
-           curs (map #(.cursor ^Img %) imgs)
+           curs (map #(.cursor ^IterableInterval %) imgs)
            t (Thread.
                (fn []
                  (loop []
@@ -129,7 +146,7 @@ f is a function that operates on cursors in the same order as imgs
 If you have an ImagePlus, then use funimage.conversion
 Note: this uses threads to avoid some blocking issues."
    ([f img1]
-     (let [cur1 (.localizingCursor ^Img img1)
+     (let [cur1 (.localizingCursor ^IterableInterval img1)
            t (Thread.
                (fn []
                  (loop []
@@ -141,8 +158,8 @@ Note: this uses threads to avoid some blocking issues."
        (.join t)
        [img1]))
    ([f img1 img2]
-     (let [cur1 (.localizingCursor ^Img img1)
-           cur2 (.localizingCursor ^Img img2)
+     (let [cur1 (.localizingCursor ^IterableInterval img1)
+           cur2 (.localizingCursor ^IterableInterval img2)
            t (Thread.
                (fn []
                  (loop []
@@ -157,7 +174,7 @@ Note: this uses threads to avoid some blocking issues."
        [img1 img2]))
    ([f img1 img2 & imgs]
      (let [imgs (concat [img1 img2] imgs)
-           curs (map #(.localizingCursor ^Img %) imgs)
+           curs (map #(.localizingCursor ^IterableInterval %) imgs)
            t (Thread.
                (fn []
                  (loop []
@@ -205,31 +222,31 @@ If you have an ImagePlus, then use funimage.conversion"
 
 (defn replace
   "Replace img1 with img2"
-  [^Img img1 ^Img img2]
+  [^IterableInterval img1 ^IterableInterval img2]
   (second (map-img
             (fn [^Cursor cur1 ^Cursor cur2] (.set (.get cur2) (.get cur1)))
             img2 img1)))
 
 (defn subtract
   "Subtract the second image from the first (destructive)."
-  [^Img img1 ^Img img2]
+  [^IterableInterval img1 ^IterableInterval img2]
   (first (map-img cursor/sub img1 img2)))
 
 (defn elmul
   "Subtract the second image from the first (destructive)."
-  [^Img img1 ^Img img2]
+  [^IterableInterval img1 ^IterableInterval img2]
   (first (map-img cursor/mul img1 img2)))
 
 (defn difference
   "Take the difference between two images."
-  [^Img img1 ^Img img2]
+  [^IterableInterval img1 ^IterableInterval img2]
   (first (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2]
                     (if (not= (cursor/get-val cur1) (cursor/get-val cur2)) 1 0))
                   img1 img2)))
 
 (defn filter-vals
   "Create a Bit Img that according to a function f, which should return true/false."
-  [f ^Img img1]
+  [f ^IterableInterval img1]
   (let [bimg (create-img-like img1 (imtype/bit-type))]
     (second (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2]
                        (cursor/set-val cur2 (f (cursor/get-val cur1))))
@@ -237,7 +254,7 @@ If you have an ImagePlus, then use funimage.conversion"
     
 (defn scale
   "Scale the image."
-  [^Img img scalar]
+  [^IterableInterval img scalar]
   (first (map-img #(cursor/set-val % 
                                    (* (cursor/get-val %) scalar)) img)))
 
@@ -253,7 +270,7 @@ If you have an ImagePlus, then use funimage.conversion"
 
 (defn sum
   "Take the sum of all pixel values in an image."
-  [^Img img]
+  [^IterableInterval img]
   (let [sum (atom 0)]
     (map-img (fn [^Cursor cur] (swap! sum + (cursor/get-val cur))) img)
     @sum))
@@ -287,7 +304,7 @@ If you have an ImagePlus, then use funimage.conversion"
 (bx,by,bz) - 'bottom' point. these are the small values. exclusive
 (tx,ty,tz) - 'top' point. these are the big values. exclusive
 locations outside these points are assigned fill-value"
-  [^Img img bx by bz tx ty tz fill-value]; should take array of locations to generalize to N-D
+  [^IterableInterval img bx by bz tx ty tz fill-value]; should take array of locations to generalize to N-D
   (let [location (float-array [0 0 0])
         f-fv (float fill-value)]
     (first (map-img (fn [^Cursor cur]
@@ -340,7 +357,7 @@ Rectangle only"
     (.dimensions img img-dim)
     (let [stop-point (long-array (map #(dec (+ %1 %2)) offset replacement-dim))
           subimg (Views/interval img offset stop-point)
-          cur (.cursor ^Img replacement)
+          cur (.cursor ^IterableInterval replacement)
           ra (.randomAccess ^IntervalView subimg)
           pos (long-array (count start-position))]
       (map-img cursor/copy subimg replacement)))
@@ -356,7 +373,7 @@ Rectangle only"
     (.dimensions img img-dim)
     (let [stop-point (long-array (map #(dec (+ %1 %2)) offset replacement-dim))
           subimg (Views/interval img offset stop-point)
-          cur (.cursor ^Img replacement)
+          cur (.cursor ^IterableInterval replacement)
           ra (.randomAccess ^IntervalView subimg)
           pos (long-array (count start-position))]
       (map-img 
@@ -368,7 +385,7 @@ Rectangle only"
 
 (defn confusion-img
   "Return an img that encodes the confusion matrix at each pixel."
-  [^Img target ^Img pred]
+  [^IterableInterval target ^IterableInterval pred]
   (last (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2 ^net.imglib2.Cursor cur3]
                    (let [val1 (cursor/get-val cur1)
                          val2 (cursor/get-val cur2)]
@@ -396,3 +413,56 @@ Rectangle only"
      :FF ff
      :F1 (/ (* tt 2) (+ tt tt ft ff))
      :ACC (/ (+ tt ff) (+ tt tf ft ff))}))
+
+(defn gradient
+  "Calculate the gradient with respect to a dimension using
+the central difference method."
+  [input dimension]
+  (let [output (fun.imagej.ops.create/img input)]
+    (PartialDerivative/gradientCentralDifference (Views/extendBorder input)
+                                                 output dimension)
+    output))
+
+(defn concat-imgs
+  "Concatenate images along dimension+1. All images
+are assumed to be of the same size."
+  [imgs]
+  (let [dimensions (dimensions (first imgs))
+        stack (fun.imagej.ops.create/img (long-array (concat dimensions
+                                                             [(count imgs)])))]
+    (dotimes [k (count imgs)]
+      (map-img cursor/copy-real                   
+                   (Views/hyperSlice stack (count dimensions) k)
+                   (nth imgs k)))
+    stack))
+
+(defn hessian-matrix
+  "Calculate the Hessian matrix, where gradients is a stack of images (presumably gradients)."
+  [gradients]
+  (let [hessians (fun.imagej.ops.create/img (long-array (concat (butlast (dimensions gradients))
+                                                                [(* (dec (num-dimensions gradients))
+                                                                    (num-dimensions gradients)
+                                                                    (/ 2))])))]
+    (HessianMatrix/calculateMatrix (Views/extendBorder gradients) hessians)
+    hessians))
+
+(defn tensor-eigen-values
+  "Return the eigenvalues of rank 2 tensors."
+  [^net.imglib2.RandomAccessibleInterval tensor]
+  (let [eigenvals (fun.imagej.ops.create/img (long-array (concat (butlast (dimensions tensor))
+                                                                 [(dec (last (dimensions tensor)))])))]
+    (TensorEigenValues/calculateEigenValuesSymmetric tensor eigenvals)
+    eigenvals))
+
+(defn hyperslice
+  "Return a n-1 dimensional slice through dimension d at position p."
+  [^net.imglib2.RandomAccessibleInterval rai d pos]
+  (Views/hyperSlice rai (int d) (long pos)))
+
+(defn dimension-split
+  "Split an image along the hyperslices of a dimension.
+Returns a View"
+  [^net.imglib2.RandomAccessibleInterval rai d]
+  (map #(hyperslice rai d %) (range (get-size-dimension rai d))))
+
+

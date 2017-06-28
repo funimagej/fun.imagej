@@ -53,17 +53,17 @@
 
 (defmulti get-type-val class);"Return the value of an imglib2 type."
 (defmethod get-type-val net.imglib2.type.numeric.real.FloatType [tpe] 
-  (.get ^net.imglib2.type.numeric.real.FloatType tpe))
+  ^float (.get ^net.imglib2.type.numeric.real.FloatType tpe))
 (defmethod get-type-val net.imglib2.type.numeric.integer.UnsignedShortType [tpe] 
   (.get ^net.imglib2.type.numeric.integer.UnsignedShortType tpe))
 (defmethod get-type-val net.imglib2.type.numeric.real.DoubleType [tpe] 
-  (.get ^net.imglib2.type.numeric.real.DoubleType tpe))
+  ^double (.get ^net.imglib2.type.numeric.real.DoubleType tpe))
 (defmethod get-type-val net.imglib2.type.numeric.integer.IntType [tpe] 
-  (.get ^net.imglib2.type.numeric.integer.IntType tpe))   
+  ^int (.get ^net.imglib2.type.numeric.integer.IntType tpe))   
 (defmethod get-type-val net.imglib2.type.numeric.integer.LongType [tpe] 
-  (.get ^net.imglib2.type.numeric.integer.LongType tpe))
+  ^long (.get ^net.imglib2.type.numeric.integer.LongType tpe))
 (defmethod get-type-val net.imglib2.type.numeric.integer.ByteType [tpe] 
-  (.get ^net.imglib2.type.numeric.integer.ByteType tpe))
+  (.get ^byte ^net.imglib2.type.numeric.integer.ByteType tpe))
 (defmethod get-type-val net.imglib2.type.logic.BitType [tpe] 
   (.get ^net.imglib2.type.logic.BitType tpe))
 (defmethod get-type-val net.imglib2.type.numeric.ARGBType [tpe] 

@@ -189,7 +189,7 @@ We should probably give a way of providing a custom dimension ordering."
         (fun.imagej.ops.math/add solution-img
                                       solution-img
                                       (fun.imagej.ops.math/multiply (fun.imagej.ops.convert/float32 feature-map)
-                                                                         (nth (:weights seg) k)))))
+                                                                    ^float (float (nth (:weights seg) k))))))
     (when (:cache-directory seg)
       (imagej/save-img solution-img (str (:cache-directory seg) (:cache-basename seg) "_segmentation.tif")))
     solution-img))
