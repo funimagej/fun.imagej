@@ -186,6 +186,19 @@ Note: this uses threads to avoid some blocking issues."
        (.join t)
        imgs)))
 
+(defn resize
+  "Resize an img."
+  [img scale]
+  (let [^net.imglib2.RandomAccessible extended-view (net.imglib2.view.Views/extendZero img)
+        ^net.imglib2.RealRandomAccessible interpolated-view (net.imglib2.view.Views/interpolate extended-view (net.imglib2.interpolation.randomaccess.NearestNeighborInterpolatorFactory.))
+        ^net.imglib2.realtransform.AffineTransform2D transform (net.imglib2.realtransform.AffineTransform2D.)]
+    (.scale transform scale)
+    (net.imglib2.view.Views/interval
+      (net.imglib2.view.Views/raster (net.imglib2.realtransform.RealViews/affineReal interpolated-view transform))
+      (let [dims (dimensions img)]
+        (net.imglib2.util.Intervals/createMinMax (long-array (concat (repeat (count dims) 0)
+                                                                     (map #(* scale %) dims))))))))
+
 ; Nonthreaded version
 #_(defn map-imgs
    "Walk all images (as cursors) applying f at each step.
@@ -397,7 +410,9 @@ Rectangle only"
                                        (if (or (pos? val2) (and (not (number? val2)) val2)); True prection
                                          3; f/t
                                          4)))));f/f
-                 target pred (create-img-like target (imtype/unsigned-byte-type)))))
+                 target pred
+                 (fun.imagej.ops.convert/uint8 (fun.imagej.ops.create/img target))
+                 #_(create-img-like target (imtype/unsigned-byte-type)))))
   
 (defn confusion-matrix
   "Return the confusion matrix from 2 images. The first image is taken to be the target and the second is the prediction."

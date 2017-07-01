@@ -127,20 +127,20 @@ We should probably give a way of providing a custom dimension ordering."
     (if (empty? feature-map-fns)
       seg
       (let [feature-name (:name (first feature-map-fns))
-            _ (println "generate-dataset working on" feature-name)
+            _ (when (:verbose seg) (println "generate-dataset working on" feature-name))
             feature-map-fn (:fn (first feature-map-fns))
             feature-map (fun.imagej.ops.convert/float32
                           (fun.imagej.ops.image/normalize
-                           (if (and
-                                 (:cache-directory seg)
-                                 (.exists (java.io.File. (str (:cache-directory seg)
-                                                              (:cache-basename seg) "_"
-                                                              feature-name ".tif"))))
-                             (imagej/open-img (str (:cache-directory seg) (:cache-basename seg) "_" feature-name ".tif"))
-                             (feature-map-fn input-img))))]
-        (println "feature map generated.")
+                          (if (and
+                                (:cache-directory seg)
+                                (.exists (java.io.File. (str (:cache-directory seg)
+                                                             (:basename seg) "_"
+                                                             feature-name ".tif"))))
+                            (imagej/open-img (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif"))
+                            (feature-map-fn input-img))))]
+        (when (:verbose seg) (println "feature map generated."))
         (when (:cache-directory seg)
-          (imagej/save-img feature-map (str (:cache-directory seg) (:cache-basename seg) "_" feature-name ".tif")))
+          (imagej/save-img feature-map (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif")))
         (recur (assoc seg
                       :feature-vals
                       (conj (:feature-vals seg)
@@ -185,7 +185,7 @@ We should probably give a way of providing a custom dimension ordering."
                                                              feature-name ".tif"))))
                             (imagej/open-img (str (:cache-directory seg) (:cache-basename seg) "_" feature-name ".tif"))
                             (feature-map-fn to-segment)))]
-        (println feature-name (str (:cache-directory seg) (:cache-basename seg) "_" feature-name ".tif"))
+        (when (:verbose seg) (println feature-name (str (:cache-directory seg) (:cache-basename seg) "_" feature-name ".tif")))
         (fun.imagej.ops.math/add solution-img
                                       solution-img
                                       (fun.imagej.ops.math/multiply (fun.imagej.ops.convert/float32 feature-map)

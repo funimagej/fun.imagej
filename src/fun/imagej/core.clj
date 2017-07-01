@@ -19,18 +19,22 @@
   (.save (.datasetIO (.scifio ij))
     (net.imagej.DefaultDataset. 
       (.context ij) (net.imagej.ImgPlus. img)) 
-    filename))
+    filename)
+  img)
 
 (defn show
   "Show an image with ImageJ."
   ([img]
-    (.show (.ui ij) img))
+    (.show (.ui ij) img)
+    img)
   ([img title]
-    (.show (.ui ij) title img)))
+    (.show (.ui ij) title img)
+    img))
 
 (defn notebook-show
   [image]
-  (.display (.notebook ij) image))
+  (.display (.notebook ij) image)
+  image)
 
 (defn show-ui
   "Show the ImageJ UI"
