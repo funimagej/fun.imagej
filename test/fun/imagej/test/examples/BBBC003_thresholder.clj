@@ -9,18 +9,6 @@
             [fun.imagej.img.type :as imtype]
             [fun.imagej.imp :as ij1]))
 
-(def bbbc-dir "/Users/kharrington/Data/BBBC/")
-
-(def input-imgs (let [input-dir (str bbbc-dir "BBBC003_inputs")]
-                  (for [file (.listFiles (java.io.File. input-dir))]
-                    (do (println (.getPath file))
-                    (ij/open-img (.getPath file))))))
-
-(def target-imgs (let [target-dir (str bbbc-dir "BBBC003_targets")]
-                   (for [file (.listFiles (java.io.File. target-dir))]
-                     (do (println (.getPath file))
-                     (ij/open-img (.getPath file))))))
-
 (defn extract-embryo
   "Extract an embryo parameterized by a radius."
   [input-img radius]
@@ -39,23 +27,33 @@
 	                  input-img;                             The input image
 	                  (shape/sphere-shape radius)))))))))) ; Filter with a circular radius
 
-(let [input-img (first input-imgs)
-      target-img (first target-imgs)
-      accuracies (sort-by second >;                        Sort our results by accuracy
-                    (map (fn [radius]
-                           (let [result-img (extract-embryo input-img radius)
-                                 cmat (img/confusion-matrix target-img result-img)]
-                             [radius (float (:ACC cmat))]))
-                         (range 10 25 3)))]
-   (println "Best result:" (first accuracies))
+(when false
+  (let [bbbc-dir "/Users/kharrington/Data/BBBC/"
+        input-imgs (let [input-dir (str bbbc-dir "BBBC003_inputs")]
+                    (for [file (.listFiles (java.io.File. input-dir))]
+                      (do (println (.getPath file))
+                      (ij/open-img (.getPath file)))))
+        target-imgs (let [target-dir (str bbbc-dir "BBBC003_targets")]
+                     (for [file (.listFiles (java.io.File. target-dir))]
+                       (do (println (.getPath file))
+                       (ij/open-img (.getPath file)))))
+        input-img (first input-imgs)
+        target-img (first target-imgs)
+        accuracies (sort-by second >;                        Sort our results by accuracy
+                      (map (fn [radius]
+                             (let [result-img (extract-embryo input-img radius)
+                                   cmat (img/confusion-matrix target-img result-img)]
+                               [radius (float (:ACC cmat))]))
+                           (range 10 25 3)))]
+     (println "Best result:" (first accuracies))
    
-   ; Uncomment this if you want to see what the predictions look like
-   #_(doall
-    (map (fn [target input-img]
-           (ij1/show-imp
-             (ij1/imps-to-rgb 
-               (map convert/img->im; this can shrink
-                    [target (extract-embryo input-img (ffirst accuracies))]))))
-         target-imgs input-imgs)))
+     ; Uncomment this if you want to see what the predictions look like
+     #_(doall
+      (map (fn [target input-img]
+             (ij1/show-imp
+               (ij1/imps-to-rgb 
+                 (map convert/img->im; this can shrink
+                      [target (extract-embryo input-img (ffirst accuracies))]))))
+           target-imgs input-imgs))))
 
 
