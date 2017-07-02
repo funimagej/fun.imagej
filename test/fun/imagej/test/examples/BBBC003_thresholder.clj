@@ -27,16 +27,15 @@
 	                  input-img;                             The input image
 	                  (shape/sphere-shape radius)))))))))) ; Filter with a circular radius
 
-(when false
+(when false; Disabled, re-enable once you obtain the dataset from:
+  ;          https://data.broadinstitute.org/bbbc/BBBC003/
   (let [bbbc-dir "/Users/kharrington/Data/BBBC/"
         input-imgs (let [input-dir (str bbbc-dir "BBBC003_inputs")]
                     (for [file (.listFiles (java.io.File. input-dir))]
-                      (do (println (.getPath file))
-                      (ij/open-img (.getPath file)))))
+                      (ij/open-img (.getPath file))))
         target-imgs (let [target-dir (str bbbc-dir "BBBC003_targets")]
-                     (for [file (.listFiles (java.io.File. target-dir))]
-                       (do (println (.getPath file))
-                       (ij/open-img (.getPath file)))))
+                     (for [file (.listFiles (java.io.File. target-dir))]                       
+                       (ij/open-img (.getPath file))))
         input-img (first input-imgs)
         target-img (first target-imgs)
         accuracies (sort-by second >;                        Sort our results by accuracy
