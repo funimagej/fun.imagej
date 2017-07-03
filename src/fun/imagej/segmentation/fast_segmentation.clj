@@ -130,14 +130,13 @@ We should probably give a way of providing a custom dimension ordering."
             _ (when (:verbose seg) (println "generate-dataset working on" feature-name))
             feature-map-fn (:fn (first feature-map-fns))
             feature-map (fun.imagej.ops.convert/float32
-                          (fun.imagej.ops.image/normalize
                           (if (and
                                 (:cache-directory seg)
                                 (.exists (java.io.File. (str (:cache-directory seg)
                                                              (:basename seg) "_"
                                                              feature-name ".tif"))))
                             (imagej/open-img (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif"))
-                            (feature-map-fn input-img))))]
+                            (feature-map-fn input-img)))]
         (when (:verbose seg) (println "feature map generated."))
         (when (:cache-directory seg)
           (imagej/save-img feature-map (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif")))

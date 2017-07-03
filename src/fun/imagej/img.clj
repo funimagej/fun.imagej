@@ -480,4 +480,3 @@ Returns a View"
   [^net.imglib2.RandomAccessibleInterval rai d]
   (map #(hyperslice rai d %) (range (get-size-dimension rai d))))
 
-

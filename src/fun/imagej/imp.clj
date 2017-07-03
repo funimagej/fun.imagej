@@ -942,3 +942,9 @@
   (ij.IJ/run imp "Subtract Background..." (str "rolling=" radius))
   imp)
   
+(defn convert-stack-to-rgb
+  "Convert the stack to an RGB imageplus."
+  [^ij.ImagePlus imp]
+  (let [converter ^ij.process.StackConverter (ij.process.StackConverter. imp)]
+    (.convertToRGB converter)
+    imp))
