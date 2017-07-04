@@ -35,13 +35,22 @@
         stl-facets))
     (.close ofile)))
 
-(defn read-stl-mesh
-  "Read a mesh."
-  [stl-filename]
-  (let [facets (.read (BinarySTLFormat.) (io/file stl-filename))]
-    (for [facet facets
-          vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
-      vertex)))
+#_(defn read-stl-mesh; This shouldn't be called a mesh function because it only returns vertices
+   "Read a mesh from a STL file."
+   [stl-filename]
+   (let [facets (.read (BinarySTLFormat.) (io/file stl-filename))]
+     (for [facet facets
+           vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
+       vertex)))
+
+(defn read-stl-vertices
+   "Read a mesh from a STL file."
+   [stl-filename]
+   (let [facets (.read (BinarySTLFormat.) (io/file stl-filename))]
+     (doall
+       (for [facet facets
+             vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
+         (net.imglib2.RealPoint. (double-array [(.getX vertex) (.getY vertex) (.getZ vertex)]))))))
 
 (defn merge-vertices-by-distance
   "Merge vertices that are close within a given distance threshold.
@@ -74,3 +83,47 @@ Returns a sequence of RealLocalizable's"
             (recur cur (conj result-verts (net.imglib2.RealPoint. cur)))
             (recur cur result-verts)))
         result-verts))))
+
+(defn zero-mean-vertices
+  "Center a set of vertices using the mean.
+Mutable function"; could be easily generalized beyond 3D
+  [vertices]  
+  (let [npoints (count vertices) 
+        x (/ (reduce + (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 0) vertices)) npoints) 
+        y (/ (reduce + (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 1) vertices)) npoints)
+        z (/ (reduce + (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 2) vertices)) npoints)
+        center (net.imglib2.RealPoint. (double-array [(- x) (- y) (- z)]))]
+    (doseq [^net.imglib2.RealPositionable vert vertices]
+      (.move vert center))
+    vertices))
+
+(defn scale-vertices
+  "Scale all vertices by a factor."
+  [vertices scale]
+  (doseq [^net.imglib2.RealPoint vert vertices]
+    (dotimes [d (.numDimensions vert)]      
+      (.setPosition vert (double (* scale (.getDoublePosition vert d))) (int d))))
+  vertices)
+
+(defn bounding-interval
+  "Return a RealInterval that bounds a collection of RealLocalizable vertices."
+  [vertices]
+  (let [min-x (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 0) vertices)) 
+        min-y (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 1) vertices))
+        min-z (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 2) vertices))
+        max-x (reduce max (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 0) vertices)) 
+        max-y (reduce max (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 1) vertices))
+        max-z (reduce max (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 2) vertices))]
+    (net.imglib2.util.Intervals/createMinMaxReal (double-array [min-x min-y min-z max-x max-y max-z]))))
+
+(defn center-vertices
+  "Center the vertices using the bounding box."
+  [vertices]
+  (let [bb (bounding-interval vertices)
+        npoints (count vertices) 
+        center (net.imglib2.RealPoint. (double-array [(- (/ (- (.realMax bb 0) (.realMin bb 0)) 2))
+                                                      (- (/ (- (.realMax bb 1) (.realMin bb 1)) 2)) 
+                                                      (- (/ (- (.realMax bb 2) (.realMin bb 2)) 2))]))]
+    (doseq [^net.imglib2.RealPositionable vert vertices]
+      (.move vert center))
+    vertices))
