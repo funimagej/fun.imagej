@@ -1,4 +1,4 @@
-(ns fun.imagej.test.examples.BBBC003_thresholder
+(ns fun.imagej.test.examples.BBBC003_detector
   (:require [fun.imagej.img :as img]
             [fun.imagej.core :as ij]
             [fun.imagej.ops :as ops]
@@ -28,7 +28,7 @@
 	                  (shape/sphere-shape radius)))))))))) ; Filter with a circular radius
 
 (when false; Disabled, re-enable once you obtain the dataset from:
-  ;          https://data.broadinstitute.org/bbbc/BBBC003/
+  ;            https://data.broadinstitute.org/bbbc/BBBC003/
   (let [bbbc-dir "/Users/kharrington/Data/BBBC/"
         input-imgs (let [input-dir (str bbbc-dir "BBBC003_inputs")]
                     (for [file (.listFiles (java.io.File. input-dir))]
