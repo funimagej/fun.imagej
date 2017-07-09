@@ -21,6 +21,8 @@
                  [net.imagej/imagej-mesh "0.1.1-SNAPSHOT"]
                  [ome/bioformats_package "5.3.3"]
                  
+                 [org.ojalgo/ojalgo "43.0"]
+                 
                  [sc.fiji/Auto_Threshold "1.16.0"]
                  ]
   :java-source-paths ["java"]

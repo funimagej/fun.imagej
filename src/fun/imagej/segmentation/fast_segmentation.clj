@@ -76,6 +76,7 @@ We should probably give a way of providing a custom dimension ordering."
              (recur seg)))
       seg)))
 
+;; Maybe deprecate
 (defn generate-sample-points-negative-labels
   "Generate the positive and negative sample points given a segmentation and the target labeling.
       Positive samples are drawn from the labeling, while negative samples come from regions outside the labeling."
@@ -87,12 +88,14 @@ We should probably give a way of providing a custom dimension ordering."
                (:num-negative-samples seg)))
       (let [candidate-pos (generate-position seg label)
             candidate-val (img/get-val label candidate-pos)]
+        #_(println candidate-val)
         #_(println (map #(img/get-val % candidate-pos)
                                      negative-labels)
                   (reduce #(or %1 %2) (map #(img/get-val % candidate-pos)
                                            negative-labels)))
            (cond                                    ; True, and need positive samples
-             (and candidate-val
+             (and (or (and (number? candidate-val) (pos? candidate-val))
+                      (and (not (number? candidate-val)) candidate-val))
                   (< (count (:positive-samples seg)) (:num-positive-samples seg)))
              (do
                (when (:verbose seg)
@@ -105,6 +108,52 @@ We should probably give a way of providing a custom dimension ordering."
                        (reduce #(or %1 %2)
                                (map #(img/get-val % candidate-pos)
                                     negative-labels)))
+                  (< (count (:negative-samples seg)) (:num-negative-samples seg)))
+             (do
+               (when (:verbose seg)
+                     (println "pos:" (count (:positive-samples seg))
+                              "neg:" (count (:negative-samples seg))))
+               (recur (assoc seg
+                             :negative-samples (conj (:negative-samples seg) candidate-pos))))
+             :else
+             (recur seg)))
+      seg)))
+
+(defn generate-sample-points-negative-label
+  "Generate the positive and negative sample points given a segmentation and the target labeling.
+      Positive samples are drawn from the labeling, while negative samples come from regions outside the labeling."
+  [seg label negative-label]
+  (loop [seg seg]
+    (if (or (< (count (:positive-samples seg))
+               (:num-positive-samples seg))
+            (< (count (:negative-samples seg))
+               (:num-negative-samples seg)))
+      (let [candidate-pos (generate-position seg label)
+            candidate-val (img/get-val label candidate-pos)
+            negative-candidate-val (img/get-val negative-label candidate-pos)]
+        #_(println candidate-val
+                  (or (and (number? candidate-val) (pos? candidate-val))
+                       (and (not (number? candidate-val)) candidate-val))
+                  negative-candidate-val
+                  (or (and (number? negative-candidate-val) (pos? negative-candidate-val))
+                      (and (not (number? negative-candidate-val)) negative-candidate-val)))
+        #_(println (map #(img/get-val % candidate-pos)
+                                     negative-labels)
+                  (reduce #(or %1 %2) (map #(img/get-val % candidate-pos)
+                                           negative-labels)))
+           (cond                                    ; True, and need positive samples
+             (and (or (and (number? candidate-val) (pos? candidate-val))
+                      (and (not (number? candidate-val)) candidate-val))
+                  (< (count (:positive-samples seg)) (:num-positive-samples seg)))
+             (do
+               (when (:verbose seg)
+                     (println "pos:" (count (:positive-samples seg))
+                              "neg:" (count (:negative-samples seg))))
+               (recur (assoc seg
+                             :positive-samples (conj (:positive-samples seg) candidate-pos))))
+             ; False, and need negative samples
+             (and (or (and (number? negative-candidate-val) (pos? negative-candidate-val))
+                      (and (not (number? negative-candidate-val)) negative-candidate-val))
                   (< (count (:negative-samples seg)) (:num-negative-samples seg)))
              (do
                (when (:verbose seg)
@@ -182,15 +231,15 @@ We should probably give a way of providing a custom dimension ordering."
                                 (.exists (java.io.File. (str (:cache-directory seg)
                                                              (:cache-basename seg) "_"
                                                              feature-name ".tif"))))
-                            (imagej/open-img (str (:cache-directory seg) (:cache-basename seg) "_" feature-name ".tif"))
+                            (imagej/open-img (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif"))
                             (feature-map-fn to-segment)))]
-        (when (:verbose seg) (println feature-name (str (:cache-directory seg) (:cache-basename seg) "_" feature-name ".tif")))
+        (when (:verbose seg) (println feature-name (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif")))
         (fun.imagej.ops.math/add solution-img
                                       solution-img
                                       (fun.imagej.ops.math/multiply (fun.imagej.ops.convert/float32 feature-map)
                                                                     ^float (float (nth (:weights seg) k))))))
     (when (:cache-directory seg)
-      (imagej/save-img solution-img (str (:cache-directory seg) (:cache-basename seg) "_segmentation.tif")))
+      (imagej/save-img solution-img (str (:cache-directory seg) (:basename seg) "_segmentation.tif")))
     solution-img))
 
 (defn save-segmentation-config
