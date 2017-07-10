@@ -127,7 +127,7 @@
      (dotimes [k (.getSize stack)]       
        (.blurGaussian ^ImageProcessor (.getProcessor stack (inc k)) sigma)))
    imp)
-(def blur-gaussian! blug-gaussian)
+(def blur-gaussian! blur-gaussian)
 
 (defn convolve
   "Convolve a kernel (kernel is a float array) with an imageplus."
