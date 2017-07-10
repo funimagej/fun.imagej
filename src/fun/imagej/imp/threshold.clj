@@ -132,7 +132,7 @@ This list is programmatically accessible as: funimage.imp.threshold/threshold-me
                  (.setThreshold ip 0 threshold ImageProcessor/RED_LUT))
                (.threshold ip (int threshold)))))))
      imp))
-
+(def autothreshold! autothreshold)
   
 #_(do 
    (def imp (convert-to-8bit (open-imp "hello-communist-kitty_bw.tif")))

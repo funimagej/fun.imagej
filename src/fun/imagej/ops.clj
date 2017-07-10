@@ -57,7 +57,7 @@
                                    "."
                                    (concat [(ns-name *ns*)]
                                          (butlast (string/split op-name #"\.")))))
-            function-name (last (string/split op-name #"\."))            
+            function-name (last (string/split op-name #"\."))     ; We should adjust the function signature based on whether it is a function or computer
 
             fn-defs (doall
                       (for [op-info op-infos]

@@ -139,6 +139,7 @@ Note: this uses threads to avoid some blocking issues."
        (.start t)
        (.join t)
        imgs)))
+(def map-img! map-img)
 
 (defn map-localize-img
    "Walk all images (as cursors) applying f at each step.
@@ -185,6 +186,7 @@ Note: this uses threads to avoid some blocking issues."
        (.start t)
        (.join t)
        imgs)))
+(def map-localize-img! map-localize-img)
 
 (defn resize
   "Resize an img."
@@ -239,16 +241,19 @@ If you have an ImagePlus, then use funimage.conversion"
   (second (map-img
             (fn [^Cursor cur1 ^Cursor cur2] (.set (.get cur2) (.get cur1)))
             img2 img1)))
+(def replace! replace)
 
 (defn subtract
   "Subtract the second image from the first (destructive)."
   [^IterableInterval img1 ^IterableInterval img2]
   (first (map-img cursor/sub img1 img2)))
+(def subtract! subtract)
 
 (defn elmul
   "Subtract the second image from the first (destructive)."
   [^IterableInterval img1 ^IterableInterval img2]
   (first (map-img cursor/mul img1 img2)))
+(def elmul! elmul)
 
 (defn difference
   "Take the difference between two images."
@@ -256,6 +261,7 @@ If you have an ImagePlus, then use funimage.conversion"
   (first (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2]
                     (if (not= (cursor/get-val cur1) (cursor/get-val cur2)) 1 0))
                   img1 img2)))
+(def difference! difference)
 
 (defn filter-vals
   "Create a Bit Img that according to a function f, which should return true/false."
@@ -270,6 +276,7 @@ If you have an ImagePlus, then use funimage.conversion"
   [^IterableInterval img scalar]
   (first (map-img #(cursor/set-val % 
                                    (* (cursor/get-val %) scalar)) img)))
+(def scale! scale)
 
 (defn threshold
   "Binarize an image about a threshold"
@@ -280,6 +287,7 @@ If you have an ImagePlus, then use funimage.conversion"
                            tval)
                          true
                          1))
+(def threshold! threshold)
 
 (defn sum
   "Take the sum of all pixel values in an image."
@@ -327,7 +335,7 @@ locations outside these points are assigned fill-value"
                         (.set (.get cur)
                           f-fv)))
              img))))
-
+(def fill-boundary! fill-boundary)
 
 (defn neighborhood-map-to-center
   "Do a neighborhood walk over an imglib2 img.
@@ -342,6 +350,7 @@ Rectangle only"
         (do (.fwd center)
           (f center local-neighborhood)))
       dest)))
+(def neighborhood-map-to-center! neighborhood-map-to-center)
 
 (defn periodic-neighborhood-map-to-center
   "Do a neighborhood walk over an imglib2 img.
@@ -359,6 +368,7 @@ Rectangle only"
           (f center ^net.imglib2.algorithm.neighborhood.RectangleNeighborhoodUnsafe (.get ^net.imglib2.Cursor neighborhood-cursor))
           (recur)))
       dest)))
+(def periodic-neighborhood-map-to-center! periodic-neighborhood-map-to-center)
 
 (defn replace-subimg
   "Replace a subimage of a larger image with a smaller one."
@@ -375,6 +385,7 @@ Rectangle only"
           pos (long-array (count start-position))]
       (map-img cursor/copy subimg replacement)))
     img)
+(def replace-subimg! replace-subimg)
 
 (defn replace-subimg-with-opacity
   "Replace a subimage of a larger image with a smaller one if the replacement is greater than the provided opacity value."
@@ -395,6 +406,7 @@ Rectangle only"
             (.set ^net.imglib2.type.numeric.RealType (.get cur1) (.get cur2))))
         subimg replacement)))
     img)
+(def replace-subimg-with-opacity! replace-subimg-with-opacity)
 
 (defn confusion-img
   "Return an img that encodes the confusion matrix at each pixel."

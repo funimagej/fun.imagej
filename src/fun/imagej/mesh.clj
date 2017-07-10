@@ -96,6 +96,7 @@ Mutable function"; could be easily generalized beyond 3D
     (doseq [^net.imglib2.RealPositionable vert vertices]
       (.move vert center))
     vertices))
+(def zero-mean-vertices! zero-mean-vertices)
 
 (defn scale-vertices
   "Scale all vertices by a factor."
@@ -104,6 +105,7 @@ Mutable function"; could be easily generalized beyond 3D
     (dotimes [d (.numDimensions vert)]      
       (.setPosition vert (double (* scale (.getDoublePosition vert d))) (int d))))
   vertices)
+(def scale-vertices! scale-vertices)
 
 (defn bounding-interval
   "Return a RealInterval that bounds a collection of RealLocalizable vertices."
@@ -127,3 +129,4 @@ Mutable function"; could be easily generalized beyond 3D
     (doseq [^net.imglib2.RealPositionable vert vertices]
       (.move vert center))
     vertices))
+(def center-vertices! center-vertices)

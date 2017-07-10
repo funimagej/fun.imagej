@@ -24,7 +24,8 @@
   "Enable the list of measurements."
   [to-enable]
   (ij.IJ/run "Set Measurements..." (str "redirect=None decimal=3 " (string/join " " 
-                                                                                (map #(str (name %)) to-enable))))) 
+                                                                                (map #(str (name %)) to-enable)))))
+(def enable-measurements! enable-measurements)
 
 (defn get-polygon-area
   "Return the area of a polygon."
