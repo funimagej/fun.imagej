@@ -230,7 +230,7 @@ We should probably give a way of providing a custom dimension ordering."
                           (if (and
                                 (:cache-directory seg)
                                 (.exists (java.io.File. (str (:cache-directory seg)
-                                                             (:cache-basename seg) "_"
+                                                             (:basename seg) "_"
                                                              feature-name ".tif"))))
                             (imagej/open-img (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif"))
                             (feature-map-fn to-segment)))]
