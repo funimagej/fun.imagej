@@ -103,3 +103,29 @@
 (defmethod set-type-val net.imglib2.type.numeric.integer.UnsignedLongType [tpe val] 
   (.set ^net.imglib2.type.numeric.integer.UnsignedLongType tpe ^long val))
 
+;; Mutable
+(defmulti set-type-val! (fn [tpe val] (class tpe)));"Return the value of an imglib2 type."
+(defmethod set-type-val! net.imglib2.type.numeric.real.FloatType [tpe val]
+  (.set ^net.imglib2.type.numeric.real.FloatType tpe ^float val))
+(defmethod set-type-val! net.imglib2.type.numeric.integer.UnsignedShortType [tpe val]
+  (.set ^net.imglib2.type.numeric.integer.UnsignedShortType tpe ^int val))
+(defmethod set-type-val! net.imglib2.type.numeric.real.DoubleType [tpe val]
+  (.set ^net.imglib2.type.numeric.real.DoubleType tpe ^double val))
+(defmethod set-type-val! net.imglib2.type.numeric.integer.IntType [tpe val]
+  (.set ^net.imglib2.type.numeric.integer.IntType tpe ^int val))
+(defmethod set-type-val! net.imglib2.type.numeric.integer.LongType [tpe val]
+  (.set ^net.imglib2.type.numeric.integer.LongType tpe ^long val))
+(defmethod set-type-val! net.imglib2.type.numeric.integer.ByteType [tpe val]
+  (.set ^net.imglib2.type.numeric.integer.ByteType tpe ^byte val))
+(defmethod set-type-val! net.imglib2.type.logic.BitType [tpe val]
+  (.set ^net.imglib2.type.logic.BitType tpe ^boolean val))
+(defmethod set-type-val! net.imglib2.type.numeric.ARGBType [tpe val]
+  (.set ^net.imglib2.type.numeric.ARGBType tpe ^int val))
+#_(defmethod set-type-val! net.imglib2.type.numeric.ARGBDoubleType [tpe a r g b]
+    (.set ^net.imglib2.type.numeric.ARGBDoubleType tpe ^double a ^double r ^double g ^double b))
+(defmethod set-type-val! net.imglib2.type.numeric.integer.UnsignedByteType [tpe val]
+  (.set ^net.imglib2.type.numeric.integer.UnsignedByteType tpe ^int val))
+(defmethod set-type-val! net.imglib2.type.numeric.integer.UnsignedIntType [tpe val]
+  (.set ^net.imglib2.type.numeric.integer.UnsignedIntType tpe ^long val))
+(defmethod set-type-val! net.imglib2.type.numeric.integer.UnsignedLongType [tpe val]
+  (.set ^net.imglib2.type.numeric.integer.UnsignedLongType tpe ^long val))

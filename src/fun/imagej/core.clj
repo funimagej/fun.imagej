@@ -4,7 +4,7 @@
             #_[fun.imagej.img :as img])
   (:import [net.imagej ImageJ]))
 
-(let [context (org.scijava.Context.) 
+(let [context (org.scijava.Context.)
       new-ij (net.imagej.ImageJ. context)]
   (defonce ij new-ij))
 

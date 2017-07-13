@@ -63,5 +63,6 @@
                (* (.getVoxel stack x y z)
                   scalar)))))
   imp)
+(def imp-scale! imp-scale)
 ;(def imp-transparent-zero "pixels of img2 are transparent" (image-calculator-fn "Transparent Zero" false true false))
 

@@ -445,4 +445,5 @@ This function writes to imp. Only works on 1 slice."
        ^ij.process.ImageProcessor (.getProcessor imp) 
        ^java.awt.Polygon (.getPolygon roi)))
   imp)
+(def rois-to-imp! rois-to-imp)
 

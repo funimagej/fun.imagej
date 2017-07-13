@@ -17,9 +17,9 @@
                  [net.imglib2/imglib2-roi "0.4.7"]
                  [net.imglib2/imglib2-ij "2.0.0-beta-37"]
                  [net.imagej/imagej "2.0.0-rc-61" :exclusions [com.github.jnr/jffi com.github.jnr/jnr-x86asm]]
+                 [ome/bioformats_package "5.3.3"]
                  [net.imagej/imagej-ops "0.38.1-SNAPSHOT"]
                  [net.imagej/imagej-mesh "0.1.1-SNAPSHOT"]
-                 [ome/bioformats_package "5.3.3"]
                  
                  [org.ojalgo/ojalgo "43.0"]
                  

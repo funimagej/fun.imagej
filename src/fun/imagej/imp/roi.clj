@@ -264,6 +264,7 @@
     (set-roi imp roi)
     (ij.IJ/run imp "Clear Outside" "slice")
     (set-roi imp prev-roi)))
+(def clear-outside-roi! clear-outside-roi)
 
 (defn clear-roi
   "Clear the image outside the roi. Set the background color beforehand"
@@ -272,5 +273,5 @@
     (set-roi imp roi)
     (ij.IJ/run imp "Clear" "slice")
     (set-roi imp prev-roi)))
-
+(def clear-roi! clear-roi)
   

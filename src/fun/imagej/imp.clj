@@ -118,6 +118,7 @@
      (dotimes [k (.getSize stack)]       
        (.autoThreshold ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def auto-threshold! auto-threshold)
 
 (defn blur-gaussian
    "Gaussian blur on the currently imageplus/ROI."
@@ -126,6 +127,7 @@
      (dotimes [k (.getSize stack)]       
        (.blurGaussian ^ImageProcessor (.getProcessor stack (inc k)) sigma)))
    imp)
+(def blur-gaussian! blur-gaussian)
 
 (defn convolve
   "Convolve a kernel (kernel is a float array) with an imageplus."
@@ -134,6 +136,7 @@
      (dotimes [k (.getSize stack)]       
        (.convolve ^ImageProcessor (.getProcessor stack (inc k)) ^floats kernel ^int kernel-width ^int kernel-height)))
   imp)
+(def convolve! convolve)
 
 (defn convolve-stack
   "Convolve a kernel with the whole stack."
@@ -144,17 +147,20 @@
       (.convolve ^ImageProcessor (.getProcessor stack (inc k)) ^floats kernel ^int kernel-width ^int kernel-height)
       (.addSlice outstack ^ImageProcessor (.getProcessor stack (inc k))))
     (ImagePlus. (.getTitle imp) outstack)))
+(def convolve-stack! convolve)
 
 (defn crop
   "Crop using the currently active ROI."
   [^ImagePlus imp]  
   (ImagePlus. (.getTitle imp) (.crop ^ImageProcessor (.getProcessor imp))))
+(def crop! crop)
 
 (defn crop-stack
   "Crop the whole stack using the currently active ROI (bounding rectangle if non rectangle roi)."
   [^ImagePlus imp]  
   (let [rect (.getBounds (.getRoi imp))]
     (ImagePlus. (.getTitle imp) (.crop ^ImageStack (.getImageStack imp) (.x rect) (.y rect) 0 (.width rect) (.height rect) (get-stack-depth imp)))))
+(def crop-stack! crop-stack)
 ; crop-stack could have a version with substack indices as well
 
 (defn dilate
@@ -164,12 +170,14 @@
      (dotimes [k (.getSize stack)]       
        (.dilate ^ImageProcessor (.getProcessor stack (inc k)))))
    imp)
+(def dilate! dilate)
 
 (defn draw-line
   "Draw a line on the imageplus from the 2 xy coords."
   [^ImagePlus imp x1 y1 x2 y2]
   (.drawLine ^ImageProcessor (.getProcessor imp) x1 y1 x2 y2)
   imp)
+(def draw-line! draw-line)
 
 ;; More drawing functions can be added drawDot drawOval drawPixel drawPolygon drawRect drawRoi drawString
 
@@ -180,6 +188,7 @@
      (dotimes [k (.getSize stack)]       
        (.erode ^ImageProcessor (.getProcessor stack (inc k)))))
    imp)
+(def erode! erode)
 
 (defn exp
   "Exponential tranform on the imageplus/ROI"
@@ -188,6 +197,7 @@
      (dotimes [k (.getSize stack)]       
        (.exp ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def exp! exp)
 
 (defn fill
   "Fill the image/ROI with current fill value. This might not have the desirable ROI behaviors."
@@ -196,6 +206,7 @@
      (dotimes [k (.getSize stack)]       
        (.fill ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def fill! fill)
 
 ; More fill functions could be added fillOutside fillOval fillPolygon
 
@@ -211,6 +222,7 @@
              (= filter-type :min) (.filter ^ImageProcessor (.getProcessor stack (inc k)) ij.process.ImageProcessor/MIN)  
              (= filter-type :max) (.filter ^ImageProcessor (.getProcessor stack (inc k)) ij.process.ImageProcessor/MAX)))
      imp))
+(def filter-imp! filter-imp)
 
 (defn find-edges
   "Find edges in the imageplus/roi"
@@ -219,6 +231,7 @@
      (dotimes [k (.getSize stack)]       
        (.findEdges ^ImageProcessor (.getProcessor stack (inc k))))
      imp))
+(def find-edges! find-edges)
 
 (defn flip-horizontal
   "Flip the imageplus horizontally."
@@ -227,6 +240,7 @@
      (dotimes [k (.getSize stack)]       
        (.flipHorizontal ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def flip-horizontal! flip-horizontal)
 
 (defn flip-vertical
   "Flip the imageplus vertically."
@@ -235,6 +249,7 @@
      (dotimes [k (.getSize stack)]       
        (.flipVertical ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def flip-vertical! flip-vertical)
 
 (defn gamma
   "Gamma correction on the imageplus."
@@ -243,6 +258,7 @@
      (dotimes [k (.getSize stack)]       
        (.gamma ^ImageProcessor (.getProcessor stack (inc k)) val)))
   imp)
+(def gamma! gamma)
 
 (defn get-pixel-unsafe
   "Get pixel without bounds checking (faster)"
@@ -356,6 +372,7 @@
      (dotimes [k (.getSize stack)]       
        (.invert ^ImageProcessor (.getProcessor stack (inc k)))))
    imp)
+(def invert! invert)
 
 (defn binary?
   "Is an imageplus binary?"
@@ -374,6 +391,7 @@
      (dotimes [k (.getSize stack)]       
        (.medianFilter ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def median-filter! median-filter)
 
 (defn scalar-multiply
   "Multiply every pixel of an imageplus by a value."
@@ -382,6 +400,7 @@
      (dotimes [k (.getSize stack)]       
        (.multiply ^ImageProcessor (.getProcessor stack (inc k)) val)))
   imp)
+(def scalar-multiply! scalar-multiply)
 
 (defn add-noise
   "Add noise to an imageplus with gaussian of mean 0 and the supplied std-dev."
@@ -390,30 +409,35 @@
      (dotimes [k (.getSize stack)]       
        (.noise ^ImageProcessor (.getProcessor stack (inc k)) std-dev)))
   imp)
+(def add-noise! add-noise)
 
 (defn put-pixel-int
   "Put a pixel value at x,y of the imageplus."
   [^ImagePlus imp x y val]
   (.putPixel ^ImageProcessor (.getProcessor imp) (int x) (int y) (int val))
   imp)
+(def put-pixel-int! put-pixel-int)
 
 (defn put-pixel-int-unsafe
   "Put a pixel value at x,y of an imageplus without bounds checking."
   [^ImagePlus imp x y val]
   (.set ^ImageProcessor (.getProcessor imp) x y val)
   imp)
+(def put-pixel-int-unsafe! put-pixel-int-unsafe)
 
 (defn put-pixel-double
   "Put a pixel value at x,y of the imageplus."
   [^ImagePlus imp x y val]
   (.putPixelValue ^ImageProcessor (.getProcessor imp) x y val)
   imp)
+(def put-pixel-double! put-pixel-double!)
 
 (defn put-pixel-double-unsafe
   "Put a pixel value at x,y of the imageplus."
   [^ImagePlus imp x y val]
   (.setf ^ImageProcessor (.getProcessor imp) x y val)
   imp)
+(def put-pixel-double-unsafe! put-pixel-double-unsafe)
 
 (defn reset-undo-buffer
   "Reset the undo buffer for an imageplus."
@@ -422,6 +446,7 @@
      (dotimes [k (.getSize stack)]       
        (.reset ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def reset-undo-buffer! reset-undo-buffer)
 
 (defn rotate
   "Rotate an imageplus by the supplied angle."
@@ -430,6 +455,7 @@
      (dotimes [k (.getSize stack)]       
        (.rotate ^ImageProcessor (.getProcessor stack (inc k)) angle)))
   imp)
+(def rotate! rotate)
 
 (defn rotate-left
   "Rotate an imageplus left by 90degrees."
@@ -438,6 +464,7 @@
      (dotimes [k (.getSize stack)]       
        (.rotateLeft ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def rotate-left! rotate-left)
 
 (defn rotate-right
   "Rotate an imageplus right by 90degrees."
@@ -446,6 +473,7 @@
      (dotimes [k (.getSize stack)]       
        (.rotateRight ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def rotate-right! rotate-right)
 
 (defn set-background-value
   "Set the background fill value of an imageplus."
@@ -454,30 +482,35 @@
      (dotimes [k (.getSize stack)]       
        (.setBackgroundValue ^ImageProcessor (.getProcessor stack (inc k)) val)))
   imp)
+(def set-background-value! set-background-value)
 
 (defn set-calibration
   "Set the calibration of an imageplus."
   [^ImagePlus imp ^Calibration cal]
   (.setCalibration imp cal)
   imp)
+(def set-calibration! set-calibration)
 
 (defn set-histogram-range
   "Set the min/max of an imageplus' histogram."
   [^ImagePlus imp hmin hmax]
   (.setHistogramRange ^ImageProcessor (.getProcessor imp) hmin hmax)
   imp)
+(def set-histogram-range! set-histogram-range)
 
 (defn set-histogram-size
   "Set the number of histogram bins for an imageplus."
   [^ImagePlus imp nbins]
   (.setHistogramSize ^ImageProcessor (.getProcessor imp) nbins)
   imp)
+(def set-histogram-size! set-histogram-size)
 
 (defn set-roi
    "Set the roi of the imageplus to start-x start-y width height."
    [^ImagePlus imp ^Roi roi]
    (.setRoi imp roi)
    imp)
+(def set-roi! set-roi)
 
 (defn set-fill-value
   "Set the default fill value for an imageplus."
@@ -486,6 +519,7 @@
      (dotimes [k (.getSize stack)]       
        (.setValue ^ImageProcessor (.getProcessor stack (inc k)) val)))
   imp)
+(def set-fill-value! set-fill-value)
 
 (defn sharpen
   "Sharpen an imageplus/roi with 3x3 kernel."
@@ -494,6 +528,7 @@
      (dotimes [k (.getSize stack)]       
        (.sharpen ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def sharpen! sharpen)
 
 (defn smooth
   "Smooth and image with 3x3 mean."
@@ -502,6 +537,7 @@
      (dotimes [k (.getSize stack)]       
        (.smooth ^ImageProcessor (.getProcessor stack (inc k)))))
   imp)
+(def smooth! smooth)
 
 (defn subtract-scalar
   "Subtract a scalar from all pixels of an imageplus."
@@ -510,12 +546,14 @@
      (dotimes [k (.getSize stack)]       
        (.subtract ^ImageProcessor (.getProcessor stack (inc k)) val)))
   imp)
+(def subtract-scalar! subtract-scalar)
 
 (defn threshold 
   "Threshold an imageplus with a supplied threshold."
   [^ImagePlus imp thresh]
   (.threshold ^ImageProcessor (.getProcessor imp) thresh)
   imp)
+(def threshold! threshold)
 
 (defn threshold-stack 
    "Threshold the whole stack of an imageplus with a supplied threshold."
@@ -524,6 +562,7 @@
      (dotimes [k (.getSize stack)]
        (.threshold ^ImageProcessor (.getProcessor stack (inc k)) thresh)))       
    imp)
+(def threshold-stack! threshold-stack)
 
 ;; ImageStack
 
@@ -537,6 +576,7 @@
   [^ImagePlus imp x y z val]
   (.setVoxel ^ImageStack (.getImageStack imp) x y z val)
   imp)
+(def set-voxel! set-voxel)
 
 (defn convert-to-binary
   "Convert an imageplus to 8 bit using the image stack."
@@ -549,6 +589,7 @@
        (.addSlice outstack
           (.convertToByteProcessor (.getProcessor stack (inc k)))))
      (ImagePlus. (.getTitle imp) outstack)))
+(def convert-to-binary! convert-to-binary)
 
 (defn convert-to-8bit
   "Convert an imageplus to 8 bit using the image stack."
@@ -728,11 +769,13 @@
   (when (.isVisible imp)
 		(.updateAndRepaintWindow imp))
   imp)
+(def invert-lut! invert-lut)
 
 (defn set-lut
   "Set the lookup table (LUT) for color coding this image."
   [^ImagePlus imp ^ij.process.LUT lut]
   (.setLut imp lut))
+(def set-lut! set-lut)
 
 (defn create-lut
   "Make a lookup table from an image."
@@ -776,6 +819,7 @@
                         ip
                         ^java.awt.Polygon (.getPolygon roi)))))))))
     imp))
+(def size-filter-stack! size-filter-stack)
 
 (defn watershed
   "Take the watershed of the current imageprocessor."
@@ -783,6 +827,7 @@
   (let [edm (ij.plugin.filter.EDM.)]
     (.toWatershed ^ij.process.ImageProcessor (.getProcessor imp))
     imp))
+(def watershed! watershed)
 
 (defn watershed-stack
   "Take the watershed of the current imageprocessor."
@@ -792,6 +837,7 @@
     (dotimes [k (.getSize stack)]       
       (.toWatershed edm ^ImageProcessor (.getProcessor stack (inc k))))
     imp))
+(def watershed-stack! watershed-stack)
   
 (defn close-all-images
   "Clear all images from ImageJ, including memory."
@@ -803,6 +849,7 @@
   "Update the display of an imp."
   [^ImagePlus imp]
   (.updateAndRepaintWindow imp))
+(def update-imp! update-imp)
         
 (defn open-image-sequence
   "Open an image sequence."
@@ -929,18 +976,21 @@
       (.add overlay-list roi)
 			(.setOverlay imp overlay-list)))
   imp); could add undo
+(def add-overlay-image! add-overlay-image)
 
 (defn autocontrast
   "Auto contrast. This is done the lazy way"
   [imp]
   (ij.IJ/run imp "Enhance Contrast" "saturated=0.35")
   imp)
+(def autocontrast! autocontrast)
 
 (defn subtract-background
   "Perform 2D rolling ball subtraction."
   [^ij.ImagePlus imp radius]
   (ij.IJ/run imp "Subtract Background..." (str "rolling=" radius))
   imp)
+(def subtract-background! subtract-background)
   
 (defn convert-stack-to-rgb
   "Convert the stack to an RGB imageplus."
@@ -948,3 +998,4 @@
   (let [converter ^ij.process.StackConverter (ij.process.StackConverter. imp)]
     (.convertToRGB converter)
     imp))
+(def convert-stack-to-rgb! convert-stack-to-rgb)

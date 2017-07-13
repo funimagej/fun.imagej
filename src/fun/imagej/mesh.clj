@@ -5,7 +5,8 @@
             [fun.imagej.core :as ij]
             [fun.imagej.ops :as ops]
             [fun.imagej.conversion :as iconv]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.string :as string]))
 
 (defn vertex-to-vector3d
   "Convert a Vertex to Vector3D."
@@ -52,6 +53,14 @@
              vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
          (net.imglib2.RealPoint. (double-array [(.getX vertex) (.getY vertex) (.getZ vertex)]))))))
 
+(defn read-vertices-to-xyz
+  "Write a list of vertices to xyz."
+  [filename]
+  (let [contents (slurp filename)]
+    (doall
+      (for [line (string/split-lines contents)]
+        (net.imglib2.RealPoint. (double-array (map #(Double/parseDouble %) (string/split line #"\t"))))))))
+
 (defn merge-vertices-by-distance
   "Merge vertices that are close within a given distance threshold.
 Expects vertices to be a sequence of RealLocalizable's.
@@ -96,6 +105,7 @@ Mutable function"; could be easily generalized beyond 3D
     (doseq [^net.imglib2.RealPositionable vert vertices]
       (.move vert center))
     vertices))
+(def zero-mean-vertices! zero-mean-vertices)
 
 (defn scale-vertices
   "Scale all vertices by a factor."
@@ -104,6 +114,7 @@ Mutable function"; could be easily generalized beyond 3D
     (dotimes [d (.numDimensions vert)]      
       (.setPosition vert (double (* scale (.getDoublePosition vert d))) (int d))))
   vertices)
+(def scale-vertices! scale-vertices)
 
 (defn bounding-interval
   "Return a RealInterval that bounds a collection of RealLocalizable vertices."
@@ -127,3 +138,15 @@ Mutable function"; could be easily generalized beyond 3D
     (doseq [^net.imglib2.RealPositionable vert vertices]
       (.move vert center))
     vertices))
+(def center-vertices! center-vertices)
+
+(defn write-vertices-to-xyz
+  "Write a list of vertices to xyz."
+  [verts filename]
+  (spit filename
+        (with-out-str
+          (doall
+            (for [vert verts]
+              (println (string/join "\t" (seq vert))))))))
+
+
