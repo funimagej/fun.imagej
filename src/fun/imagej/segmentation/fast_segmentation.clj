@@ -1,7 +1,8 @@
 (ns fun.imagej.segmentation.fast-segmentation
   (:require [fun.imagej.img :as img]
             [fun.imagej.core :as imagej]
-            [fun.imagej.img.shape :as shape])
+            [fun.imagej.img.shape :as shape]
+            [fun.imagej.ops :as ops])
   (:import [org.apache.commons.math3.linear QRDecomposition Array2DRowRealMatrix ArrayRealVector SingularValueDecomposition]))
 
 ;; The Fast Segmentation paradigm uses a hash map as the base data structure
@@ -176,7 +177,7 @@ We should probably give a way of providing a custom dimension ordering."
     (if (empty? feature-map-fns)
       seg
       (let [feature-name (:name (first feature-map-fns))
-            _ (when (:verbose seg) (println "generate-dataset working on" feature-name))
+            _ (when (:verbose seg) (println "generate-dataset working on" feature-name ))
             feature-map-fn (:fn (first feature-map-fns))
             feature-map (fun.imagej.ops.convert/float32
                           (if (and

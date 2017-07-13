@@ -9,7 +9,11 @@
             [fun.imagej.img.utils :as img-utils]))
 
 (deftest test-ops
-  (let [img (fun.imagej.ops.create/img (img-utils/interval [10 10]) (net.imglib2.type.numeric.real.DoubleType.))]    
+  (let [img (fun.imagej.ops.create/img (img-utils/interval [10 10]) (net.imglib2.type.numeric.real.DoubleType.))]
+    (is img)))
+
+(deftest convert-ops
+  (let [img (fun.imagej.ops.convert/float32 (fun.imagej.ops.create/img (img-utils/interval [10 10]) (net.imglib2.type.numeric.real.DoubleType.)))]
     (is img)))
 
 #_(do 

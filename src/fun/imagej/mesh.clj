@@ -5,7 +5,8 @@
             [fun.imagej.core :as ij]
             [fun.imagej.ops :as ops]
             [fun.imagej.conversion :as iconv]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.string :as string]))
 
 (defn vertex-to-vector3d
   "Convert a Vertex to Vector3D."
@@ -51,6 +52,14 @@
        (for [facet facets
              vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
          (net.imglib2.RealPoint. (double-array [(.getX vertex) (.getY vertex) (.getZ vertex)]))))))
+
+(defn read-vertices-to-xyz
+  "Write a list of vertices to xyz."
+  [filename]
+  (let [contents (slurp filename)]
+    (doall
+      (for [line (string/split-lines contents)]
+        (net.imglib2.RealPoint. (double-array (map #(Double/parseDouble %) (string/split line #"\t"))))))))
 
 (defn merge-vertices-by-distance
   "Merge vertices that are close within a given distance threshold.
@@ -130,3 +139,14 @@ Mutable function"; could be easily generalized beyond 3D
       (.move vert center))
     vertices))
 (def center-vertices! center-vertices)
+
+(defn write-vertices-to-xyz
+  "Write a list of vertices to xyz."
+  [verts filename]
+  (spit filename
+        (with-out-str
+          (doall
+            (for [vert verts]
+              (println (string/join "\t" (seq vert))))))))
+
+

@@ -492,3 +492,47 @@ Returns a View"
   [^net.imglib2.RandomAccessibleInterval rai d]
   (map #(hyperslice rai d %) (range (get-size-dimension rai d))))
 
+; Radius argument will be deprecated
+(defn find-maxima
+  "Find maxima"
+  ([^net.imglib2.IterableInterval input]
+   (let [radius 3]
+    (find-maxima input ^net.imglib2.algorithm.neighborhood.RectangleShape (net.imglib2.algorithm.neighborhood.RectangleShape. radius true) radius)))
+  ([^net.imglib2.IterableInterval input ^net.imglib2.algorithm.neighborhood.RectangleShape shp radius]
+    (let [source (net.imglib2.view.Views/interval input (net.imglib2.util.Intervals/expand input (- radius)))
+          nbrhoods (.neighborhoods shp source)]
+      (loop [center-cur ^net.imglib2.Cursor (.cursor ^net.imglib2.IterableInterval (net.imglib2.view.Views/iterable source))
+             nbr-cur ^net.imglib2.Cursor (.cursor nbrhoods)
+             maxima []]
+        (if-not (.hasNext center-cur)
+          maxima
+          (let [center (.next center-cur)]
+            (.fwd nbr-cur)
+            (if (reduce #(and %1 %2)
+                        (map #(> (.compareTo ^net.imglib2.type.numeric.real.AbstractRealType center ^net.imglib2.type.numeric.real.AbstractRealType %) 0)
+                             (iterator-seq (.iterator ^net.imglib2.algorithm.neighborhood.Neighborhood (.get nbr-cur)))))
+              (let [pos (net.imglib2.RealPoint. (long-array (.numDimensions input)))]
+                (.localize center-cur pos)
+                (recur center-cur nbr-cur (conj maxima pos)))
+              (recur center-cur nbr-cur maxima))))))))
+
+(defn draw-maxima
+  "Draw maxima into an image."
+  [input maxima]
+  (let [ra ^net.imglib2.RandomAccess (.randomAccess input)]
+    (doseq [maximum maxima]
+      (.setPosition ra maximum)
+      (when (net.imglib2.util.Intervals/contains input ra)
+        (cursor/set-val ra 1))))
+  input)
+
+(defn realpoint-distance
+  "Return the distance between two realpoints"
+  [p1 p2]
+  (let [a1 (double-array (.numDimensions p1))
+        a2 (double-array (.numDimensions p2))
+        diff (double-array (.numDimensions p1))]
+    (.localize p1 a1)
+    (.localize p2 a2)
+    (net.imglib2.util.LinAlgHelpers/subtract a1 a2 diff)
+    (net.imglib2.util.LinAlgHelpers/length diff)))
