@@ -511,7 +511,7 @@ Returns a View"
             (if (reduce #(and %1 %2)
                         (map #(> (.compareTo ^net.imglib2.type.numeric.real.AbstractRealType center ^net.imglib2.type.numeric.real.AbstractRealType %) 0)
                              (iterator-seq (.iterator ^net.imglib2.algorithm.neighborhood.Neighborhood (.get nbr-cur)))))
-              (let [pos (net.imglib2.RealPoint. (long-array (.numDimensions input)))]
+              (let [pos (net.imglib2.RealPoint. (double-array (.numDimensions input)))]
                 (.localize center-cur pos)
                 (recur center-cur nbr-cur (conj maxima pos)))
               (recur center-cur nbr-cur maxima))))))))

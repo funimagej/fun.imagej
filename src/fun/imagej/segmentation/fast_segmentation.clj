@@ -20,10 +20,17 @@
   "Add a feature map generator to a segmentation. These are stored as maps"
   [seg feature-name feature-fn]
   (assoc seg
-         :feature-map-fns
-         (conj (:feature-map-fns seg)
-               {:name feature-name
-                :fn   feature-fn})))
+    :feature-map-fns
+    (conj (:feature-map-fns seg)
+          {:name feature-name
+           :fn   (if (:verbose seg)
+                   (fn [target] (let [start-time (System/nanoTime)
+                                      feature-map (feature-fn target)
+                                      stop-time (System/nanoTime)]
+                                  (println "Time taken:" (- stop-time start-time) (double (/ (- stop-time start-time) 1000000)))
+                                  feature-map))
+                   feature-fn)
+           })))
 
 (defn generate-position
   "Generate a candidate sample position.
