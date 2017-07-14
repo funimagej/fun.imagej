@@ -100,27 +100,27 @@ f is a function that operates on cursors in the same order as imgs
 If you have an ImagePlus, then use funimage.conversion
 Note: this uses threads to avoid some blocking issues."
    ([f img1]
-     (let [cur1 (.cursor ^IterableInterval img1)
+     (let [cur1 ^Cursor (.cursor ^IterableInterval img1)
            t (Thread.
                (fn []
                  (loop []
-                   (when (.hasNext ^Cursor cur1)
-                     (.fwd ^Cursor cur1)
+                   (when (.hasNext cur1)
+                     (.fwd cur1)
                      (f cur1)
                      (recur)))))]
        (.start t)
        (.join t)
        [img1]))
    ([f img1 img2]
-     (let [cur1 (.cursor ^IterableInterval img1)
-           cur2 (.cursor ^IterableInterval img2)
+     (let [^Cursor cur1 (.cursor ^IterableInterval img1)
+           ^Cursor cur2 (.cursor ^IterableInterval img2)
            t (Thread.
                (fn []
                  (loop []
-                   (when (and (.hasNext ^Cursor cur1)
-                              (.hasNext ^Cursor cur2))
-                     (.fwd ^Cursor cur1)
-                     (.fwd ^Cursor cur2)
+                   (when (and (.hasNext cur1)
+                              (.hasNext cur2))
+                     (.fwd cur1)
+                     (.fwd cur2)
                      (f cur1 cur2)
                      (recur)))))]
        (.start t)
@@ -128,12 +128,12 @@ Note: this uses threads to avoid some blocking issues."
        [img1 img2]))
    ([f img1 img2 & imgs]
      (let [imgs (concat [img1 img2] imgs)
-           curs (map #(.cursor ^IterableInterval %) imgs)
+           curs (map (fn ^Cursor [i] (.cursor ^IterableInterval i)) imgs)
            t (Thread.
                (fn []
                  (loop []
-                   (when (every? #(.hasNext ^Cursor %) curs)
-                     (doseq [cur curs] (.fwd ^Cursor cur))
+                   (when (every? #(.hasNext %) curs)
+                     (doseq [cur curs] (.fwd cur))
                      (apply f curs)
                      (recur)))))]
        (.start t)
@@ -147,27 +147,27 @@ f is a function that operates on cursors in the same order as imgs
 If you have an ImagePlus, then use funimage.conversion
 Note: this uses threads to avoid some blocking issues."
    ([f img1]
-     (let [cur1 (.localizingCursor ^IterableInterval img1)
+     (let [^Cursor cur1 (.localizingCursor ^IterableInterval img1)
            t (Thread.
                (fn []
                  (loop []
-                   (when (.hasNext ^Cursor cur1)
-                     (.fwd ^Cursor cur1)
+                   (when (.hasNext cur1)
+                     (.fwd cur1)
                      (f cur1)
                      (recur)))))]
        (.start t)
        (.join t)
        [img1]))
    ([f img1 img2]
-     (let [cur1 (.localizingCursor ^IterableInterval img1)
-           cur2 (.localizingCursor ^IterableInterval img2)
+     (let [^Cursor cur1 (.localizingCursor ^IterableInterval img1)
+           ^Cursor cur2 (.localizingCursor ^IterableInterval img2)
            t (Thread.
                (fn []
                  (loop []
-                   (when (and (.hasNext ^Cursor cur1)
-                              (.hasNext ^Cursor cur2))
-                     (.fwd ^Cursor cur1)
-                     (.fwd ^Cursor cur2)
+                   (when (and (.hasNext cur1)
+                              (.hasNext cur2))
+                     (.fwd cur1)
+                     (.fwd cur2)
                      (f cur1 cur2)
                      (recur)))))]
        (.start t)
@@ -175,12 +175,12 @@ Note: this uses threads to avoid some blocking issues."
        [img1 img2]))
    ([f img1 img2 & imgs]
      (let [imgs (concat [img1 img2] imgs)
-           curs (map #(.localizingCursor ^IterableInterval %) imgs)
+           curs (map (fn ^Cursor [i] (.localizingCursor ^IterableInterval i)) imgs)
            t (Thread.
                (fn []
                  (loop []
-                   (when (every? #(.hasNext ^Cursor %) curs)
-                     (doseq [cur curs] (.fwd ^Cursor cur))
+                   (when (every? #(.hasNext %) curs)
+                     (doseq [cur curs] (.fwd cur))
                      (apply f curs)
                      (recur)))))]
        (.start t)
@@ -239,7 +239,7 @@ If you have an ImagePlus, then use funimage.conversion"
   "Replace img1 with img2"
   [^IterableInterval img1 ^IterableInterval img2]
   (second (map-img
-            (fn [^Cursor cur1 ^Cursor cur2] (.set (.get cur2) (.get cur1)))
+            (fn [cur1 cur2] (.set (.get cur2) (.get cur1)))
             img2 img1)))
 (def replace! replace)
 
@@ -258,7 +258,7 @@ If you have an ImagePlus, then use funimage.conversion"
 (defn difference
   "Take the difference between two images."
   [^IterableInterval img1 ^IterableInterval img2]
-  (first (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2]
+  (first (map-img (fn [cur1 cur2]
                     (if (not= (cursor/get-val cur1) (cursor/get-val cur2)) 1 0))
                   img1 img2)))
 (def difference! difference)
@@ -267,7 +267,7 @@ If you have an ImagePlus, then use funimage.conversion"
   "Create a Bit Img that according to a function f, which should return true/false."
   [f ^IterableInterval img1]
   (let [bimg (create-img-like img1 (imtype/bit-type))]
-    (second (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2]
+    (second (map-img (fn [cur1 cur2]
                        (cursor/set-val cur2 (f (cursor/get-val cur1))))
                      img1 bimg))))
     
@@ -293,7 +293,7 @@ If you have an ImagePlus, then use funimage.conversion"
   "Take the sum of all pixel values in an image."
   [^IterableInterval img]
   (let [sum (atom 0)]
-    (map-img (fn [^Cursor cur] (swap! sum + (cursor/get-val cur))) img)
+    (map-img (fn [cur] (swap! sum + (cursor/get-val cur))) img)
     @sum))
 
 #_(defn replace-subimg
@@ -328,7 +328,7 @@ locations outside these points are assigned fill-value"
   [^IterableInterval img bx by bz tx ty tz fill-value]; should take array of locations to generalize to N-D
   (let [location (float-array [0 0 0])
         f-fv (float fill-value)]
-    (first (map-img (fn [^Cursor cur]
+    (first (map-img (fn [cur]
                       (.localize cur location)
                       (when (or (< (first location) bx) (< (second location) by) (< (last location) bz)
                                 (> (first location) tx) (> (second location) ty) (> (last location) tz))
@@ -362,10 +362,10 @@ Rectangle only"
           local-neighborhood ^net.imglib2.algorithm.neighborhood.Neighborhood (.neighborhoods shape ^net.imglib2.RandomAccessibleInterval source)
           neighborhood-cursor ^net.imglib2.Cursor (.cursor local-neighborhood)]
       (loop []
-        (when (.hasNext ^net.imglib2.Cursor center)
-          (.fwd ^net.imglib2.Cursor center)
-          (.fwd ^net.imglib2.Cursor neighborhood-cursor) 
-          (f center ^net.imglib2.algorithm.neighborhood.RectangleNeighborhoodUnsafe (.get ^net.imglib2.Cursor neighborhood-cursor))
+        (when (.hasNext center)
+          (.fwd center)
+          (.fwd neighborhood-cursor)
+          (f center ^net.imglib2.algorithm.neighborhood.RectangleNeighborhoodUnsafe (.get neighborhood-cursor))
           (recur)))
       dest)))
 (def periodic-neighborhood-map-to-center! periodic-neighborhood-map-to-center)
@@ -401,7 +401,7 @@ Rectangle only"
           ra (.randomAccess ^IntervalView subimg)
           pos (long-array (count start-position))]
       (map-img 
-        (fn [^Cursor cur1 ^Cursor cur2] 
+        (fn [cur1 cur2]
           (when (> (.get (.get cur2)) opacity)
             (.set ^net.imglib2.type.numeric.RealType (.get cur1) (.get cur2))))
         subimg replacement)))
@@ -411,7 +411,7 @@ Rectangle only"
 (defn confusion-img
   "Return an img that encodes the confusion matrix at each pixel."
   [^IterableInterval target ^IterableInterval pred]
-  (last (map-img (fn [^net.imglib2.Cursor cur1 ^net.imglib2.Cursor cur2 ^net.imglib2.Cursor cur3]
+  (last (map-img (fn [cur1 cur2 cur3]
                    (let [val1 (cursor/get-val cur1)
                          val2 (cursor/get-val cur2)]
                      (cursor/set-val cur3
