@@ -24,12 +24,14 @@
 (defn write-mesh-as-stl
   "Write a DefaultMesh from imagej-ops to a .stl file."
   [mesh stl-filename]
-  (let [stl-facets (for [facet (.getFacets mesh)]
-                      (STLFacet. (vertex-to-vector3d (.getNormal facet)) 
-                                 (vertex-to-vector3d (.getP0 facet))
-                                 (vertex-to-vector3d (.getP1 facet))
-                                 (vertex-to-vector3d (.getP2 facet))
-                                 0))
+  (let [default-mesh (net.imagej.mesh.DefaultMesh.)
+        stl-facets (for [facet (.getFacets mesh)]
+                     (.init (STLFacet. (.getTrianglePool default-mesh))
+                            (vertex-to-vector3d (.getNormal facet))
+                            (vertex-to-vector3d (.getP0 facet))
+                            (vertex-to-vector3d (.getP1 facet))
+                            (vertex-to-vector3d (.getP2 facet))
+                            0))
         ofile (java.io.FileOutputStream. stl-filename)]
     (.write ofile
       (.write (BinarySTLFormat.)
@@ -47,10 +49,14 @@
 (defn read-stl-vertices
    "Read a mesh from a STL file."
    [stl-filename]
-   (let [facets (.read (BinarySTLFormat.) (io/file stl-filename))]
+   (let [default-mesh (net.imagej.mesh.DefaultMesh.)
+         facets (.read (BinarySTLFormat.)
+                       (.getTrianglePool default-mesh)
+                       (.getVertex3Pool default-mesh)
+                       (io/file stl-filename))]
      (doall
-       (for [facet facets
-             vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
+       (for [^net.imagej.mesh.Triangle facet facets
+             ^net.imagej.mesh.Vertex3 vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
          (net.imglib2.RealPoint. (double-array [(.getX vertex) (.getY vertex) (.getZ vertex)]))))))
 
 (defn read-vertices-to-xyz
