@@ -56,7 +56,7 @@
                        (io/file stl-filename))]
      (doall
        (for [^net.imagej.mesh.Triangle facet facets
-             ^net.imagej.mesh.Vertex3 vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
+             ^net.imagej.mesh.Vertex3 vertex [(.getVertex facet 0) (.getVertex facet 1) (.getVertex facet 2)]]
          (net.imglib2.RealPoint. (double-array [(.getX vertex) (.getY vertex) (.getZ vertex)]))))))
 
 (defn read-vertices-to-xyz
@@ -75,16 +75,16 @@ Returns a sequence of RealLocalizable's"
   (let [point-list ^net.imglib2.RealPointSampleList (net.imglib2.RealPointSampleList. 3)
         _ (doseq [vert vertices]
             (.add point-list ^net.imglib2.RealLocalizable vert;; Let's update this to use real localizables
-              (net.imglib2.type.logic.BitType. false)))
+                  (net.imglib2.type.logic.BitType. false)))
         kdtree (net.imglib2.KDTree. point-list)
         tree-search ^net.imglib2.neighborsearch.RadiusNeighborSearchOnKDTree (net.imglib2.neighborsearch.RadiusNeighborSearchOnKDTree. kdtree)]
     ;; First search and remove
     (loop [cur ^net.imglib2.KDTree$KDTreeCursor (.cursor kdtree)]; mighe be $KDTreeCursor
       (when (.hasNext cur)
-        (.fwd cur)        
+        (.fwd cur)
         (when-not (.get ^net.imglib2.type.logic.BitType (.get cur)) ;; Only look at neighbors if this point is unflagged
-          (.search tree-search cur distance-threshold true)        
-          (when (pos? (.numNeighbors tree-search))          
+          (.search tree-search cur distance-threshold true)
+          (when (pos? (.numNeighbors tree-search))
             (doseq [k (range 1 (.numNeighbors tree-search))]; Unsure whether input point is returned, assuming so
               (.setOne ^net.imglib2.type.logic.BitType (.get ^net.imglib2.Sampler (.getSampler tree-search k))))))
         (recur cur)))
@@ -92,7 +92,7 @@ Returns a sequence of RealLocalizable's"
     (loop [cur ^net.imglib2.KDTree$KDTreeCursor (.cursor kdtree)
            result-verts []]
       (if (.hasNext cur)
-        (do 
+        (do
           (.fwd cur)
           (if-not (.get ^net.imglib2.type.logic.BitType (.get cur)) ;; Only look at neighbors if this point is unflagged
             (recur cur (conj result-verts (net.imglib2.RealPoint. cur)))
