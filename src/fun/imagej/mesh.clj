@@ -133,6 +133,12 @@ Mutable function"; could be easily generalized beyond 3D
         max-z (reduce max (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 2) vertices))]
     (net.imglib2.util.Intervals/createMinMaxReal (double-array [min-x min-y min-z max-x max-y max-z]))))
 
+(defn real-interval-to-seq
+  "Convert an interval into a seq"
+  [interval]
+  (concat (map #(.realMin interval %) (range (.numDimensions interval)))
+          (map #(.realMax interval %) (range (.numDimensions interval)))))
+
 (defn center-vertices
   "Center the vertices using the bounding box."
   [vertices]
@@ -146,13 +152,27 @@ Mutable function"; could be easily generalized beyond 3D
     vertices))
 (def center-vertices! center-vertices)
 
+#_(defn write-vertices-to-xyz
+    "Write a list of vertices to xyz."
+    [verts filename]
+    (spit filename
+          (with-out-str
+            (doall
+              (for [vert verts]
+                (println (string/join "\t" (seq vert))))))))
+
 (defn write-vertices-to-xyz
-  "Write a list of vertices to xyz."
-  [verts filename]
-  (spit filename
-        (with-out-str
-          (doall
-            (for [vert verts]
-              (println (string/join "\t" (seq vert))))))))
+    "Write a list of vertices to xyz."
+    [verts filename]
+    (spit filename
+          (with-out-str
+            (doall
+              (for [vert verts]
+                (println (string/join "\t" [(.getDoublePosition vert 0) (.getDoublePosition vert 1) (.getDoublePosition vert 2)])))))))
+
+(defn realpoint-to-point
+  "Convert a real point to a point"
+  [^net.imglib2.RealPoint rp]
+  ^net.imglib2.Point (net.imglib2.Point. (long-array [(.getDoublePosition rp 0) (.getDoublePosition rp 1) (.getDoublePosition rp 2)])))
 
 

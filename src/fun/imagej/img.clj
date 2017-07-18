@@ -536,3 +536,14 @@ Returns a View"
     (.localize p2 a2)
     (net.imglib2.util.LinAlgHelpers/subtract a1 a2 diff)
     (net.imglib2.util.LinAlgHelpers/length diff)))
+
+(defn point-distance
+  "Return the distance between two Points"
+  [p1 p2]
+  (let [a1 (long-array (.numDimensions p1))
+        a2 (long-array (.numDimensions p2))
+        diff (long-array (.numDimensions p1))]
+    (.localize p1 a1)
+    (.localize p2 a2)
+    (net.imglib2.util.LinAlgHelpers/subtract a1 a2 diff)
+    (net.imglib2.util.LinAlgHelpers/length diff)))
