@@ -2,7 +2,8 @@
   (:require [fun.imagej.img :as img]
             [fun.imagej.core :as imagej]
             [fun.imagej.img.shape :as shape]
-            [fun.imagej.ops :as ops])
+            [fun.imagej.ops :as ops]
+            [random-forests.core :as rf])
   (:import [org.apache.commons.math3.linear QRDecomposition Array2DRowRealMatrix ArrayRealVector SingularValueDecomposition]))
 
 ;; The Fast Segmentation paradigm uses a hash map as the base data structure
@@ -52,36 +53,36 @@ We should probably give a way of providing a custom dimension ordering."
   [seg label]
   ;(println "generate-sample-points " (class label))
   (loop [seg (assoc seg
-                    :positive-samples []
-                    :negative-samples [])]
+               :positive-samples []
+               :negative-samples [])]
     (if (or (< (count (:positive-samples seg))
                (:num-positive-samples seg))
             (< (count (:negative-samples seg))
-               (:num-negative-samples seg)))      
+               (:num-negative-samples seg)))
       (let [candidate-pos (generate-position seg label)
             candidate-val (img/get-val ^net.imglib2.img.imageplus.ByteImagePlus label ^longs candidate-pos)]
         ;(println "Positive " (count (:positive-samples seg)) " Negative " (count (:negative-samples seg)) " val " candidate-val)
-           (cond                                    ; True, and need positive samples
-             (and candidate-val
-                  (< (count (:positive-samples seg)) (:num-positive-samples seg)))
-             (do
-               (when (:verbose seg)
-                     (println "pos:" (count (:positive-samples seg))
-                              "neg:" (count (:negative-samples seg))))
-               (recur (assoc seg
-                             :positive-samples (conj (:positive-samples seg) candidate-pos))))
-             ; False, and need negative samples
-             (and (or (not candidate-val)
-                      (zero? candidate-val))
-                  (< (count (:negative-samples seg)) (:num-negative-samples seg)))
-             (do
-               (when (:verbose seg)
-                     (println "pos:" (count (:positive-samples seg))
-                              "neg:" (count (:negative-samples seg))))
-               (recur (assoc seg
-                             :negative-samples (conj (:negative-samples seg) candidate-pos))))
-             :else
-             (recur seg)))
+        (cond                                    ; True, and need positive samples
+          (and candidate-val
+               (< (count (:positive-samples seg)) (:num-positive-samples seg)))
+          (do
+            (when (:verbose seg)
+              (println "pos:" (count (:positive-samples seg))
+                       "neg:" (count (:negative-samples seg))))
+            (recur (assoc seg
+                     :positive-samples (conj (:positive-samples seg) candidate-pos))))
+          ; False, and need negative samples
+          (and (or (not candidate-val)
+                   (zero? candidate-val))
+               (< (count (:negative-samples seg)) (:num-negative-samples seg)))
+          (do
+            (when (:verbose seg)
+              (println "pos:" (count (:positive-samples seg))
+                       "neg:" (count (:negative-samples seg))))
+            (recur (assoc seg
+                     :negative-samples (conj (:negative-samples seg) candidate-pos))))
+          :else
+          (recur seg)))
       seg)))
 
 ;; Maybe deprecate
@@ -177,10 +178,10 @@ We should probably give a way of providing a custom dimension ordering."
   "Generate a dataset for training"
   [seg input-img]
   (loop [seg (assoc seg
-                    :feature-vals []
-                    :target-vals (concat (repeat (count (:positive-samples seg)) 1)
-                                         (repeat (count (:negative-samples seg)) 0)))
-         feature-map-fns (:feature-map-fns seg)]    
+               :feature-vals []
+               :target-vals (concat (repeat (count (:positive-samples seg)) 1)
+                                    (repeat (count (:negative-samples seg)) 0)))
+         feature-map-fns (:feature-map-fns seg)]
     (if (empty? feature-map-fns)
       seg
       (let [feature-name (:name (first feature-map-fns))
@@ -193,17 +194,18 @@ We should probably give a way of providing a custom dimension ordering."
                                                              (:basename seg) "_"
                                                              feature-name ".tif"))))
                             (imagej/open-img (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif"))
-                            (feature-map-fn input-img)))]
+                            (feature-map-fn input-img)))
+            next-feature-vals (doall
+                                (map #(img/get-val feature-map %)
+                                     (concat (:positive-samples seg)
+                                             (:negative-samples seg))))]
         (when (:verbose seg) (println "feature map generated."))
         (when (:cache-directory seg)
           (imagej/save-img feature-map (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif")))
         (recur (assoc seg
-                      :feature-vals
-                      (conj (:feature-vals seg)
-                            (doall
-                              (map #(img/get-val feature-map %)
-                                   (concat (:positive-samples seg)
-                                           (:negative-samples seg))))))
+                 :feature-vals
+                 (conj (:feature-vals seg)
+                       next-feature-vals))
                (rest feature-map-fns))))))
 
 (defn solve-segmentation
@@ -216,19 +218,36 @@ We should probably give a way of providing a custom dimension ordering."
         coefficients (org.apache.commons.math3.linear.Array2DRowRealMatrix. data-matrix false)
         ;solver (.getSolver (org.apache.commons.math3.linear.QRDecomposition. coefficients))
         solver (.getSolver (org.apache.commons.math3.linear.SingularValueDecomposition. coefficients))
-        
+
         constants (org.apache.commons.math3.linear.ArrayRealVector. (double-array (:target-vals seg)) false)
         solution (.solve solver constants)]
     (assoc seg
-           :weights (doall 
-                      (map #(.getEntry solution %)
-                           (range (.getDimension solution)))))))
+      :weights (doall
+                 (map #(.getEntry solution %)
+                      (range (.getDimension solution)))))))
+
+#_(defn solve-segmentation-random-forest
+  "Solve the segmentatino using random-forest"
+  [seg]
+  (let [features (set (conj (into []
+                               (map #(rf/feature (name (nth feature-seq %))
+                                                 %
+                                                 :continuous)
+                                    (range (count feature-seq))))
+                         #_(rf/feature "class" (count feature-seq) :categorical)))
+        forest (take (or (:forest-size seg) 200)
+                     (rf/build-random-forest examples features
+                                             (or (:tree-depth seg) 8)
+                                             (or (:tree-samples seg) 50)))]
+    (assoc seg
+      :forest forest)))
 
 (defn segment-image
   "Use a solved segmentation and an input image to segment an input."
   [seg to-segment]
   (let [solution-img
-        (fun.imagej.ops.convert/float32 (img/create-img-like to-segment))]    
+        (fun.imagej.ops.convert/float32 (fun.imagej.ops.create/img to-segment)
+                                        #_(img/create-img-like to-segment))]
     (dotimes [k (count (:feature-map-fns seg))]
       (let [ffmap (nth (:feature-map-fns seg) k)
             feature-name (:name ffmap)
@@ -243,9 +262,10 @@ We should probably give a way of providing a custom dimension ordering."
                             (feature-map-fn to-segment)))]
         (when (:verbose seg) (println feature-name (str (:cache-directory seg) (:basename seg) "_" feature-name ".tif")))
         (fun.imagej.ops.math/add solution-img
-                                      solution-img
-                                      (fun.imagej.ops.math/multiply (fun.imagej.ops.convert/float32 feature-map)
-                                                                    ^float (float (nth (:weights seg) k))))))
+                                 solution-img
+                                 (fun.imagej.ops.convert/float32
+                                   (fun.imagej.ops.math/multiply (fun.imagej.ops.convert/float32 feature-map)
+                                                               ^float (float (nth (:weights seg) k)))))))
     (when (:cache-directory seg)
       (imagej/save-img solution-img (str (:cache-directory seg) (:basename seg) "_segmentation.tif")))
     solution-img))
