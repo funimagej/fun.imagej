@@ -27,10 +27,14 @@
   (let [default-mesh (net.imagej.mesh.DefaultMesh.)
         stl-facets (for [facet (.getFacets mesh)]
                      (.init (STLFacet. (.getTrianglePool default-mesh))
-                            (vertex-to-vector3d (.getNormal facet))
-                            (vertex-to-vector3d (.getP0 facet))
-                            (vertex-to-vector3d (.getP1 facet))
-                            (vertex-to-vector3d (.getP2 facet))
+                            (.init (net.imagej.mesh.Vertex3. (.getVertex3Pool default-mesh))
+                                   (.getX (.getNormal facet)) (.getY (.getNormal facet)) (.getZ (.getNormal facet)))
+                            (.init (net.imagej.mesh.Vertex3. (.getVertex3Pool default-mesh))
+                                   (.getX (.getP0 facet)) (.getY (.getP0 facet)) (.getZ (.getP0 facet)))
+                            (.init (net.imagej.mesh.Vertex3. (.getVertex3Pool default-mesh))
+                                   (.getX (.getP1 facet)) (.getY (.getP1 facet)) (.getZ (.getP1 facet)))
+                            (.init (net.imagej.mesh.Vertex3. (.getVertex3Pool default-mesh))
+                                   (.getX (.getP2 facet)) (.getY (.getP2 facet)) (.getZ (.getP2 facet)))
                             0))
         ofile (java.io.FileOutputStream. stl-filename)]
     (.write ofile
