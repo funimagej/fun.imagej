@@ -51,7 +51,7 @@
       (map (fn [target input-img]
              (ij1/show-imp
                (ij1/imps-to-rgb 
-                 (map convert/img->im; this can shrink
+                 (map convert/img->imp; this can shrink
                       [target (extract-embryo input-img (ffirst accuracies))]))))
            target-imgs input-imgs))))
 
