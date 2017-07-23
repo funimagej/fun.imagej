@@ -26,16 +26,16 @@
   [mesh stl-filename]
   (let [default-mesh (net.imagej.mesh.DefaultMesh.)
         stl-facets (for [facet (.getFacets mesh)]
-                     (.init (STLFacet. (.getTrianglePool default-mesh))
-                            (.init (net.imagej.mesh.Vertex3. (.getVertex3Pool default-mesh))
-                                   (.getX (.getNormal facet)) (.getY (.getNormal facet)) (.getZ (.getNormal facet)))
-                            (.init (net.imagej.mesh.Vertex3. (.getVertex3Pool default-mesh))
-                                   (.getX (.getP0 facet)) (.getY (.getP0 facet)) (.getZ (.getP0 facet)))
-                            (.init (net.imagej.mesh.Vertex3. (.getVertex3Pool default-mesh))
-                                   (.getX (.getP1 facet)) (.getY (.getP1 facet)) (.getZ (.getP1 facet)))
-                            (.init (net.imagej.mesh.Vertex3. (.getVertex3Pool default-mesh))
-                                   (.getX (.getP2 facet)) (.getY (.getP2 facet)) (.getZ (.getP2 facet)))
-                            0))
+                     (let [normal (.init (.create (.getVertex3Pool default-mesh))
+                                         (.getX (.getNormal facet)) (.getY (.getNormal facet)) (.getZ (.getNormal facet)))
+                           v1 (.init (.create (.getVertex3Pool default-mesh))
+                                     (.getX (.getP0 facet)) (.getY (.getP0 facet)) (.getZ (.getP0 facet)))
+                           v2 (.init (.create (.getVertex3Pool default-mesh))
+                                     (.getX (.getP1 facet)) (.getY (.getP1 facet)) (.getZ (.getP1 facet)))
+                           v3 (.init (.create (.getVertex3Pool default-mesh))
+                                     (.getX (.getP2 facet)) (.getY (.getP2 facet)) (.getZ (.getP2 facet)))]
+                       (.init (.create (.getTrianglePool default-mesh))
+                              v1 v2 v3 normal)))
         ofile (java.io.FileOutputStream. stl-filename)]
     (.write ofile
       (.write (BinarySTLFormat.)
@@ -166,13 +166,13 @@ Mutable function"; could be easily generalized beyond 3D
                 (println (string/join "\t" (seq vert))))))))
 
 (defn write-vertices-to-xyz
-    "Write a list of vertices to xyz."
-    [verts filename]
-    (spit filename
-          (with-out-str
-            (doall
-              (for [vert verts]
-                (println (string/join "\t" [(.getDoublePosition vert 0) (.getDoublePosition vert 1) (.getDoublePosition vert 2)])))))))
+  "Write a list of vertices to xyz."
+  [verts filename]
+  (spit filename
+        (with-out-str
+          (doall
+            (for [vert verts]
+              (println (string/join "\t" [(.getDoublePosition vert 0) (.getDoublePosition vert 1) (.getDoublePosition vert 2)])))))))
 
 (defn realpoint-to-point
   "Convert a real point to a point"
