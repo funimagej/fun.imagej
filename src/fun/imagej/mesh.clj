@@ -25,16 +25,24 @@
   "Write a DefaultMesh from imagej-ops to a .stl file."
   [mesh stl-filename]
   (let [default-mesh (net.imagej.mesh.DefaultMesh.)
-        stl-facets (for [facet (.getFacets mesh)]
-                     (let [normal (.init (.create (.getVertex3Pool default-mesh))
-                                         (.getX (.getNormal facet)) (.getY (.getNormal facet)) (.getZ (.getNormal facet)))
-                           v1 (.init (.create (.getVertex3Pool default-mesh))
-                                     (.getX (.getP0 facet)) (.getY (.getP0 facet)) (.getZ (.getP0 facet)))
-                           v2 (.init (.create (.getVertex3Pool default-mesh))
-                                     (.getX (.getP1 facet)) (.getY (.getP1 facet)) (.getZ (.getP1 facet)))
-                           v3 (.init (.create (.getVertex3Pool default-mesh))
-                                     (.getX (.getP2 facet)) (.getY (.getP2 facet)) (.getZ (.getP2 facet)))]
-                       (.init (.create (.getTrianglePool default-mesh))
+        stl-facets (for [^net.imagej.ops.geom.geom3d.mesh.TriangularFacet facet (.getFacets mesh)]
+                     (let [normal ^net.imagej.mesh.Vertex3 (.init ^net.imagej.mesh.Vertex3 (.create ^net.imagej.mesh.Vertex3Pool (.getVertex3Pool default-mesh))
+                                                                  (.getX ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getNormal facet))
+                                                                  (.getY ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getNormal facet))
+                                                                  (.getZ ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getNormal facet)))
+                           v1 ^net.imagej.mesh.Vertex3 (.init ^net.imagej.mesh.Vertex3 (.create ^net.imagej.mesh.Vertex3Pool (.getVertex3Pool default-mesh))
+                                                              (.getX ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP0 facet))
+                                                              (.getY ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP0 facet))
+                                                              (.getZ ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP0 facet)))
+                           v2 ^net.imagej.mesh.Vertex3 (.init ^net.imagej.mesh.Vertex3 (.create ^net.imagej.mesh.Vertex3Pool (.getVertex3Pool default-mesh))
+                                                              (.getX ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP1 facet))
+                                                              (.getY ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP1 facet))
+                                                              (.getZ ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP1 facet)))
+                           v3 ^net.imagej.mesh.Vertex3 (.init ^net.imagej.mesh.Vertex3 (.create ^net.imagej.mesh.Vertex3Pool (.getVertex3Pool default-mesh))
+                                                              (.getX ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP2 facet))
+                                                              (.getY ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP2 facet))
+                                                              (.getZ ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP2 facet)))]
+                       ^net.imagej.mesh.Triangle (.init ^net.imagej.mesh.Triangle (.create ^net.imagej.mesh.TrianglePool (.getTrianglePool default-mesh))
                               v1 v2 v3 normal)))
         ofile (java.io.FileOutputStream. stl-filename)]
     (.write ofile
