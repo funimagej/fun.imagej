@@ -387,7 +387,7 @@ Uses centroids"
                                    (:display-results argmap)
                                    false)
                            " display")
-                         " exclude add")
+                         " add"); add option for exclude on edges
         manager (ij.plugin.frame.RoiManager. true)]
     (ij.plugin.filter.ParticleAnalyzer/setRoiManager manager)
     (ij.IJ/run imp "Analyze Particles..." method-args)
