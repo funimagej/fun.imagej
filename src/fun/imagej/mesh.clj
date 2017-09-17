@@ -1,5 +1,6 @@
 (ns fun.imagej.mesh
-  (:import [net.imagej.mesh.stl STLFacet BinarySTLFormat])
+  (:import [net.imagej.mesh.stl STLFacet BinarySTLFormat]
+           (net.imagej.mesh DefaultMesh))
   (:require [fun.imagej.img :as img]
             [fun.imagej.imp :as imp]
             [fun.imagej.core :as ij]
@@ -57,6 +58,25 @@
      (for [facet facets
            vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
        vertex)))
+
+(defn slurp-bytes
+  "Slurp the bytes from a slurpable thing"
+  [x]
+  (with-open [out (java.io.ByteArrayOutputStream.)]
+    (clojure.java.io/copy (clojure.java.io/input-stream x) out)
+    (.toByteArray out)))
+
+(defn read-stl
+  "Read a mesh from STL"
+  [stl-filename]
+  (let [mesh (DefaultMesh.)
+        vp (.getVertex3Pool mesh)
+        tp (.getTrianglePool mesh)
+        format (BinarySTLFormat.)
+        facets (.readFacets format tp vp ^bytes (slurp-bytes stl-filename))]
+    (.setTriangles mesh facets)
+    (.setVerticesFromTriangles mesh)
+    mesh))
 
 (defn read-stl-vertices
    "Read a mesh from a STL file."
@@ -137,7 +157,13 @@ Mutable function"; could be easily generalized beyond 3D
 (defn bounding-interval
   "Return a RealInterval that bounds a collection of RealLocalizable vertices."
   [vertices]
-  (let [min-x (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 0) vertices)) 
+  (println (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 0) vertices))
+           (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 1) vertices))
+           (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 2) vertices)))
+  (doseq [v (take 3 vertices)]
+    (println v)
+    (println (doall (map #(.getDoublePosition ^net.imglib2.RealLocalizable v %) (range 3)))))
+  (let [min-x (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 0) vertices))
         min-y (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 1) vertices))
         min-z (reduce min (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 2) vertices))
         max-x (reduce max (map #(.getDoublePosition ^net.imglib2.RealLocalizable % 0) vertices)) 

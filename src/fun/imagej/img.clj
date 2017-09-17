@@ -99,33 +99,33 @@ with Dimensions."
 f is a function that operates on cursors in the same order as imgs
 If you have an ImagePlus, then use funimage.conversion
 Note: this uses threads to avoid some blocking issues."
-   ([f img1]
-     (let [cur1 ^Cursor (.cursor ^IterableInterval img1)
-           t (Thread.
-               (fn []
-                 (loop []
-                   (when (.hasNext cur1)
-                     (.fwd cur1)
-                     (f cur1)
-                     (recur)))))]
-       (.start t)
-       (.join t)
-       [img1]))
-   ([f img1 img2]
-     (let [^Cursor cur1 (.cursor ^IterableInterval img1)
-           ^Cursor cur2 (.cursor ^IterableInterval img2)
-           t (Thread.
-               (fn []
-                 (loop []
-                   (when (and (.hasNext cur1)
-                              (.hasNext cur2))
-                     (.fwd cur1)
-                     (.fwd cur2)
-                     (f cur1 cur2)
-                     (recur)))))]
-       (.start t)
-       (.join t)
-       [img1 img2]))
+  ([f img1]
+   (let [cur1 ^Cursor (.cursor ^IterableInterval img1)
+         t (Thread.
+             (fn []
+               (loop []
+                 (when (.hasNext cur1)
+                   (.fwd cur1)
+                   (f cur1)
+                   (recur)))))]
+     (.start t)
+     (.join t)
+     [img1]))
+  ([f img1 img2]
+   (let [^Cursor cur1 (.cursor ^IterableInterval img1)
+         ^Cursor cur2 (.cursor ^IterableInterval img2)
+         t (Thread.
+             (fn []
+               (loop []
+                 (when (and (.hasNext cur1)
+                            (.hasNext cur2))
+                   (.fwd cur1)
+                   (.fwd cur2)
+                   (f cur1 cur2)
+                   (recur)))))]
+     (.start t)
+     (.join t)
+     [img1 img2]))
    ([f img1 img2 & imgs]
      (let [imgs (concat [img1 img2] imgs)
            curs (map (fn ^Cursor [i] (.cursor ^IterableInterval i)) imgs)
@@ -341,15 +341,15 @@ locations outside these points are assigned fill-value"
   "Do a neighborhood walk over an imglib2 img.
 Rectangle only"
   ([f radius source dest]
-    (let [interval ^Interval (Intervals/expand source (* -1 radius))
-          source ^RandomAccessibleInterval (Views/interval source interval)
-          dest ^RandomAccessibleInterval (Views/interval dest interval)
-          center ^Cursor (.cursor (Views/iterable dest))
-          shape ^RectangleShape (RectangleShape. radius false)]
-      (doseq [^Neighborhood local-neighborhood (.neighborhoods shape source)]
-        (do (.fwd center)
-          (f center local-neighborhood)))
-      dest)))
+   (let [interval ^Interval (Intervals/expand source (* -1 radius))
+         source ^RandomAccessibleInterval (Views/interval source interval)
+         dest ^RandomAccessibleInterval (Views/interval dest interval)
+         center ^Cursor (.cursor (Views/iterable dest))
+         shape ^RectangleShape (RectangleShape. radius false)]
+     (doseq [^Neighborhood local-neighborhood (.neighborhoods shape source)]
+       (do (.fwd center)
+           (f center local-neighborhood)))
+     dest)))
 (def neighborhood-map-to-center! neighborhood-map-to-center)
 
 (defn periodic-neighborhood-map-to-center
@@ -547,3 +547,12 @@ Returns a View"
     (.localize p2 a2)
     (net.imglib2.util.LinAlgHelpers/subtract a1 a2 diff)
     (net.imglib2.util.LinAlgHelpers/length diff)))
+
+(defn normalize
+  "Normalize an image using its minimum and maximum"
+  [input]
+  (let [ab (fun.imagej.ops.stats/minMax input)
+        mn (.getA ab)
+        mx (.getB ab)]
+    (fun.imagej.ops.math/divide (fun.imagej.ops.math/subtract input mn)
+                                (fun.imagej.ops.math/subtract mx mn))))
