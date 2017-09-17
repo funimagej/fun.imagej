@@ -141,37 +141,37 @@ We should probably give a way of providing a custom dimension ordering."
             candidate-val (img/get-val label candidate-pos)
             negative-candidate-val (img/get-val negative-label candidate-pos)]
         #_(println candidate-val
-                  (or (and (number? candidate-val) (pos? candidate-val))
+                   (or (and (number? candidate-val) (pos? candidate-val))
                        (and (not (number? candidate-val)) candidate-val))
-                  negative-candidate-val
-                  (or (and (number? negative-candidate-val) (pos? negative-candidate-val))
-                      (and (not (number? negative-candidate-val)) negative-candidate-val)))
+                   negative-candidate-val
+                   (or (and (number? negative-candidate-val) (pos? negative-candidate-val))
+                       (and (not (number? negative-candidate-val)) negative-candidate-val)))
         #_(println (map #(img/get-val % candidate-pos)
-                                     negative-labels)
-                  (reduce #(or %1 %2) (map #(img/get-val % candidate-pos)
-                                           negative-labels)))
-           (cond                                    ; True, and need positive samples
-             (and (or (and (number? candidate-val) (pos? candidate-val))
-                      (and (not (number? candidate-val)) candidate-val))
-                  (< (count (:positive-samples seg)) (:num-positive-samples seg)))
-             (do
-               (when (:verbose seg)
-                     (println "pos:" (count (:positive-samples seg))
-                              "neg:" (count (:negative-samples seg))))
-               (recur (assoc seg
-                             :positive-samples (conj (:positive-samples seg) candidate-pos))))
-             ; False, and need negative samples
-             (and (or (and (number? negative-candidate-val) (pos? negative-candidate-val))
-                      (and (not (number? negative-candidate-val)) negative-candidate-val))
-                  (< (count (:negative-samples seg)) (:num-negative-samples seg)))
-             (do
-               (when (:verbose seg)
-                     (println "pos:" (count (:positive-samples seg))
-                              "neg:" (count (:negative-samples seg))))
-               (recur (assoc seg
-                             :negative-samples (conj (:negative-samples seg) candidate-pos))))
-             :else
-             (recur seg)))
+                        negative-labels)
+                   (reduce #(or %1 %2) (map #(img/get-val % candidate-pos)
+                                            negative-labels)))
+        (cond                                    ; True, and need positive samples
+          (and (or (and (number? candidate-val) (pos? candidate-val))
+                   (and (not (number? candidate-val)) candidate-val))
+               (< (count (:positive-samples seg)) (:num-positive-samples seg)))
+          (do
+            (when (:verbose seg)
+              (println "pos:" (count (:positive-samples seg))
+                       "neg:" (count (:negative-samples seg))))
+            (recur (assoc seg
+                     :positive-samples (conj (:positive-samples seg) candidate-pos))))
+          ; False, and need negative samples
+          (and (or (and (number? negative-candidate-val) (pos? negative-candidate-val))
+                   (and (not (number? negative-candidate-val)) negative-candidate-val))
+               (< (count (:negative-samples seg)) (:num-negative-samples seg)))
+          (do
+            (when (:verbose seg)
+              (println "pos:" (count (:positive-samples seg))
+                       "neg:" (count (:negative-samples seg))))
+            (recur (assoc seg
+                     :negative-samples (conj (:negative-samples seg) candidate-pos))))
+          :else
+          (recur seg)))
       seg)))
 
 (defn generate-dataset

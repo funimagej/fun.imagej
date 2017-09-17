@@ -122,4 +122,8 @@
 (def >= fun.imagej.ops.logic/greaterThanOrEqual)
 (def <= fun.imagej.ops.logic/lessThanOrEqual)
 
-
+(defn run-op
+  "Run an op using its string name and an array of args that will
+  be converted into an object array"
+  [op-name args]
+  (.run (.op ij/ij) op-name (into-array Object args)))
