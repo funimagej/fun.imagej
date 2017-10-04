@@ -556,3 +556,4 @@ Returns a View"
         mx (.getB ab)]
     (fun.imagej.ops.math/divide (fun.imagej.ops.math/subtract input mn)
                                 (fun.imagej.ops.math/subtract mx mn))))
+

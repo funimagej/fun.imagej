@@ -96,6 +96,7 @@
         (= method :bicubic) (.setInterpolationMethod (.getProcessor imp) ij.process.ImageProcessor/BICUBIC))
   imp)
 
+
 (defn resize-imp
   "Resize an image."
   [^ImagePlus imp width height]
