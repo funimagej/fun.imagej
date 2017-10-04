@@ -41,11 +41,10 @@
 (defn velocity-img-3d
   "Return the velocity img in channels using an assumption that Z is the scanning axis.
   Expects a XYTZ image (1 channel)"
-  [input]
-  (let [time-dimension 3
-        vx (fun.imagej.ops.create/img (img/hyperslice input time-dimension 0))
-        vy (fun.imagej.ops.create/img (img/hyperslice input time-dimension 0))
-        vz (fun.imagej.ops.create/img (img/hyperslice input time-dimension 0))
+  [input time-dimension t-start t-stop]
+  (let [vx (fun.imagej.ops.create/img (img/hyperslice input time-dimension t-start))
+        vy (fun.imagej.ops.create/img (img/hyperslice input time-dimension t-start))
+        vz (fun.imagej.ops.create/img (img/hyperslice input time-dimension t-start))
 
         radius 3
 
@@ -64,17 +63,17 @@
         ; Reading from the following
         ; What about using views to get convolutional neighbors
         ; - Use a list of RAIs (e.g. View's), then no Cursors
-        T0 (Views/interval (img/hyperslice input time-dimension 0)
-                           (Intervals/expand (img/hyperslice input time-dimension 0) (* -1 radius)))
+        T0 (Views/interval (img/hyperslice input time-dimension t-start)
+                           (Intervals/expand (img/hyperslice input time-dimension t-start) (* -1 radius)))
         ;nbrsT0 ^IterableInterval (.neighborhoods shape T0)
         ;cNbrsT0 ^Cursor (.cursor nbrsT0) ; Create a list of RAIs instead
         raisT0 (create-view-set-r T0 radius)
         ;_ (println "raisT0" raisT0)
 
-        time-offset 10
+        ;time-offset 10
 
-        T1 (Views/interval (img/hyperslice input time-dimension time-offset)
-                           (Intervals/expand (img/hyperslice input time-dimension time-offset) (* -1 radius)))
+        T1 (Views/interval (img/hyperslice input time-dimension t-stop)
+                           (Intervals/expand (img/hyperslice input time-dimension t-stop) (* -1 radius)))
         ;nbrsT1 ^IterableInterval (.neighborhoods shape T1)
         ;cNbrsT1 ^Cursor (.cursor nbrsT0)
         raisT1 (create-view-set-r T1 radius)
@@ -133,8 +132,8 @@
         ; Reading from the following
         ; What about using views to get convolutional neighbors
         ; - Use a list of RAIs (e.g. View's), then no Cursors
-        T0 (Views/interval (img/hyperslice input time-dimension 0)
-                           (Intervals/expand (img/hyperslice input time-dimension 0) (* -1 radius)))
+        T0 (Views/interval (img/hyperslice input time-dimension t-start)
+                           (Intervals/expand (img/hyperslice input time-dimension t-start) (* -1 radius)))
         raisT0 (create-view-set-r T0 radius)
 
         ;time-offset 10
