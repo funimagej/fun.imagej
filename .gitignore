@@ -6,3 +6,4 @@
 pom.xml
 /bin/
 .idea
+target/doc

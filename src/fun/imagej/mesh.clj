@@ -213,4 +213,9 @@ Mutable function"; could be easily generalized beyond 3D
   [^net.imglib2.RealPoint rp]
   ^net.imglib2.Point (net.imglib2.Point. (long-array [(.getDoublePosition rp 0) (.getDoublePosition rp 1) (.getDoublePosition rp 2)])))
 
-
+(defn vertex3-to-array
+  "Convert a vertex3 to a seq"
+  [v3]
+  (let [fa (float-array 3)]
+    (.localize v3 fa)
+    fa))

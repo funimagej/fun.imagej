@@ -20,11 +20,13 @@
                  [ome/bioformats_package "5.3.3"]
                  ;[net.imagej/imagej-ops "0.38.1-SNAPSHOT"]
                  [net.imagej/imagej-ops "0.38.0"]
-                 [net.imagej/imagej-mesh "0.1.3"]
+                 [net.imagej/imagej-mesh "0.1.4-SNAPSHOT"]
                  
                  [org.ojalgo/ojalgo "43.0"]
                  
                  [sc.fiji/Auto_Threshold "1.16.0"]
+
+                 [sc.iview/sciview "0.0.1-SNAPSHOT" :exclusions [com.github.jnr/jffi com.github.jnr/jnr-x86asm]]
                  ]
   :java-source-paths ["java"]
   :repositories [["imagej" "http://maven.imagej.net/content/groups/hosted/"]
@@ -50,7 +52,8 @@
                                       :password :env/CI_DEPLOY_PASSWORD
                                       :sign-releases false}]]
   ; Try to use lein parent when we can
-  :plugins [[lein-cloverage "1.0.9"]]
+  :plugins [[lein-cloverage "1.0.9"]
+            [lein-codox "0.10.3"]]
 ;  :plugins [[lein-parent "0.3.1"]]
   :jvm-opts ["-Xmx32g" "-server"
              ;"-javaagent:/Users/kyle/.m2/repository/net/imagej/ij1-patcher/0.12.3/ij1-patcher-0.12.3.jar=init"
