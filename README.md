@@ -8,6 +8,10 @@ FunImageJ is a Lisp/Clojure framework for scientific image processing built upon
 
 Note to functional programming folks: many FunImageJ functions treat data as mutable. Images are large and take up lots of memory, we try not to duplicate data unless necessary. If you want to do something non-destructively, then you may need to explicitly use `copy` functions.
 
+[API Documentation](https://kephale.github.io/fun.imagej/)
+
+Example code for both standalone and Fiji usage is provided in the [*test* directory](https://github.com/kephale/fun.imagej/tree/master/test/fun/imagej/test) of this repository.  
+
 ---
 
 ## Usage within ImageJ:
