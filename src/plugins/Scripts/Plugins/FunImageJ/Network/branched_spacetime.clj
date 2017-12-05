@@ -16,6 +16,7 @@
 ;; TODO:
 ; - measure a band along ROI line
 ; - use a branch point and roi detector
+; - align between timepoints
 
 (refer 'user)
 
