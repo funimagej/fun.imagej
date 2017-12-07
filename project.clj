@@ -1,4 +1,4 @@
-(defproject fun.imagej/fun.imagej "0.2.4"
+(defproject fun.imagej/fun.imagej "0.2.5-SNAPSHOT"
   :description "Functional Image Processing with ImageJ/FIJI"
   :url "https://github.com/funimage/funimage"
   :license {:name "Apache v2.0"
@@ -25,6 +25,8 @@
                  [org.ojalgo/ojalgo "43.0"]
                  
                  [sc.fiji/Auto_Threshold "1.16.0"]
+
+                 [sc.iview/sciview "0.0.1"]
                  ]
   :java-source-paths ["java"]
   :repositories [["imagej" "http://maven.imagej.net/content/groups/hosted/"]
