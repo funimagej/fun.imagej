@@ -14,6 +14,27 @@ Example code for both standalone and Fiji usage is provided in the [*test* direc
 
 ---
 
+## Getting started
+
+### IntelliJ
+
+1. Install [Cursive](https://cursive-ide.com/userguide/). 
+2. Edit code as you usually would. Look at `fun.imagej.demo` to start.
+
+### Eclipse
+
+1. Install [Counterclockwise](http://doc.ccw-ide.org/). You can find it in the Eclipse marketplace.
+2. Edit code as you usually would. Look at `fun.imagej.demo` to start.
+
+### CLI
+
+1. Install a build manager: [Leiningen](https://leiningen.org/) (default in these examples) or [boot](https://github.com/boot-clj/boot)
+- If you are an Emacs user, then you might want to install [CIDER](https://github.com/clojure-emacs/cider)
+2. `lein repl` will start up a Read-Eval-Print-Loop where you can interactively code
+3. `lein run -m fun.imagej.demo` will launch a demo
+
+---
+
 ## Usage within ImageJ:
 
 Add an update site like you would usually (see http://fiji.sc/List_of_update_sites)   
@@ -36,7 +57,7 @@ Add the following repositories to your `project.clj`
 Then add the fun.imagej dependency:
 
 ```
-[fun.imagej/fun.imagej "0.2.1"]
+[fun.imagej/fun.imagej "0.2.4"]
 ```
 
 
