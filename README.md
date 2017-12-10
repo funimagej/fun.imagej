@@ -33,6 +33,13 @@ Example code for both standalone and Fiji usage is provided in the [*test* direc
 2. `lein repl` will start up a Read-Eval-Print-Loop where you can interactively code
 3. `lein run -m fun.imagej.demo` will launch a demo
 
+### Introductory Clojure resources:
+    
+- [Introduction to Clojure syntax](https://clojure.org/guides/learn/syntax)
+- [A basic tutorial](http://clojure-doc.org/articles/tutorials/introduction.html)
+- [Grimoire interactive API lookup](https://www.conj.io/)
+- [Clojure scripting in ImageJ](http://imagej.net/Clojure_Scripting) [Note: this resource is discouraged for 99.9% of users]
+
 ---
 
 ## Usage within ImageJ:
