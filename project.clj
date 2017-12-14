@@ -26,7 +26,8 @@
                  
                  [sc.fiji/Auto_Threshold "1.16.0"]
 
-                 [sc.iview/sciview "0.0.1"]
+                 ;[sc.iview/sciview "0.0.1"]
+                 [sc.iview/sciview "0.0.2-SNAPSHOT"]
                  ]
   :java-source-paths ["java"]
   :repositories [["imagej" "http://maven.imagej.net/content/groups/hosted/"]

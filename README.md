@@ -19,19 +19,19 @@ Example code for both standalone and Fiji usage is provided in the [*test* direc
 ### IntelliJ
 
 1. Install [Cursive](https://cursive-ide.com/userguide/). 
-2. Edit code as you usually would. Look at `fun.imagej.demo` to start.
+2. Edit code as you usually would. Look at `fun.imagej.test.presentations.dd2017` to start.
 
 ### Eclipse
 
 1. Install [Counterclockwise](http://doc.ccw-ide.org/). You can find it in the Eclipse marketplace.
-2. Edit code as you usually would. Look at `fun.imagej.demo` to start.
+2. Edit code as you usually would. Look at `fun.imagej.test.presentations.dd2017` to start.
 
 ### CLI
 
 1. Install a build manager: [Leiningen](https://leiningen.org/) (default in these examples) or [boot](https://github.com/boot-clj/boot)
 - If you are an Emacs user, then you might want to install [CIDER](https://github.com/clojure-emacs/cider)
 2. `lein repl` will start up a Read-Eval-Print-Loop where you can interactively code
-3. `lein run -m fun.imagej.demo` will launch a demo
+3. `lein run -m fun.imagej.test.presentations.dd2017` will launch a demo
 
 ### Introductory Clojure resources:
     
