@@ -10,7 +10,13 @@ Note to functional programming folks: many FunImageJ functions treat data as mut
 
 [API Documentation](https://kephale.github.io/fun.imagej/)
 
-Example code for both standalone and Fiji usage is provided in the [*test* directory](https://github.com/kephale/fun.imagej/tree/master/test/fun/imagej/test) of this repository.  
+Example code for both standalone and Fiji usage is provided in the [*test* directory](https://github.com/kephale/fun.imagej/tree/master/test/fun/imagej/test) of this repository.
+  
+---
+
+## Citing:
+
+Kyle I S Harrington, Curtis T Rueden, Kevin W Eliceiri; FunImageJ: a Lisp framework for scientific image processing, Bioinformatics, btx710, https://doi.org/10.1093/bioinformatics/btx710
 
 ---
 
