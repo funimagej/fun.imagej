@@ -61,3 +61,6 @@
              #_"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:8000"]
   ;:javac-options ["-target" "1.6" "-source" "1.6"]
   )
+(require 'cemerick.pomegranate.aether)
+(cemerick.pomegranate.aether/register-wagon-factory!
+  "http" #(org.apache.maven.wagon.providers.http.HttpWagon.))
