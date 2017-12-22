@@ -116,8 +116,8 @@
 
 (defn add-box
   "Add a sphere to a sciview instance"
-  [sv position center]
-  (.addBox sv position center))
+  [sv position size]
+  (.addBox sv position size))
 
 (defn add-obj
   "Add an obj file to a scene (implictly opens the file)"
@@ -128,6 +128,11 @@
   "Add a stl file to a scene (implictly opens the file)"
   [sv filename]
   (.addSTL sv filename))
+
+(defn add-volume
+  "Add a stl file to a scene (implictly opens the file)"
+  [sv image]
+  (.addVolume sv image 1 1 1))
 
 (defn add-point-cloud
   "Add a point cloud to the scene"
@@ -197,3 +202,6 @@
                  ; UVs
                  1
                  )
+
+;(def sv (get-sciview))
+

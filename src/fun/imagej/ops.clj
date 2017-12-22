@@ -102,25 +102,25 @@
          :namespace op-namespace
          }))))
 
-(def + 
-  ((fn [x]
-     x)
-    (fn [x y]
-      (fun.imagej.ops.math/add x y))))
-(def - 
-  (fn [x y]
-    (fun.imagej.ops.math/subtract x y)))
-;(fn [x] (fun.imagej.ops.math/negate x) ; should figure this out for -
-(def * fun.imagej.ops.math/multiply)
-(def / fun.imagej.ops.math/divide)
-(def or fun.imagej.ops.logic/or)
-(def and fun.imagej.ops.logic/and)
-(def > fun.imagej.ops.logic/greaterThan)
-(def < fun.imagej.ops.logic/lessThan)
-(def = fun.imagej.ops.logic/equal)
-(def not= fun.imagej.ops.logic/notEqual)
-(def >= fun.imagej.ops.logic/greaterThanOrEqual)
-(def <= fun.imagej.ops.logic/lessThanOrEqual)
+;(def +
+;  ((fn [x]
+;     x)
+;    (fn [x y]
+;      (fun.imagej.ops.math/add x y))))
+;(def -
+;  (fn [x y]
+;    (fun.imagej.ops.math/subtract x y)))
+;;(fn [x] (fun.imagej.ops.math/negate x) ; should figure this out for -
+;(def * fun.imagej.ops.math/multiply)
+;(def / fun.imagej.ops.math/divide)
+;(def or fun.imagej.ops.logic/or)
+;(def and fun.imagej.ops.logic/and)
+;(def > fun.imagej.ops.logic/greaterThan)
+;(def < fun.imagej.ops.logic/lessThan)
+;(def = fun.imagej.ops.logic/equal)
+;(def not= fun.imagej.ops.logic/notEqual)
+;(def >= fun.imagej.ops.logic/greaterThanOrEqual)
+;(def <= fun.imagej.ops.logic/lessThanOrEqual)
 
 (defn run-op
   "Run an op using its string name and an array of args that will

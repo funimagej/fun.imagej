@@ -1,4 +1,5 @@
 (ns fun.imagej.img.cursor
+  (:refer-clojure :exclude [inc dec])
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
             [fun.imagej.img.type :as tpe])
@@ -34,12 +35,14 @@
   [^Cursor cur]
   (.inc ^net.imglib2.type.numeric.RealType (.get cur)))
 (def inc! inc)
+(def inc-val! inc)
 
 (defn dec
   "Decrement the value at a cursor."
   [^Cursor cur]
   (.dec ^net.imglib2.type.numeric.RealType (.get cur)))
 (def dec! dec)
+(def dec-val! dec)
 
 (defn set-one
   "Set a cursor's value to one."

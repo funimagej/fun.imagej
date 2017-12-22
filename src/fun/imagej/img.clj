@@ -1,4 +1,5 @@
 (ns fun.imagej.img
+  (:refer-clojure :exclude [replace])
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
             [fun.imagej.img.cursor :as cursor]
@@ -18,8 +19,7 @@
            [net.imglib2.converter Converters]
            [net.imglib2.algorithm.binary Thresholder]
            [net.imglib2.algorithm.gradient PartialDerivative HessianMatrix]
-           [net.imglib2.algorithm.linalg.eigen TensorEigenValues]
-           ))
+           [net.imglib2.algorithm.linalg.eigen TensorEigenValues]))
 
 (defn num-dimensions
   "Return the number of dimensions of a EuclideanSpace."

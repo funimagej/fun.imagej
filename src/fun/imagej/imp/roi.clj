@@ -52,6 +52,14 @@
   (let [roi-manager (get-roi-manager)]
      (.getRoisAsArray roi-manager)))
 
+(defn open-roi-zip
+  "Open a zip of ROIs"
+  [filename]
+  (let [rm (get-roi-manager)]
+    (.reset rm)
+    (.runCommand rm "Open" filename)
+    (seq (get-rois))))
+
 (defn mask-from-roi-manager
   "Make a mask ImagePlus from all the rois in roi-manager."
   [roi-manager imp]
