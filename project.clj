@@ -16,7 +16,9 @@
                  [net.imglib2/imglib2-algorithm "0.8.0"]
                  [net.imglib2/imglib2-roi "0.4.7"]
                  [net.imglib2/imglib2-ij "2.0.0-beta-37"]
-                 [net.imagej/imagej "2.0.0-rc-61" :exclusions [com.github.jnr/jffi com.github.jnr/jnr-x86asm]]
+                 [net.imagej/imagej "2.0.0-rc-61" :exclusions [com.github.jnr/jffi
+                                                               com.github.jnr/jnr-x86asm
+                                                               org.scijava/scripting-renjin]]
                  [ome/bioformats_package "5.3.3"]
                  ;[net.imagej/imagej-ops "0.38.1-SNAPSHOT"]
                  [net.imagej/imagej-ops "0.38.0"]
