@@ -8,7 +8,7 @@
                  ;[me.raynes/fs "1.4.6"]
                  ;[org.clojure/data.zip "0.1.1"]
                  [clj-random "0.1.8"]
-                 
+
                  ;[cc.artifice/clj-ml "0.8.5"]
                  [random-forests-clj "0.2.0"]
 
@@ -21,22 +21,22 @@
                  ;[net.imagej/imagej-ops "0.38.1-SNAPSHOT"]
                  [net.imagej/imagej-ops "0.38.0"]
                  [net.imagej/imagej-mesh "0.1.3"]
-                 
+
                  [org.ojalgo/ojalgo "43.0"]
-                 
+
                  [sc.fiji/Auto_Threshold "1.16.0"]
 
                  [sc.iview/sciview "0.0.1"]
                  ]
   :java-source-paths ["java"]
-  :repositories [["imagej" "http://maven.imagej.net/content/groups/hosted/"]
-                 ["imagej-releases" "http://maven.imagej.net/content/repositories/releases/"]
-                 ["ome maven" "http://artifacts.openmicroscopy.org/artifactory/maven/"]
-                 ["imagej-snapshots" "http://maven.imagej.net/content/repositories/snapshots/"]
-                 ["clojars2" {:url "http://clojars.org/repo/"
-                             :username :env/LEIN_USERNAME
-                              :password :env/LEIN_PASSWORD}]]
-  :deploy-repositories [["releases" {:url "http://maven.imagej.net/content/repositories/releases"
+  :repositories [["imagej" "https://maven.imagej.net/content/groups/hosted/"]
+                 ["imagej-releases" "https://maven.imagej.net/content/repositories/releases/"]
+                 ["ome maven" "https://artifacts.openmicroscopy.org/artifactory/maven/"]
+                 ["imagej-snapshots" "https://maven.imagej.net/content/repositories/snapshots/"]
+                 #_["clojars2" {:url "http://clojars.org/repo/"
+                                :username :env/LEIN_USERNAME
+                                :password :env/LEIN_PASSWORD}]]
+  :deploy-repositories [["releases" {:url "https://maven.imagej.net/content/repositories/releases"
                                      ;; Select a GPG private key to use for
                                      ;; signing. (See "How to specify a user
                                      ;; ID" in GPG's manual.) GPG will
@@ -47,15 +47,15 @@
                                      :username :env/CI_DEPLOY_USERNAME
                                      :password :env/CI_DEPLOY_PASSWORD
                                      :sign-releases false}]
-                        ["snapshots" {:url "http://maven.imagej.net/content/repositories/snapshots"
+                        ["snapshots" {:url "https://maven.imagej.net/content/repositories/snapshots"
                                       :username :env/CI_DEPLOY_USERNAME
                                       :password :env/CI_DEPLOY_PASSWORD
                                       :sign-releases false}]]
   ; Try to use lein parent when we can
   :plugins [[lein-cloverage "1.0.9"]]
-;  :plugins [[lein-parent "0.3.1"]]
+  ;  :plugins [[lein-parent "0.3.1"]]
   :jvm-opts ["-Xmx32g" "-server"
              ;"-javaagent:/Users/kyle/.m2/repository/net/imagej/ij1-patcher/0.12.3/ij1-patcher-0.12.3.jar=init"
-             #_"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:8000"] 
+             #_"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:8000"]
   ;:javac-options ["-target" "1.6" "-source" "1.6"]
   )
