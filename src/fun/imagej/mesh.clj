@@ -1,6 +1,7 @@
 (ns fun.imagej.mesh
   (:import [net.imagej.mesh.stl STLFacet BinarySTLFormat]
-           (net.imagej.mesh DefaultMesh))
+           (net.imagej.mesh DefaultMesh)
+           (net.imagej.ops.geom.geom3d.mesh TriangularFacet Vertex))
   (:require [fun.imagej.img :as img]
             [fun.imagej.imp :as imp]
             [fun.imagej.core :as ij]
@@ -213,4 +214,12 @@ Mutable function"; could be easily generalized beyond 3D
   [^net.imglib2.RealPoint rp]
   ^net.imglib2.Point (net.imglib2.Point. (long-array [(.getDoublePosition rp 0) (.getDoublePosition rp 1) (.getDoublePosition rp 2)])))
 
-
+(defn convert-to-opsmesh
+  "Convert and imagej-mesh mesh to an imagej-ops mesh"
+  [^net.imagej.mesh.DefaultMesh dm]
+  (let [result (net.imagej.ops.geom.geom3d.mesh.DefaultMesh. )]
+    (doseq [tri (.getTriangles dm)]
+      (.addFace result (TriangularFacet. (Vertex. (.getX (.getVertex tri 0)) (.getY (.getVertex tri 0)) (.getZ (.getVertex tri 0)))
+                                          (Vertex. (.getX (.getVertex tri 1)) (.getY (.getVertex tri 1)) (.getZ (.getVertex tri 1)))
+                                          (Vertex. (.getX (.getVertex tri 2)) (.getY (.getVertex tri 2)) (.getZ (.getVertex tri 2))))))
+    result))

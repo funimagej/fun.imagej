@@ -22,7 +22,7 @@
                  [ome/bioformats_package "5.3.3"]
                  ;[net.imagej/imagej-ops "0.38.1-SNAPSHOT"]
                  [net.imagej/imagej-ops "0.38.0"]
-                 [net.imagej/imagej-mesh "0.1.3"]
+                 [net.imagej/imagej-mesh "0.2.0"]
 
                  [org.ojalgo/ojalgo "43.0"]
 

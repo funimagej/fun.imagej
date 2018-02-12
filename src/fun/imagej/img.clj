@@ -557,3 +557,17 @@ Returns a View"
     (fun.imagej.ops.math/divide (fun.imagej.ops.math/subtract input mn)
                                 (fun.imagej.ops.math/subtract mx mn))))
 
+(defn entropy
+  "Return the entropy of the image. entropy = -sum(p*log(p))"
+  [image]
+  (let [;hist (ops/run-op "image.histogram" (object-array [image 256]))
+        ;hist-counts (map #(.get %) (seq hist))
+        image-8bit (fun.imagej.ops.convert/uint8 image)
+        hist-counts (vals (frequencies (map #(.get %) image-8bit)))
+        sum-count (reduce + hist-counts)
+        _ (println sum-count hist-counts (frequencies (map #(.get %) image-8bit)))
+        norm-hist-counts (map #(/ % sum-count) hist-counts)]
+    (- (reduce + (map #(* % (/ (java.lang.Math/log %)
+                               (java.lang.Math/log 2)))
+                      norm-hist-counts)))))
+
