@@ -4,7 +4,7 @@
 ; @Float(label="Depth") depth
 ; @OUTPUT ImagePlus voxelized-imp
 
-(ns plugins.Scripts.Plugins.FunImageJ.plugins.Scripts.Plugins.FunImageJ.Mesh.voxelize
+(ns plugins.Scripts.Plugins.FunImageJ.plugins.Scripts.Plugins.FunImageJ.Mesh.voxelize-mesh
   (:require [fun.imagej.img :as img]
             [fun.imagej.core :as ij]
             [fun.imagej.ops :as ops]
