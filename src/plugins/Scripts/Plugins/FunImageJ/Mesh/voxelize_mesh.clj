@@ -1,7 +1,7 @@
-; @Dataset(label="Filename of mesh",description="Filename should be stl") mesh-filename
-; @Float(label="Width") width
-; @Float(label="Height") height
-; @Float(label="Depth") depth
+; @File(label="Filename of mesh",description="Filename should be stl") mesh-filename
+; @Integer(label="Width") width
+; @Integer(label="Height") height
+; @Integer(label="Depth") depth
 ; @OUTPUT ImagePlus voxelized-imp
 
 (ns plugins.Scripts.Plugins.FunImageJ.plugins.Scripts.Plugins.FunImageJ.Mesh.voxelize-mesh
