@@ -40,6 +40,11 @@
   []
   (net.imglib2.type.numeric.integer.UnsignedByteType.))
 
+(defn unsigned-short-type
+  "Return an ImgLib2 UnsignedByteType."
+  []
+  (net.imglib2.type.numeric.integer.UnsignedShortType.))
+
 (defn unsigned-int-type
   "Retun an ImgLib2 UnsignedIntType."
   []
