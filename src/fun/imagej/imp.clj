@@ -900,7 +900,7 @@
    #_(ij.plugin.RGBStackMerge/mergeChannels (into-array ImagePlus (take 3 imps)) false)
    (let [argmap (apply hash-map args)]
      (ij.plugin.RGBStackMerge/mergeChannels (into-array ImagePlus (take 3 imps)) 
-                                            (or (:keep-source argmap) false) )
+                                            (or (:keep-source argmap) true) )
      #_(.mergeHyperstacks (ij.plugin.RGBStackMerge.) (into-array ImagePlus (take 3 imps)) 
         (or (:keep-source argmap) false))))
 
