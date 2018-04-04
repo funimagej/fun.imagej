@@ -557,17 +557,30 @@ Returns a View"
     (fun.imagej.ops.math/divide (fun.imagej.ops.math/subtract input mn)
                                 (fun.imagej.ops.math/subtract mx mn))))
 
+(defn img-to-seq
+  "Return a seq version of an image."
+  [img1]
+  (let [cur1 ^Cursor (.cursor ^IterableInterval img1)]
+    (loop [contents []]
+      (if (.hasNext cur1)
+        (do 
+          (.fwd cur1)
+          (recur (conj contents (.get (.get cur1)))))
+        contents))))
+
 (defn entropy
   "Return the entropy of the image. entropy = -sum(p*log(p))"
   [image]
   (let [;hist (ops/run-op "image.histogram" (object-array [image 256]))
         ;hist-counts (map #(.get %) (seq hist))
         image-8bit (fun.imagej.ops.convert/uint8 image)
-        hist-counts (vals (frequencies (map #(.get %) image-8bit)))
+        hist-counts (vals (frequencies (img-to-seq image-8bit))); TODO: imglib2-type frequencies function
         sum-count (reduce + hist-counts)
-        _ (println sum-count hist-counts (frequencies (map #(.get %) image-8bit)))
+;        _ (println sum-count hist-counts (frequencies (map #(.get %) image-8bit)))
         norm-hist-counts (map #(/ % sum-count) hist-counts)]
-    (- (reduce + (map #(* % (/ (java.lang.Math/log %)
-                               (java.lang.Math/log 2)))
-                      norm-hist-counts)))))
+    (if (= 1 (count norm-hist-counts))
+      0
+      (- (reduce + (map #(* % (/ (java.lang.Math/log %)
+                                 (java.lang.Math/log 2)))
+                        norm-hist-counts))))))
 

@@ -42,6 +42,26 @@
     (let [ra (.randomAccess img1)]
       (.setPosition ra (long-array [50 50]))
       (is (zero? (- (.get (.get ra)) 1))))))
-             
+
+(deftest test-entropy
+  (let [w 6 h 6
+        img1 (first (img/map-img #(cursor/set-val! % 127)
+                                 (fun.imagej.ops.convert/uint8
+                                   (fun.imagej.ops.create/img (long-array [w h])))))
+        _ (ij/save-img img1 "img1.tif")
+        _ (println :img1 (doall (map #(.get %) (fun.imagej.ops.image/histogram img1))))
+        flag (atom true)
+        img2 (first (img/map-img (fn [cur] (if @flag
+                                             (do (swap! flag #(not %))
+                                                 (cursor/set-val! cur 255))
+                                             (do (swap! flag #(not %))
+                                                 (cursor/set-val! cur 0))))
+                                 (fun.imagej.ops.convert/uint8
+                                  (fun.imagej.ops.create/img (long-array [w h])))))
+        _ (ij/save-img img2 "img2.tif")
+        _ (println :img2 (doall (map #(.get %) (fun.imagej.ops.image/histogram img2))))]
+    (is (and (zero? (img/entropy img1))
+             (< (- 1 (img/entropy img2))
+                0.000001)))))
          
         
