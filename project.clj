@@ -1,4 +1,4 @@
-(defproject fun.imagej/fun.imagej "0.2.6-SNAPSHOT"
+(defproject fun.imagej/fun.imagej "0.2.6"
   :description "Functional Image Processing with ImageJ/FIJI"
   :url "https://github.com/funimage/funimage"
   :license {:name "Apache v2.0"
@@ -30,12 +30,14 @@
 
                  [sc.fiji/Auto_Threshold "1.16.0"]
 
+                 [org.scijava/scijava-common "2.71.1"]
+
                  ;[sc.iview/sciview "0.0.1"]
 
                  ;[mosaic/MosaicSuite "1.0.8"]
                  ]
   :java-source-paths ["java"]
-  :repositories [["imagej" "https://maven.imagej.net/content/groups/hosted/"]
+  :repositories [["imagej" "https://maven.imagej.net/content/groups/public"]
                  ["imagej-releases" "https://maven.imagej.net/content/repositories/releases/"]
                  ["ome maven" "https://artifacts.openmicroscopy.org/artifactory/maven/"]
                  ["imagej-snapshots" "https://maven.imagej.net/content/repositories/snapshots/"]

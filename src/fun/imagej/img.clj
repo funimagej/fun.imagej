@@ -458,9 +458,9 @@ are assumed to be of the same size."
         stack (fun.imagej.ops.create/img (long-array (concat dimensions
                                                              [(count imgs)])))]
     (dotimes [k (count imgs)]
-      (map-img cursor/copy-real                   
-                   (Views/hyperSlice stack (count dimensions) k)
-                   (nth imgs k)))
+      (map-img cursor/copy-real
+               (Views/hyperSlice stack (count dimensions) k)
+               (nth imgs k)))
     stack))
 
 (defn hessian-matrix
@@ -555,7 +555,8 @@ Returns a View"
         mn (.getA ab)
         mx (.getB ab)]
     (fun.imagej.ops.math/divide (fun.imagej.ops.math/subtract input mn)
-                                (fun.imagej.ops.math/subtract mx mn))))
+                                (fun.imagej.ops.math/subtract mx mn))));TODO: divby0
+(def normalize! normalize)
 
 (defn img-to-seq
   "Return a seq version of an image."
