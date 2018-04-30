@@ -18,7 +18,7 @@
 ; - use a branch point and roi detector
 ; - align between timepoints
 
-(ij/setup-context (resolve 'ctxt) 'user)
+(ij/setup-context (var-get (resolve 'ctxt)) 'user)
 
 (def roi-manager (ij.plugin.frame.RoiManager/getRoiManager))
 

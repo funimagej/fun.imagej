@@ -10,7 +10,7 @@
 
 (require '[fun.imagej.core :as ij])
 
-(ij/setup-context (resolve 'ctxt) 'user)
+(ij/setup-context (var-get (resolve 'ctxt)) 'user)
 
 (def context ctxt)
 (def interpreter-window (InterpreterWindow. ctxt))

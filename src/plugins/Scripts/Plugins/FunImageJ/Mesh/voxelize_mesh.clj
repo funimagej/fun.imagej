@@ -19,9 +19,9 @@
             [fun.imagej.imp :as ij1]
             [clojure.string :as string]))
 
-(ij/setup-context (resolve 'ctxt) 'user)
+(ij/setup-context (var-get (resolve 'ctxt)) 'user)
 
-(do ; Bindings for testing
+#_(do ; Bindings for testing
   (def mesh-filename "/Users/kharrington/git/brevis/resources/obj/sphere.stl")
   (def width 100)
   (def height 100)
