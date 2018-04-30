@@ -54,5 +54,5 @@
   [ctxt source-ns]
   (refer source-ns)
   ; Could check if the existing IJ is already using the same context, because it probably is
-  (reset! ij (net.imagej.ImageJ. (if ctxt ctxt (org.scijava.Context.)))))
+  (reset! ij (net.imagej.ImageJ. (if ctxt (var-get ctxt) (org.scijava.Context.)))))
 

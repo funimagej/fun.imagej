@@ -10,7 +10,7 @@
 
 (require '[fun.imagej.core :as ij])
 
-(ij/setup-context (var-get (resolve 'ctxt)) 'user)
+(ij/setup-context (resolve 'ctxt) 'user)
 
 (def context ctxt)
 (def interpreter-window (InterpreterWindow. ctxt))
@@ -19,6 +19,3 @@
 (.lang (.getREPL interpreter-window) "Clojure")
 ;(.eval (.getInterpreter interpreter-window) "(println \"Hello from Clojure\")")
 ;(.print "Hello!")
-
-
-
