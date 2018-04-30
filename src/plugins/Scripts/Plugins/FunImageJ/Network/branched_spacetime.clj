@@ -1,8 +1,8 @@
 ; @Dataset(label="2D Timeseries Image",description="2D timeseries image") input
+; @Context ctxt
 
 (ns fun.imagej.test.experimental.branched-spacetime
   (:require [fun.imagej.img :as img]
-            [fun.imagej.core :as ij]
             [fun.imagej.ops :as ops]
             [fun.imagej.img.shape :as shape]
             [fun.imagej.conversion :as convert]
@@ -18,7 +18,7 @@
 ; - use a branch point and roi detector
 ; - align between timepoints
 
-(refer 'user)
+(ij/setup-context (resolve 'ctxt) 'user)
 
 (def roi-manager (ij.plugin.frame.RoiManager/getRoiManager))
 

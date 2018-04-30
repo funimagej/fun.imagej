@@ -24,7 +24,7 @@
 
 #_(defn open-imp
     "Open an image using bioformats, this returns an array of imageplus's. Return the first, see open-imps to open many imagepluses at once. If bioformats messes up, it attempts to open it with the normal imageplus reader"
-    [filename]    
+    [filename]
     ^ImagePlus (try
                  (first (BF/openImagePlus filename))
                  #_(catch Exception e (str "cannot open " filename " with bioformats, attempting imageplus reader."))
@@ -885,7 +885,7 @@
 (defn conj-imps
   "Conj an image to another image's stack."
   [target-stack imp]
-  (zconcat-imps(conj (vec (split-channels target-stack)) imp))) 
+  (zconcat-imps (conj (vec (split-channels target-stack)) imp)))
 
 #_(defn imps-to-rgb
    "Convert a sequence of imps (only first 3 or fewer if less supplied) to RGB."
@@ -893,16 +893,16 @@
    #_(ij.plugin.RGBStackMerge/mergeChannels (into-array ImagePlus (take 3 imps)) false)
    (let [argmap (apply hash-map args)]
      (.mergeHyperstacks (ij.plugin.RGBStackMerge.) (into-array ImagePlus (take 3 imps)) (or (:keep-source argmap) false))))
-        
+
 (defn imps-to-rgb
-   "Convert a sequence of imps (only first 3 or fewer if less supplied) to RGB."
-   [imps & args]
-   #_(ij.plugin.RGBStackMerge/mergeChannels (into-array ImagePlus (take 3 imps)) false)
-   (let [argmap (apply hash-map args)]
-     (ij.plugin.RGBStackMerge/mergeChannels (into-array ImagePlus (take 3 imps)) 
-                                            (or (:keep-source argmap) true) )
-     #_(.mergeHyperstacks (ij.plugin.RGBStackMerge.) (into-array ImagePlus (take 3 imps)) 
-        (or (:keep-source argmap) false))))
+  "Convert a sequence of imps (only first 3 or fewer if less supplied) to RGB."
+  [imps & args]
+  #_(ij.plugin.RGBStackMerge/mergeChannels (into-array ImagePlus (take 3 imps)) false)
+  (let [argmap (apply hash-map args)]
+    (ij.plugin.RGBStackMerge/mergeChannels (into-array ImagePlus (take 3 imps))
+                                           (or (:keep-source argmap) true) )
+    #_(.mergeHyperstacks (ij.plugin.RGBStackMerge.) (into-array ImagePlus (take 3 imps))
+                         (or (:keep-source argmap) false))))
 
 ; IJ1-style
 (defn max-z-projection

@@ -2,6 +2,7 @@
 ; @Integer(label="Width") width
 ; @Integer(label="Height") height
 ; @Integer(label="Depth") depth
+; @Context ctxt
 ; @OUTPUT ImagePlus voxelized-imp
 
 (ns plugins.Scripts.Plugins.FunImageJ.plugins.Scripts.Plugins.FunImageJ.Mesh.voxelize-mesh
@@ -18,9 +19,9 @@
             [fun.imagej.imp :as ij1]
             [clojure.string :as string]))
 
-(refer 'user)
+(ij/setup-context (resolve 'ctxt) 'user)
 
-#_(do ; Bindings for testing
+(do ; Bindings for testing
   (def mesh-filename "/Users/kharrington/git/brevis/resources/obj/sphere.stl")
   (def width 100)
   (def height 100)
