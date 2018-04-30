@@ -7,7 +7,7 @@
 (defn get-sciview
   "Return a SciView instance if it exists or create one"
   []
-  (let [ctxt (.getContext ij/ij)
+  (let [ctxt (.getContext (ij/get-ij))
         sciview-service (.getService ctxt "sc.iview.SciViewService")
         sciview (.getOrCreateActiveSciView sciview-service)]
     sciview))

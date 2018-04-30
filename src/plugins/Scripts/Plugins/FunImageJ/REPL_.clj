@@ -1,3 +1,4 @@
+; @Context ctxt
 
 ;; This is the old Clojure REPL
 ;(.run (Clojure.Clojure_Interpreter.) "")
@@ -7,8 +8,12 @@
         '[org.scijava.script ScriptService])
 ;        '[org.scijava.`object`.ObjectService
 
-(def context (Context.))
-(def interpreter-window (InterpreterWindow. context))  
+(require '[fun.imagej.core :as ij])
+
+(ij/setup-context (resolve 'ctxt) 'user)
+
+(def context ctxt)
+(def interpreter-window (InterpreterWindow. ctxt))
 
 (.show interpreter-window)
 (.lang (.getREPL interpreter-window) "Clojure")

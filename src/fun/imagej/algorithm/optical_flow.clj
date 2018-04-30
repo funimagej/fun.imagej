@@ -1,7 +1,6 @@
 (ns fun.imagej.algorithm.optical-flow
   (:require [fun.imagej.img :as img]
             [fun.imagej.conversion :as convert]
-            [fun.imagej.core :as ij]
             [fun.imagej.img.shape :as shape]
             [fun.imagej.img.cursor :as cursor]
             [clojure.string :as string]

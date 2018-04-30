@@ -39,7 +39,7 @@
 
 (def infos-ignore #{"eval" "help" "identity" "info" "infos" "join" "loop" "map" "module" "op" "ops" "parent" "namespace" "run" "slice"})
 
-(def valid-ops (into #{} (.ops (.op ij/ij))))
+(def valid-ops (into #{} (.ops (.op (ij/get-ij)))))
 
 (def ops-namespaces (atom []))
 
@@ -48,9 +48,9 @@
     (for [[op-name op-infos] (group-by #(.getName %)
                                        (filter #(valid-ops (.getName %))
                                                (filter #(not (infos-ignore (.getName %)))
-                                                       (.infos (.op ij/ij)))))]
+                                                       (.infos (.op (ij/get-ij))))))]
       (let [op-info (first op-infos)
-            op-expression "(.op ij/ij)"
+            op-expression "(.op (ij/get-ij))"
             parts (string/split (.getName op-info) #"\.")
             cinfo (.cInfo op-info)
             op-namespace (symbol (string/join
@@ -126,4 +126,4 @@
   "Run an op using its string name and an array of args that will
   be converted into an object array"
   [op-name args]
-  (.run (.op ij/ij) op-name (into-array Object args)))
+  (.run (.op (ij/get-ij)) op-name (into-array Object args)))
