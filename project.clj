@@ -1,4 +1,4 @@
-(defproject fun.imagej/fun.imagej "0.2.6"
+(defproject fun.imagej/fun.imagej "0.2.7-SNAPSHOT"
   :description "Functional Image Processing with ImageJ/FIJI"
   :url "https://github.com/funimage/funimage"
   :license {:name "Apache v2.0"
@@ -21,8 +21,6 @@
                                                                com.github.jnr/jnr-x86asm
                                                                org.scijava/scripting-renjin]]
                  [ome/bioformats_package "5.3.3"]
-                 ;[net.imagej/imagej-ops "0.38.1-SNAPSHOT"]
-                 ;[net.imagej/imagej-ops "0.39.0"]
                  [net.imagej/imagej-ops "0.40.0"]
                  [net.imagej/imagej-mesh "0.2.0"]
 

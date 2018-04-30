@@ -26,11 +26,10 @@
   (def height 100)
   (def depth 100))
 
-(def mesh (msh/convert-to-opsmesh (msh/read-stl mesh-filename)))
-
-(def voxelized-imp (convert/img->imp (ops/run-op "voxelization" (object-array [mesh width height depth]))))
-
-(intern 'user 'voxelized-imp voxelized-imp)
+(let [mesh (msh/convert-to-opsmesh (msh/read-stl mesh-filename))
+      vox-img (ops/run-op "voxelization" (object-array [mesh width height depth]))
+      voxelized-imp (convert/img->imp vox-img)]
+  (intern 'user 'voxelized-imp voxelized-imp))
 ;(ij1/show-imp voxelized-imp)
 
 
