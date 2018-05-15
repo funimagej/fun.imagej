@@ -1,7 +1,4 @@
 (ns fun.imagej.mesh
-  (:import [net.imagej.mesh.stl STLFacet BinarySTLFormat]
-           (net.imagej.mesh DefaultMesh)
-           (net.imagej.ops.geom.geom3d.mesh TriangularFacet Vertex))
   (:require [fun.imagej.img :as img]
             [fun.imagej.imp :as imp]
             [fun.imagej.core :as ij]
@@ -14,51 +11,32 @@
   "Convert a Vertex to Vector3D."
   [vtx]
   (org.apache.commons.math3.geometry.euclidean.threed.Vector3D.
-    (.getX vtx)
-    (.getY vtx)
-    (.getZ vtx)))
+    (.xf vtx)
+    (.yf vtx)
+    (.zf vtx)))
 
 (defn marching-cubes
   "Convenience function for marching cubes."
   [input]
   (fun.imagej.ops.geom/marchingCubes (fun.imagej.ops.convert/bit input)))
 
-(defn write-mesh-as-stl
-  "Write a DefaultMesh from imagej-ops to a .stl file."
-  [mesh stl-filename]
-  (let [default-mesh (net.imagej.mesh.DefaultMesh.)
-        stl-facets (for [^net.imagej.ops.geom.geom3d.mesh.TriangularFacet facet (.getFacets mesh)]
-                     (let [normal ^net.imagej.mesh.Vertex3 (.init ^net.imagej.mesh.Vertex3 (.create ^net.imagej.mesh.Vertex3Pool (.getVertex3Pool default-mesh))
-                                                                  (.getX ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getNormal facet))
-                                                                  (.getY ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getNormal facet))
-                                                                  (.getZ ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getNormal facet)))
-                           v1 ^net.imagej.mesh.Vertex3 (.init ^net.imagej.mesh.Vertex3 (.create ^net.imagej.mesh.Vertex3Pool (.getVertex3Pool default-mesh))
-                                                              (.getX ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP0 facet))
-                                                              (.getY ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP0 facet))
-                                                              (.getZ ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP0 facet)))
-                           v2 ^net.imagej.mesh.Vertex3 (.init ^net.imagej.mesh.Vertex3 (.create ^net.imagej.mesh.Vertex3Pool (.getVertex3Pool default-mesh))
-                                                              (.getX ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP1 facet))
-                                                              (.getY ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP1 facet))
-                                                              (.getZ ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP1 facet)))
-                           v3 ^net.imagej.mesh.Vertex3 (.init ^net.imagej.mesh.Vertex3 (.create ^net.imagej.mesh.Vertex3Pool (.getVertex3Pool default-mesh))
-                                                              (.getX ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP2 facet))
-                                                              (.getY ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP2 facet))
-                                                              (.getZ ^org.apache.commons.math3.geometry.euclidean.threed.Vector3D (.getP2 facet)))]
-                       ^net.imagej.mesh.Triangle (.init ^net.imagej.mesh.Triangle (.create ^net.imagej.mesh.TrianglePool (.getTrianglePool default-mesh))
-                              v1 v2 v3 normal)))
-        ofile (java.io.FileOutputStream. stl-filename)]
-    (.write ofile
-      (.write (BinarySTLFormat.)
-        stl-facets))
-    (.close ofile)))
+(defn save
+  "Save a mesh to file."
+  [mesh filename]
+  (.save (.io (ij/get-ij))
+         mesh
+         filename))
 
-#_(defn read-stl-mesh; This shouldn't be called a mesh function because it only returns vertices
-   "Read a mesh from a STL file."
-   [stl-filename]
-   (let [facets (.read (BinarySTLFormat.) (io/file stl-filename))]
-     (for [facet facets
-           vertex [(.vertex0 facet) (.vertex1 facet) (.vertex2 facet)]]
-       vertex)))
+; Deprecated
+(def write-mesh-as-stl save)
+
+(defn open
+  "Open a mesh from file."
+  [filename]
+  (.open (.io (ij/get-ij))
+         filename))
+
+(def read-stl-mesh open)
 
 (defn slurp-bytes
   "Slurp the bytes from a slurpable thing"
@@ -67,19 +45,9 @@
     (clojure.java.io/copy (clojure.java.io/input-stream x) out)
     (.toByteArray out)))
 
-(defn read-stl
-  "Read a mesh from STL"
-  [stl-filename]
-  (let [mesh (DefaultMesh.)
-        vp (.getVertex3Pool mesh)
-        tp (.getTrianglePool mesh)
-        format (BinarySTLFormat.)
-        facets (.readFacets format tp vp ^bytes (slurp-bytes stl-filename))]
-    (.setTriangles mesh facets)
-    (.setVerticesFromTriangles mesh)
-    mesh))
+(def read-stl open)
 
-(defn read-stl-vertices
+#_(defn read-stl-vertices
    "Read a mesh from a STL file."
    [stl-filename]
    (let [default-mesh (net.imagej.mesh.DefaultMesh.)
@@ -191,15 +159,6 @@ Mutable function"; could be easily generalized beyond 3D
     vertices))
 (def center-vertices! center-vertices)
 
-#_(defn write-vertices-to-xyz
-    "Write a list of vertices to xyz."
-    [verts filename]
-    (spit filename
-          (with-out-str
-            (doall
-              (for [vert verts]
-                (println (string/join "\t" (seq vert))))))))
-
 (defn write-vertices-to-xyz
   "Write a list of vertices to xyz."
   [verts filename]
@@ -214,7 +173,7 @@ Mutable function"; could be easily generalized beyond 3D
   [^net.imglib2.RealPoint rp]
   ^net.imglib2.Point (net.imglib2.Point. (long-array [(.getDoublePosition rp 0) (.getDoublePosition rp 1) (.getDoublePosition rp 2)])))
 
-(defn convert-to-opsmesh
+#_(defn convert-to-opsmesh
   "Convert and imagej-mesh mesh to an imagej-ops mesh"
   [^net.imagej.mesh.DefaultMesh dm]
   (let [result (net.imagej.ops.geom.geom3d.mesh.DefaultMesh. )]

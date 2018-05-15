@@ -1,4 +1,4 @@
-(defproject fun.imagej/fun.imagej "0.2.7-SNAPSHOT"
+(defproject fun.imagej/fun.imagej "0.3.0-SNAPSHOT"
   :description "Functional Image Processing with ImageJ/FIJI"
   :url "https://github.com/funimage/funimage"
   :license {:name "Apache v2.0"
@@ -14,23 +14,25 @@
                  [random-forests-clj "0.2.0"]
 
                  ; Java libs
-                 [net.imglib2/imglib2-algorithm "0.8.0"]
-                 [net.imglib2/imglib2-roi "0.5.0"]
-                 [net.imglib2/imglib2-ij "2.0.0-beta-37"]
-                 [net.imagej/imagej "2.0.0-rc-61" :exclusions [com.github.jnr/jffi
+                 [net.imglib2/imglib2-algorithm "0.9.0"]
+                 [net.imglib2/imglib2-roi "0.5.1"]
+                 [net.imglib2/imglib2-ij "2.0.0-beta-40"]
+                 [net.imagej/imagej "2.0.0-rc-65" :exclusions [com.github.jnr/jffi
                                                                com.github.jnr/jnr-x86asm
                                                                org.scijava/scripting-renjin]]
-                 [ome/bioformats_package "5.3.3"]
-                 [net.imagej/imagej-ops "0.40.0"]
-                 [net.imagej/imagej-mesh "0.2.0"]
+                 [ome/bioformats_package "5.8.2"]
+                 [net.imagej/imagej-ops "0.41.0"]
+                 [net.imagej/imagej-mesh "0.7.0"]
+                 [net.imagej/imagej-mesh-io "0.1.0"]
 
                  [org.ojalgo/ojalgo "43.0"]
 
                  [sc.fiji/Auto_Threshold "1.16.0"]
 
-                 [org.scijava/scijava-common "2.71.1"]
+                 [org.scijava/scijava-common "2.72.0"]
 
-                 ;[sc.iview/sciview "0.0.1"]
+                 ;[sc.iview/sciview "0.0.2-SNAPSHOT"]
+                 [sc.iview/sciview "0.1.0"]
 
                  ;[mosaic/MosaicSuite "1.0.8"]
                  ]
