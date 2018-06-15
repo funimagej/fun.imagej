@@ -1,4 +1,4 @@
-(defproject fun.imagej/fun.imagej "0.3.0"
+(defproject fun.imagej/fun.imagej "0.3.1-SNAPSHOT"
   :description "Functional Image Processing with ImageJ/FIJI"
   :url "https://github.com/funimage/funimage"
   :license {:name "Apache v2.0"
@@ -58,7 +58,8 @@
                                       :password :env/CI_DEPLOY_PASSWORD
                                       :sign-releases false}]]
   ; Try to use lein parent when we can
-  :plugins [[lein-cloverage "1.0.9"]]
+  :plugins [[lein-cloverage "1.0.9"]
+            [lein-exec "0.3.7"]]
   ;  :plugins [[lein-parent "0.3.1"]]
   :jvm-opts ["-Xmx32g" "-server"
              ;"-javaagent:/Users/kyle/.m2/repository/net/imagej/ij1-patcher/0.12.3/ij1-patcher-0.12.3.jar=init"
