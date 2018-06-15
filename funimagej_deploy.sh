@@ -12,7 +12,6 @@ then
    cp ~/.m2/repository/random-forests-clj/random-forests-clj/$(ls ~/.m2/repository/random-forests-clj/random-forests-clj/ | tail -1)/*.jar Fiji.app/jars/
    cp ~/.m2/repository/clj-random/clj-random/$(ls ~/.m2/repository/clj-random/clj-random/ | tail -1)/*.jar Fiji.app/jars/
    cp ~/.m2/repository/seesaw/seesaw/$(ls ~/.m2/repository/seesaw/seesaw/ | tail -1)/*.jar Fiji.app/jars/
-   cp ~/.m2/repository/org/mastodon/mastodon-collection/$(ls ~/.m2/repository/org/mastodon/mastodon-collection/ | tail -1)/*.jar Fiji.app/jars/
    cd Fiji.app
    curl -O https://raw.githubusercontent.com/fiji/fiji/7f13f66968a9d4622e519c8aae04786db6601314/bin/upload-site-simple.sh
    chmod a+x upload-site-simple.sh
