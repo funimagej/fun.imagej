@@ -109,9 +109,9 @@
   "Add a sphere to a sciview instance"
   [sv center radius]
   (let [center (net.imglib2.RealPoint. (double-array center))
-        pos (cleargl.GLVector. (float-array [(.getFloatPosition center 0)
-                                             (.getFloatPosition center 1)
-                                             (.getFloatPosition center 2)]))]
+        pos (sc.iview.vector.FloatVector3. (.getFloatPosition center 0)
+                                           (.getFloatPosition center 1)
+                                           (.getFloatPosition center 2))]
     (.addSphere sv pos radius)))
 
 (defn add-box
@@ -130,9 +130,9 @@
   (.addSTL sv filename))
 
 (defn add-volume
-  "Add a stl file to a scene (implictly opens the file)"
+  "Add an image to the scene as a volume"
   [sv image]
-  (.addVolume sv image 1 1 1))
+  (.addVolume sv image))
 
 (defn add-point-cloud
   "Add a point cloud to the scene"
