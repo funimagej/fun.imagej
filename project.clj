@@ -16,25 +16,22 @@
                  ; Java libs
                  [net.imglib2/imglib2-algorithm "0.9.0"]
                  [net.imglib2/imglib2-roi "0.5.1"]
-                 [net.imglib2/imglib2-ij "2.0.0-beta-40"]
-                 [net.imagej/imagej "2.0.0-rc-65" :exclusions [com.github.jnr/jffi
+                 [net.imglib2/imglib2-ij "2.0.0-beta-42"]
+                 [net.imagej/imagej "2.0.0-rc-67" :exclusions [com.github.jnr/jffi
                                                                com.github.jnr/jnr-x86asm
                                                                org.scijava/scripting-renjin]]
                  [ome/bioformats_package "5.8.2"]
-                 [net.imagej/imagej-ops "0.41.0"]
+                 [net.imagej/imagej-ops "0.41.1"]
                  [net.imagej/imagej-mesh "0.7.0"]
                  [net.imagej/imagej-mesh-io "0.1.0"]
 
-                 [org.ojalgo/ojalgo "43.0"]
+                 [org.ojalgo/ojalgo "45.1.0"]
 
                  [sc.fiji/Auto_Threshold "1.16.0"]
 
-                 [org.scijava/scijava-common "2.72.0"]
+                 [org.scijava/scijava-common "2.74.2"]
 
-                 ;[sc.iview/sciview "0.0.2-SNAPSHOT"]
                  [sc.iview/sciview "0.1.0"]
-
-                 ;[mosaic/MosaicSuite "1.0.8"]
                  ]
   :java-source-paths ["java"]
   :repositories [["imagej" "https://maven.imagej.net/content/groups/public"]
@@ -68,6 +65,3 @@
              #_"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:8000"]
   ;:javac-options ["-target" "1.6" "-source" "1.6"]
   )
-(require 'cemerick.pomegranate.aether)
-(cemerick.pomegranate.aether/register-wagon-factory!
-  "http" #(org.apache.maven.wagon.providers.http.HttpWagon.))
