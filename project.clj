@@ -39,7 +39,7 @@
                  ["ome maven" "https://artifacts.openmicroscopy.org/artifactory/maven/"]
                  ["imagej-snapshots" "https://maven.imagej.net/content/repositories/snapshots/"]
                  ;["mosaic.public" "http://mosaic.mpi-cbg.de/maven/"]
-                 #_["clojars2" {:url "http://clojars.org/repo/"
+                 #_["clojars2" {:url "https://clojars.org/repo/"
                                 :username :env/LEIN_USERNAME
                                 :password :env/LEIN_PASSWORD}]]
   :deploy-repositories [["releases" {:url "https://maven.imagej.net/content/repositories/releases"
