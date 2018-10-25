@@ -47,6 +47,29 @@ Then add the fun.imagej dependency:
 
 ---
 
+## Usage within Maven projects:
+
+Add the following repositories to your `pom.xml`
+
+```
+<repository>
+	<id>imagej.public</id>
+	<url>https://maven.imagej.net/content/groups/public</url>
+</repository>
+```
+
+Then add the fun.imagej dependency:
+
+```
+<dependency>
+	<groupId>fun.imagej</groupId>
+	<artifactId>fun.imagej</artifactId>
+	<version>0.2.1</version>
+</dependency>
+```
+
+---
+
 
 License:
 
