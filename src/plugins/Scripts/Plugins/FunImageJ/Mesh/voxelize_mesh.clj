@@ -5,7 +5,7 @@
 ; @Context ctxt
 ; @OUTPUT ImagePlus voxelized-imp
 
-(ns plugins.Scripts.Plugins.FunImageJ.plugins.Scripts.Plugins.FunImageJ.Mesh.voxelize-mesh
+(ns plugins.Scripts.Plugins.FunImageJ.Mesh.voxelize-mesh
   (:require [fun.imagej.img :as img]
             [fun.imagej.core :as ij]
             [fun.imagej.ops :as ops]
@@ -27,7 +27,7 @@
   (def height 100)
   (def depth 100))
 
-(let [mesh (msh/convert-to-opsmesh (msh/read-stl mesh-filename))
+(let [mesh (msh/read-stl (.getAbsolutePath mesh-filename))
       vox-img (ops/run-op "voxelization" (object-array [mesh width height depth]))
       voxelized-imp (convert/img->imp vox-img)]
   (intern 'user 'voxelized-imp voxelized-imp))
