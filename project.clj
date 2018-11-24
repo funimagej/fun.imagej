@@ -25,6 +25,9 @@
                  [net.imagej/imagej-mesh "0.7.1"]
                  [net.imagej/imagej-mesh-io "0.1.2"]
 
+                 [org.janelia.saalfeldlab/n5 "2.0.2"]
+                 [org.janelia.saalfeldlab/n5-imglib2 "3.0.0"]
+
                  [org.ojalgo/ojalgo "46.3.0"]
 
                  [sc.fiji/Auto_Threshold "1.17.1"]
