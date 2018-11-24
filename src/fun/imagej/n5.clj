@@ -24,8 +24,14 @@
   "Construct a n5 path from a fucntion and its args"
   [f args]
   (string/join java.io.File/separator
-               (map #(str (hash %))
-                    (concat [f] args))))
+               (concat [(.getName (class f))]
+                       (map #(str (cond (number? %) %
+                                        (string? %) %
+                                        ; can we add something that allows for N5 internal referencing?
+                                        ; e.g. if arg is read from the same N5, fetch the internal name
+                                        ; - try to use the hash of the N5 path
+                                        :else (hash %)))
+                            args))))
 
 (defn n5-memoize
   "Returns a memoized version of a referentially transparent function. The
