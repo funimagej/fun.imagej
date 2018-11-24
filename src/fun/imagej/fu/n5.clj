@@ -32,7 +32,7 @@
 (defn image?
   "Is a thing an image?"
   [thing]
-  (isa? thing 'net.imglib2.RandomAccessibleInterval))
+  (instance? net.imglib2.RandomAccessibleInterval thing))
 
 (defn get-memory-key
   "Currently wraps hash"
@@ -47,7 +47,7 @@
 (defn contains-image?
   "Discover the key that corresponds to an image"
   [n5-cache im]
-  (and (discover-path n5-cache im); Everything is currently assumed to be loaded into in memory
+  (and (discover-path n5-cache im); Everything is currently assumed to be loaded into in-memory
        (.exists (:reader n5-cache)
                 (discover-path n5-cache im)))); The path for the image exists and is readable
 
@@ -58,20 +58,14 @@
                (concat [(.getName (class f))]
                        (map #(str (cond (number? %) %
                                         (string? %) %
-                                        ; support images
-                                        ; if we establish and maintain a local/up-to-date mapping with n5 paths and
-                                        ;   instances in memory, then we can easily make references to other n5 data
+                                        ; If an image was opened or computed with this n5-cache, then we can track its filepath
                                         (and (image? %) (contains-image? n5-cache %)) (discover-path n5-cache %)
-
-                                        ; can we add something that allows for N5 internal referencing?
-                                        ; e.g. if arg is read from the same N5, fetch the internal name
-                                        ; - try to use the hash of the N5 path
                                         :else (hash %)))
                             args))))
 
-; If you do an in memory *and* disk memoize, then it is possible to
+; If you do an in-memory *and* disk memoize, then it is possible to
 ;   create a cache that has composite elements that are expressed in terms of existing
-;   variables. Ignore the dependency complexity for now, assume well-behaved coders.
+;   variables. Ignore the dependency complexity for now, assume well-behaved coders and loop-free usage.
 
 (defn memoize-with-n5-cache
   "Returns a memoized version of a referentially transparent function. The
