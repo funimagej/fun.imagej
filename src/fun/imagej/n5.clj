@@ -33,7 +33,7 @@
                                         :else (hash %)))
                             args))))
 
-(defn n5-memoize
+(defn memoize-with-n5-cache
   "Returns a memoized version of a referentially transparent function. The
   memoized version of the function keeps a cache of the mapping from arguments
   to results and, when calls with the same arguments are repeated often, has
