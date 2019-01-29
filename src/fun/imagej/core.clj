@@ -22,7 +22,7 @@
   (.getImg (.getImgPlus (.open (.datasetIO (.scifio (get-ij))) filename))))
 
 (defn save-img
-  "Open an image with ImageJ/SCIFIO"
+  "Save an image with ImageJ/SCIFIO"
   [img filename]
   (.save (.datasetIO (.scifio (get-ij)))
     (net.imagej.DefaultDataset. 

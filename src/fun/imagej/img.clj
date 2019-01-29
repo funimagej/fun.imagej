@@ -95,13 +95,11 @@ with Dimensions."
   img)
 
 (defn map-img
-   "Walk all images (as cursors) applying f at each step.
-f is a function that operates on cursors in the same order as imgs
-If you have an ImagePlus, then use funimage.conversion
-Note: this uses threads to avoid some blocking issues."
+   "Loop over an image by iterating an image as an IterableInterval (e.g., using a cursor).
+Note: this uses threads to avoid some blocking issues caused by Clojure's map function."
   ([f img1]
    (let [cur1 ^Cursor (.cursor ^IterableInterval img1)
-         t (Thread.
+         t (Thread.; TODO: this thread should come from a
              (fn []
                (loop []
                  (when (.hasNext cur1)
