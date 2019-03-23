@@ -5,7 +5,7 @@ then
    LEIN_SNAPSHOTS_IN_RELEASE=1 lein deploy
    funimagej_version=$(lein exec -ep "(println (System/getProperty \"fun.imagej.version\"))")
    if [[ $funimagej_version != *"SNAPSHOT"* ]]; then
-       curl -O http://downloads.imagej.net/fiji/latest/fiji-nojre.zip
+       curl -O https://downloads.imagej.net/fiji/latest/fiji-nojre.zip
        unzip fiji-nojre.zip
        mv target/fun.imagej*jar Fiji.app/jars/
        cp -r src/plugins/* Fiji.app/plugins/
