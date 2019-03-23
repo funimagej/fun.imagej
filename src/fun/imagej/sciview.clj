@@ -28,7 +28,7 @@
 (defn set-vertices
   "Set the vertices of a geometry"
   [^HasGeometry n verts]
-  (let [vert-buffer (.allocateFloatAndPut BufferUtils/BufferUtils (float-array (flatten verts)))]
+  (let [vert-buffer (.allocateFloatAndPut BufferUtils (float-array (flatten verts)))]
       (.setVertices n vert-buffer)
       (.recalculateNormals n)
       (.setDirty n true)
@@ -105,6 +105,36 @@
 
 ;; Core Node types
 
+(let [zero-vec (cleargl.GLVector. (float-array [0 0 0]))]
+  (defn move-line
+    "Move a line to new start/stop points"
+    [line start stop]
+    (println "move-line:" (.getCapacity line))
+    (.clearPoints line)
+    (.addPoint line zero-vec)
+    (.addPoint line start)
+    (.addPoint line stop)
+    (.addPoint line zero-vec)
+    line)
+
+  (defn add-line
+    "Add a line to a sciview instance"
+    ([sv start stop]
+      (add-line sv start stop sc.iview.SciView/DEFAULT_COLOR))
+    ([sv start stop color]
+      (add-line sv start stop color 0.1))
+    ([sv start stop color width]
+      (let [line (graphics.scenery.Line. 4)]
+        (.setEdgeWidth line 0.3)        
+        (move-line line start stop)
+        (.addNode sv line)))
+    #_([sv start stop color width]
+      (let [points (into-array sc.iview.vector.Vector3 
+                               #_[(sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop)]
+                               [(sc.iview.vector.ClearGLVector3. zero-vec) (sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop) (sc.iview.vector.ClearGLVector3. zero-vec)])]
+        (.addLine sv points color width)))))
+
+
 (defn add-sphere
   "Add a sphere to a sciview instance"
   [sv center radius]
@@ -141,9 +171,9 @@
         default-point-size (or point-size 1.025)
         point-cloud (PointCloud. default-point-size "PointCloud")
         mat (Material.)
-        v-buffer (.allocateFloat BufferUtils/BufferUtils (* (count flat-verts) 4))
-        n-buffer (.allocateFloat BufferUtils/BufferUtils (* (count flat-verts) 4))
-        uv-buffer (.allocateFloat BufferUtils/BufferUtils (* (count verts) 2 4))
+        v-buffer (.allocateFloat BufferUtils (* (count flat-verts) 4))
+        n-buffer (.allocateFloat BufferUtils (* (count flat-verts) 4))
+        uv-buffer (.allocateFloat BufferUtils (* (count verts) 2 4))
         uvs (for [k (range (count verts))]
               (repeat 2 default-point-size))
         ]
@@ -157,7 +187,7 @@
     (.setVertices point-cloud v-buffer)
     (.setNormals point-cloud n-buffer)
     (.setTexcoords point-cloud uv-buffer)
-    (.setIndices point-cloud (.allocateInt BufferUtils/BufferUtils 0))
+    (.setIndices point-cloud (.allocateInt BufferUtils 0))
     (.setupPointCloud point-cloud)
 
     (set-color mat (GLVector. (float-array [1 1 1])))
@@ -204,4 +234,3 @@
                  )
 
 ;(def sv (get-sciview))
-
