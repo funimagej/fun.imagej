@@ -11,6 +11,7 @@
   "Get the currently active ImageJ gateway."
   []
   (when-not @ij
+    (graphics.scenery.SceneryBase/xinitThreads); This has to run before ANY X11 commands are issued. 
     (let [context (org.scijava.Context.)
           new-ij (net.imagej.ImageJ. context)]
       (reset! ij new-ij)))
@@ -55,4 +56,3 @@
   (refer source-ns)
   ; Could check if the existing IJ is already using the same context, because it probably is
   (reset! ij (net.imagej.ImageJ. (if ctxt (var-get ctxt) (org.scijava.Context.)))))
-

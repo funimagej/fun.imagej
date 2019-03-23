@@ -34,7 +34,9 @@
 
                  [org.scijava/scijava-common "2.76.0"]
 
-                 [sc.iview/sciview "0.1.6"]
+                 [sc.iview/sciview "0.2.0-beta-1" :exclusions [com.github.jnr/jffi
+                                                                 com.github.jnr/jnr-x86asm
+                                                                 org.scijava/scripting-renjin]]
                  ]
   :java-source-paths ["java"]
   :repositories [["imagej" "https://maven.imagej.net/content/groups/public"]
