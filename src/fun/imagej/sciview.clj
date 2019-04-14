@@ -125,11 +125,11 @@
       (add-line sv start stop color 0.1))
     ([sv start stop color width]
       (let [line (graphics.scenery.Line. 4)]
-        (.setEdgeWidth line 0.3)        
+        (.setEdgeWidth line 0.3)
         (move-line line start stop)
         (.addNode sv line)))
     #_([sv start stop color width]
-      (let [points (into-array sc.iview.vector.Vector3 
+      (let [points (into-array sc.iview.vector.Vector3
                                #_[(sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop)]
                                [(sc.iview.vector.ClearGLVector3. zero-vec) (sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop) (sc.iview.vector.ClearGLVector3. zero-vec)])]
         (.addLine sv points color width)))))
@@ -196,6 +196,11 @@
 
     (.addNode sv point-cloud)))
 
+(defn remove-node
+  "Remove a node from the scene"
+  [sv n]
+  (.deleteNode sv n))
+
 ;; Test Snippets
 
 ;(def sp (add-sphere (get-sciview) [0 0 0] 10))
@@ -234,3 +239,8 @@
                  )
 
 ;(def sv (get-sciview))
+
+#_(let [sv (get-sciview)
+      sphere (add-sphere sv [0 0 0] (float 5))]
+  (Thread/sleep 2000)
+  (remove-node sv sphere))
