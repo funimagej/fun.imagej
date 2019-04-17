@@ -143,7 +143,7 @@
 (defn add-sphere
   "Add a sphere to a sciview instance"
   [sv position radius]
-  (.addSphere sv pos radius))
+  (.addSphere sv position radius))
 
 (defn add-box
   "Add a sphere to a sciview instance"
