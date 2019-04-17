@@ -29,10 +29,10 @@
   "Set the vertices of a geometry"
   [^HasGeometry n verts]
   (let [vert-buffer (.allocateFloatAndPut BufferUtils (float-array (flatten verts)))]
-      (.setVertices n vert-buffer)
-      (.recalculateNormals n)
-      (.setDirty n true)
-      n))
+    (.setVertices n vert-buffer)
+    (.recalculateNormals n)
+    (.setDirty n true)
+    n))
 
 (defn set-position
   "Set the position of a Node"
@@ -120,19 +120,19 @@
   (defn add-line
     "Add a line to a sciview instance"
     ([sv start stop]
-      (add-line sv start stop sc.iview.SciView/DEFAULT_COLOR))
+     (add-line sv start stop sc.iview.SciView/DEFAULT_COLOR))
     ([sv start stop color]
-      (add-line sv start stop color 0.1))
+     (add-line sv start stop color 0.1))
     ([sv start stop color width]
-      (let [line (graphics.scenery.Line. 4)]
-        (.setEdgeWidth line 0.3)
-        (move-line line start stop)
-        (.addNode sv line)))
+     (let [line (graphics.scenery.Line. 4)]
+       (.setEdgeWidth line 0.3)
+       (move-line line start stop)
+       (.addNode sv line)))
     #_([sv start stop color width]
-      (let [points (into-array sc.iview.vector.Vector3
-                               #_[(sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop)]
-                               [(sc.iview.vector.ClearGLVector3. zero-vec) (sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop) (sc.iview.vector.ClearGLVector3. zero-vec)])]
-        (.addLine sv points color width)))))
+        (let [points (into-array sc.iview.vector.Vector3
+                                 #_[(sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop)]
+                                 [(sc.iview.vector.ClearGLVector3. zero-vec) (sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop) (sc.iview.vector.ClearGLVector3. zero-vec)])]
+          (.addLine sv points color width)))))
 
 
 (defn add-sphere
@@ -179,7 +179,7 @@
         ]
     (.put v-buffer (float-array flat-verts))
     (.flip v-buffer)
-    (.put n-buffer (float-array (flatten colors))); check for RGB v. RGBA
+    (.put n-buffer (float-array (flatten colors)))          ; check for RGB v. RGBA
     (.flip n-buffer)
     (.put uv-buffer (float-array (flatten uvs)))
     (.flip uv-buffer)
@@ -226,21 +226,24 @@
 ;    (Thread/sleep 20)))
 
 #_(add-point-cloud (get-sciview)
-                 ; Verts
-                 (for [k (range 10)]
-                   (for [d (range 3)]
-                     (* (rand) 10)))
-                 ; Colors
-                 (for [k (range 10)]
-                   (for [d (range 3)]
-                     (rand)))
-                 ; UVs
-                 1
-                 )
+                   ; Verts
+                   (for [k (range 10)]
+                     (for [d (range 3)]
+                       (* (rand) 10)))
+                   ; Colors
+                   (for [k (range 10)]
+                     (for [d (range 3)]
+                       (rand)))
+                   ; UVs
+                   1
+                   )
 
 ;(def sv (get-sciview))
 
-#_(let [sv (get-sciview)
-      sphere (add-sphere sv [0 0 0] (float 5))]
-  (Thread/sleep 2000)
-  (remove-node sv sphere))
+(defn -main
+  []
+  (graphics.scenery.SceneryBase/xinitThreads)
+  (let [sv (get-sciview)
+        sphere (add-sphere sv [0 0 0] (float 5))]
+    (Thread/sleep 2000)
+    (remove-node sv sphere)))

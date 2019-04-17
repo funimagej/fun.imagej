@@ -34,14 +34,15 @@
 
                  [org.scijava/scijava-common "2.76.0"]
 
-                 [com.github.scenerygraphics/sciview "860f3191f2ee8066f024ae29e6f1531449226ee4" :exclusions [com.github.jnr/jffi]
+                 [com.github.scenerygraphics/sciview "57e57905c4f8342f58f84e0a9dee8315c22900a2" :exclusions [com.github.jnr/jffi]
                                                                  com.github.jnr/jnr-x86asm
                                                                  org.scijava/scripting-renjin]
 
                  #_[sc.iview/sciview "0.2.0-beta-1" :exclusions [com.github.jnr/jffi
                                                                  com.github.jnr/jnr-x86asm
                                                                  org.scijava/scripting-renjin]]]
-                 
+
+
   :java-source-paths ["java"]
   :repositories [["imagej" "https://maven.imagej.net/content/groups/public"]
                  ["imagej-releases" "https://maven.imagej.net/content/repositories/releases/"]
@@ -71,8 +72,7 @@
   :plugins [[lein-cloverage "1.0.9"]
             [lein-exec "0.3.7"]]
   ;  :plugins [[lein-parent "0.3.1"]]
-  :jvm-opts ["-Xmx32g" "-server"
+  :jvm-opts ["-Xmx32g" "-server" "-Dscenery.Renderer=OpenGLRenderer"
              ;"-javaagent:/Users/kyle/.m2/repository/net/imagej/ij1-patcher/0.12.3/ij1-patcher-0.12.3.jar=init"
              #_"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:8000"])
   ;:javac-options ["-target" "1.6" "-source" "1.6"]
-  
