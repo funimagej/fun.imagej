@@ -149,6 +149,16 @@
   [sv position size]
   (.addBox sv position size))
 
+(defn add-cylinder
+  "Add a cylinder to a sciview instance."
+  [sv position radius length]
+  (.addCylinder sv position radius length 25))
+
+(defn add-cone
+  "Add a cylinder to a sciview instance."
+  [sv position radius length]
+  (.addCone sv position radius length 25))
+
 (defn add-obj
   "Add an obj file to a scene (implictly opens the file)"
   [sv filename]
@@ -244,6 +254,9 @@
   []
   (graphics.scenery.SceneryBase/xinitThreads)
   (let [sv (get-sciview)
-        sphere (add-sphere sv [0 0 0] (float 5))]
-    (Thread/sleep 2000)
-    (remove-node sv sphere)))
+        obj (add-cone sv [0 0 0] 10 20)]
+    obj)
+  #_(let [sv (get-sciview)
+          sphere (add-sphere sv [0 0 0] (float 5))]
+      (Thread/sleep 2000)
+      (remove-node sv sphere)))
