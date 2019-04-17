@@ -25,6 +25,11 @@
     (.flip vert-buffer)
     verts))
 
+(defn vec-to-vec3
+  "Convert a clojure vector into a SciView Vector3f"
+  [v]
+  (sc.iview.vector.JOMLVector3. (first v) (second v) (last v)))
+
 (defn set-vertices
   "Set the vertices of a geometry"
   [^HasGeometry n verts]
@@ -137,12 +142,8 @@
 
 (defn add-sphere
   "Add a sphere to a sciview instance"
-  [sv center radius]
-  (let [center (net.imglib2.RealPoint. (double-array center))
-        pos (sc.iview.vector.FloatVector3. (.getFloatPosition center 0)
-                                           (.getFloatPosition center 1)
-                                           (.getFloatPosition center 2))]
-    (.addSphere sv pos radius)))
+  [sv position radius]
+  (.addSphere sv pos radius))
 
 (defn add-box
   "Add a sphere to a sciview instance"
@@ -254,7 +255,7 @@
   []
   (graphics.scenery.SceneryBase/xinitThreads)
   (let [sv (get-sciview)
-        obj (add-cone sv [0 0 0] 10 20)]
+        obj (add-cone sv (vec-to-vec3 [0 0 0]) 10 20)]
     obj)
   #_(let [sv (get-sciview)
           sphere (add-sphere sv [0 0 0] (float 5))]
