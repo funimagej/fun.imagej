@@ -255,9 +255,7 @@
   []
   (graphics.scenery.SceneryBase/xinitThreads)
   (let [sv (get-sciview)
-        obj (add-cone sv (vec-to-vec3 [0 0 0]) 10 20)]
-    obj)
-  #_(let [sv (get-sciview)
-          sphere (add-sphere sv [0 0 0] (float 5))]
-      (Thread/sleep 2000)
-      (remove-node sv sphere)))
+        sphere (add-sphere sv (vec-to-vec3 [0 0 0]) (float 5))]
+    sphere))
+
+;(-main)

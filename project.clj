@@ -34,7 +34,7 @@
 
                  [org.scijava/scijava-common "2.76.0"]
 
-                 [com.github.scenerygraphics/sciview "e8d143c12b6a6deebafd4890ad19e029e6d85d1c" :exclusions [com.github.jnr/jffi]
+                 [com.github.scenerygraphics/sciview "afbad4ddd138e8b114bc7aa66e3b08a45e86500d" :exclusions [com.github.jnr/jffi]
                                                                  com.github.jnr/jnr-x86asm
                                                                  org.scijava/scripting-renjin]
 
