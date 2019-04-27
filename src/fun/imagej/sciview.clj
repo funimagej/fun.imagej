@@ -2,7 +2,9 @@
   (:require [fun.imagej.core :as ij])
   (:import (graphics.scenery Node Material HasGeometry BufferUtils PointCloud)
            (cleargl GLVector)
-           (java.nio FloatBuffer)))
+           (java.nio FloatBuffer)
+           (sc.iview SciView)
+           (sc.iview.vector Vector3)))
 
 (defn get-sciview
   "Return a SciView instance if it exists or create one"
@@ -134,45 +136,45 @@
        (move-line line start stop)
        (.addNode sv line)))
     #_([sv start stop color width]
-        (let [points (into-array sc.iview.vector.Vector3
-                                 #_[(sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop)]
-                                 [(sc.iview.vector.ClearGLVector3. zero-vec) (sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop) (sc.iview.vector.ClearGLVector3. zero-vec)])]
-          (.addLine sv points color width)))))
+       (let [points (into-array sc.iview.vector.Vector3
+                                #_[(sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop)]
+                                [(sc.iview.vector.ClearGLVector3. zero-vec) (sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop) (sc.iview.vector.ClearGLVector3. zero-vec)])]
+         (.addLine sv points color width)))))
 
 
 (defn add-sphere
   "Add a sphere to a sciview instance"
-  [sv position radius]
+  [^SciView sv ^Vector3 position radius]
   (.addSphere sv position radius))
 
 (defn add-box
   "Add a sphere to a sciview instance"
-  [sv position size]
+  [^SciView sv ^Vector3 position size]
   (.addBox sv position size))
 
 (defn add-cylinder
   "Add a cylinder to a sciview instance."
-  [sv position radius length]
+  [^SciView sv ^Vector3 position radius length]
   (.addCylinder sv position radius length 25))
 
 (defn add-cone
   "Add a cylinder to a sciview instance."
-  [sv position radius length]
+  [^SciView sv ^Vector3 position radius length]
   (.addCone sv position radius length 25))
 
 (defn add-obj
   "Add an obj file to a scene (implictly opens the file)"
-  [sv filename]
+  [^SciView sv ^String filename]
   (.addObj sv filename))
 
 (defn add-stl
   "Add a stl file to a scene (implictly opens the file)"
-  [sv filename]
+  [^SciView sv ^String filename]
   (.addSTL sv filename))
 
 (defn add-volume
   "Add an image to the scene as a volume"
-  [sv image]
+  [^SciView sv image]
   (.addVolume sv image))
 
 (defn add-point-cloud
@@ -186,8 +188,8 @@
         n-buffer (.allocateFloat BufferUtils (* (count flat-verts) 4))
         uv-buffer (.allocateFloat BufferUtils (* (count verts) 2 4))
         uvs (for [k (range (count verts))]
-              (repeat 2 default-point-size))
-        ]
+              (repeat 2 default-point-size))]
+
     (.put v-buffer (float-array flat-verts))
     (.flip v-buffer)
     (.put n-buffer (float-array (flatten colors)))          ; check for RGB v. RGBA
@@ -209,7 +211,7 @@
 
 (defn remove-node
   "Remove a node from the scene"
-  [sv n]
+  [^SciView sv ^Node n]
   (.deleteNode sv n))
 
 ;; Test Snippets
@@ -246,8 +248,8 @@
                      (for [d (range 3)]
                        (rand)))
                    ; UVs
-                   1
-                   )
+                   1)
+
 
 ;(def sv (get-sciview))
 
