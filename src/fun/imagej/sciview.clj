@@ -250,14 +250,34 @@
                    ; UVs
                    1)
 
+(defn toggle-floor
+  "Toggle the visibility of the floor"
+  [^SciView sv]
+  (.setVisible (.getFloor sv) (not (.getVisible (.getFloor sv)))))
 
 ;(def sv (get-sciview))
 
 (defn -main
   []
   (graphics.scenery.SceneryBase/xinitThreads)
-  (let [sv (get-sciview)
-        sphere (add-sphere sv (vec-to-vec3 [0 0 0]) (float 5))]
-    sphere))
+  #_(let [sv (get-sciview)
+          sphere (add-sphere sv (vec-to-vec3 [0 0 0]) (float 5))]
+      sphere)
+  (let [sv (get-sciview)]
+    (println "Initial sleep")
+    (Thread/sleep 5000)
+    (toggle-floor sv)
+    (println "Adding spheres")
+    (loop [spheres []
+           i 200]
+      (if (zero? i)
+        (do (println "Removing spheres")
+            (doseq [sphere spheres]
+              (remove-node sv sphere))
+            (println "Done"))
+        (recur (conj spheres
+                     (add-sphere sv (vec-to-vec3 (repeatedly 3 #(rand 100))) (float 5)))
+               (dec i))))))
+
 
 ;(-main)
