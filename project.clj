@@ -1,6 +1,6 @@
-(defproject fun.imagej/fun.imagej "0.4.0"
+(defproject fun.imagej/fun.imagej "0.4.1-SNAPSHOT"
   :description "Functional Image Processing with ImageJ/FIJI"
-  :url "https://github.com/funimage/funimage"
+  :url "https://github.com/funimagej/fun.imagel"
   :license {:name "Apache v2.0"
             :url "https://github.com/funimage/funimage/LICENSE"}
   :dependencies [[org.clojure/clojure "1.8.0"]
