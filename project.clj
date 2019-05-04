@@ -30,7 +30,7 @@
 
                  [org.scijava/scijava-common "2.76.0"]
 
-                 [sc.iview/sciview "77c2afe" :exclusions [com.github.jnr/jffi
+                 [sc.iview/sciview "c5f8241" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
                                                           org.scijava/scripting-renjin]]]
   :resource-paths ["src/main/resource"]
