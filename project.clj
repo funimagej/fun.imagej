@@ -1,4 +1,4 @@
-(defproject fun.imagej/fun.imagej "0.3.4-SNAPSHOT"
+(defproject fun.imagej/fun.imagej "0.4.0"
   :description "Functional Image Processing with ImageJ/FIJI"
   :url "https://github.com/funimage/funimage"
   :license {:name "Apache v2.0"
@@ -36,11 +36,7 @@
 
                  [sc.iview/sciview "0aa72f7" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
-                                                          org.scijava/scripting-renjin]]
-
-                 #_[sc.iview/sciview "0.2.0-beta-1" :exclusions [com.github.jnr/jffi
-                                                                 com.github.jnr/jnr-x86asm
-                                                                 org.scijava/scripting-renjin]]]
+                                                          org.scijava/scripting-renjin]]]
   :resource-paths ["src/main/resource"]
   :java-source-paths ["java"]
   :repositories [["imagej" "https://maven.imagej.net/content/groups/public"]

@@ -42,7 +42,7 @@ Add the following repositories to your `project.clj`
 Then add the fun.imagej dependency:
 
 ```
-[fun.imagej/fun.imagej "0.3.3"]
+[fun.imagej/fun.imagej "0.4.0"]
 ```
 
 ---
@@ -64,7 +64,7 @@ Then add the fun.imagej dependency:
 <dependency>
 	<groupId>fun.imagej</groupId>
 	<artifactId>fun.imagej</artifactId>
-	<version>0.3.3</version>
+	<version>0.4.0</version>
 </dependency>
 ```
 
