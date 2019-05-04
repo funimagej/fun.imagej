@@ -21,7 +21,7 @@
      :as-filename (fn [key] (str directory java.io.File/separator (name key) ".tif"))
      :write-return (fn [key update-fn]
                      (let [im (update-fn)]
-                       (ij/save-img im (cache key))))})
+                       (ij/save-img im (cache key))))}))
 
 (defn get-or-update!
   "Cache is an img-cache created with

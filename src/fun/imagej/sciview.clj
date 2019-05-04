@@ -1,10 +1,10 @@
 (ns fun.imagej.sciview
   (:require [fun.imagej.core :as ij])
-  (:import (graphics.scenery Node Material HasGeometry BufferUtils PointCloud)
+  (:import (graphics.scenery Node Material HasGeometry BufferUtils PointCloud Sphere)
            (cleargl GLVector)
            (java.nio FloatBuffer)
            (sc.iview SciView)
-           (sc.iview.vector Vector3)))
+           (sc.iview.vector Vector3 ClearGLVector3)))
 
 (defn get-sciview
   "Return a SciView instance if it exists or create one"
@@ -141,11 +141,21 @@
                                 [(sc.iview.vector.ClearGLVector3. zero-vec) (sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop) (sc.iview.vector.ClearGLVector3. zero-vec)])]
          (.addLine sv points color width)))))
 
+(defn add-node
+  "Add a node to the scene"
+  ([^SciView sv ^Node node]
+   (add-node sv node true))
+  ([^SciView sv ^Node node active-publish]
+   (.addNode sv node active-publish)))
 
 (defn add-sphere
   "Add a sphere to a sciview instance"
-  [^SciView sv ^Vector3 position radius]
-  (.addSphere sv position radius))
+  ([^SciView sv ^Vector3 position radius]
+   (.addSphere sv position radius))
+  ([^SciView sv ^Vector3 position radius active-publish]
+   (let [sphere ^Node (Sphere. radius 25)]
+     (.setPosition sphere ^GLVector (ClearGLVector3/convert position))
+     (add-node sv sphere active-publish))))
 
 (defn add-box
   "Add a sphere to a sciview instance"
@@ -211,8 +221,10 @@
 
 (defn remove-node
   "Remove a node from the scene"
-  [^SciView sv ^Node n]
-  (.deleteNode sv n))
+  ([^SciView sv ^Node n]
+   (remove-node sv n true))
+  ([^SciView sv ^Node n active-publish]
+   (.deleteNode sv n active-publish)))
 
 ;; Test Snippets
 
@@ -278,6 +290,5 @@
         (recur (conj spheres
                      (add-sphere sv (vec-to-vec3 (repeatedly 3 #(rand 100))) (float 5)))
                (dec i))))))
-
 
 ;(-main)

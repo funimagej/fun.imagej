@@ -34,15 +34,14 @@
 
                  [org.scijava/scijava-common "2.76.0"]
 
-                 [com.github.scenerygraphics/sciview "78b3148" :exclusions [com.github.jnr/jffi
-                                                                            com.github.jnr/jnr-x86asm
-                                                                            org.scijava/scripting-renjin]]
+                 [sc.iview/sciview "0aa72f7" :exclusions [com.github.jnr/jffi
+                                                          com.github.jnr/jnr-x86asm
+                                                          org.scijava/scripting-renjin]]
 
                  #_[sc.iview/sciview "0.2.0-beta-1" :exclusions [com.github.jnr/jffi
                                                                  com.github.jnr/jnr-x86asm
                                                                  org.scijava/scripting-renjin]]]
-
-
+  :resource-paths ["src/main/resource"]
   :java-source-paths ["java"]
   :repositories [["imagej" "https://maven.imagej.net/content/groups/public"]
                  ["imagej-releases" "https://maven.imagej.net/content/repositories/releases/"]
