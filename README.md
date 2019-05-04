@@ -1,6 +1,6 @@
 # FunImageJ
 
-[![Build Status](https://travis-ci.org/funimage/funimage.svg?branch=master)](https://travis-ci.org/funimage/funimage)
+[![Build Status](https://travis-ci.org/funimagej/fun.imagej.svg?branch=master)](https://travis-ci.org/funimagej/fun.imagej)
 
 ---
 
