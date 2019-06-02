@@ -11,7 +11,8 @@
   "Get the currently active ImageJ gateway."
   []
   (when-not @ij
-    (graphics.scenery.SceneryBase/xinitThreads); This has to run before ANY X11 commands are issued. 
+    (when (= (System/getProperty "useSciView") "true")
+      (graphics.scenery.SceneryBase/xinitThreads)); This has to run before ANY X11 commands are issued.
     (let [context (org.scijava.Context.)
           new-ij (net.imagej.ImageJ. context)]
       (reset! ij new-ij)))
