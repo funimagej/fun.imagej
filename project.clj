@@ -30,15 +30,12 @@
 
                  [org.scijava/scijava-common "2.76.0"]
 
-                 [sc.iview/sciview "8c7fa91" :exclusions [com.github.jnr/jffi
+                 [sc.iview/sciview "d8a6df9" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
                                                           org.scijava/scripting-renjin]]]
   :resource-paths ["src/main/resource"]
   :java-source-paths ["java"]
-  :repositories [["imagej" "https://maven.imagej.net/content/groups/public"]
-                 ["imagej-releases" "https://maven.imagej.net/content/repositories/releases/"]
-                 ["ome maven" "https://artifacts.openmicroscopy.org/artifactory/maven/"]
-                 ["imagej-snapshots" "https://maven.imagej.net/content/repositories/snapshots/"]
+  :repositories [["scijava.public" "https://maven.scijava.org/content/groups/public"]
                  ["jitpack.io" "https://jitpack.io"]]
   :deploy-repositories [["releases" {:url "https://maven.imagej.net/content/repositories/releases"
                                      ;; Select a GPG private key to use for
