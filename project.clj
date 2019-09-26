@@ -16,7 +16,7 @@
                  [net.imagej/imagej "2.0.0-rc-68" :exclusions [com.github.jnr/jffi
                                                                com.github.jnr/jnr-x86asm
                                                                org.scijava/scripting-renjin]]
-                 [ome/bioformats_package "6.0.0-m2"]
+                 [ome/bioformats_package "6.2.1"]
                  [net.imagej/imagej-ops "0.43.0"]
                  [net.imagej/imagej-mesh "0.7.1"]
                  [net.imagej/imagej-mesh-io "0.1.2"]
@@ -30,7 +30,7 @@
 
                  [org.scijava/scijava-common "2.76.0"]
 
-                 [sc.iview/sciview "d8a6df9" :exclusions [com.github.jnr/jffi
+                 [sc.iview/sciview "964da48" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
                                                           org.scijava/scripting-renjin]]]
   :resource-paths ["src/main/resource"]
