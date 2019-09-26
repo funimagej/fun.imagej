@@ -16,7 +16,7 @@
                  [net.imagej/imagej "2.0.0-rc-68" :exclusions [com.github.jnr/jffi
                                                                com.github.jnr/jnr-x86asm
                                                                org.scijava/scripting-renjin]]
-                 [ome/bioformats_package "6.0.0-m2"]
+                 [ome/bioformats_package "6.2.1"]
                  [net.imagej/imagej-ops "0.43.0"]
                  [net.imagej/imagej-mesh "0.7.1"]
                  [net.imagej/imagej-mesh-io "0.1.2"]
@@ -30,16 +30,14 @@
 
                  [org.scijava/scijava-common "2.76.0"]
 
-                 [sc.iview/sciview "8c7fa91" :exclusions [com.github.jnr/jffi
+                 [sc.iview/sciview "964da48" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
                                                           org.scijava/scripting-renjin]]]
   :resource-paths ["src/main/resource"]
   :java-source-paths ["java"]
-  :repositories [["imagej" "https://maven.imagej.net/content/groups/public"]
-                 ["imagej-releases" "https://maven.imagej.net/content/repositories/releases/"]
-                 ["ome maven" "https://artifacts.openmicroscopy.org/artifactory/maven/"]
-                 ["imagej-snapshots" "https://maven.imagej.net/content/repositories/snapshots/"]
-                 ["jitpack.io" "https://jitpack.io"]]
+  :repositories [["scijava.public" "https://maven.scijava.org/content/groups/public"]
+                 ["jitpack.io" "https://jitpack.io"]
+                 ["saalfeld-lab-maven-repo" "https://saalfeldlab.github.io/maven"]]
   :deploy-repositories [["releases" {:url "https://maven.imagej.net/content/repositories/releases"
                                      ;; Select a GPG private key to use for
                                      ;; signing. (See "How to specify a user
