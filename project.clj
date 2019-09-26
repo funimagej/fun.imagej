@@ -36,7 +36,8 @@
   :resource-paths ["src/main/resource"]
   :java-source-paths ["java"]
   :repositories [["scijava.public" "https://maven.scijava.org/content/groups/public"]
-                 ["jitpack.io" "https://jitpack.io"]]
+                 ["jitpack.io" "https://jitpack.io"]
+                 ["saalfeld-lab-maven-repo" "https://saalfeldlab.github.io/maven"]]
   :deploy-repositories [["releases" {:url "https://maven.imagej.net/content/repositories/releases"
                                      ;; Select a GPG private key to use for
                                      ;; signing. (See "How to specify a user
