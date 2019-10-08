@@ -30,6 +30,8 @@
 
                  [org.scijava/scijava-common "2.76.0"]
 
+                 [com.github.fiji/TrackMate3 "0a96636"]
+
                  [sc.iview/sciview "964da48" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
                                                           org.scijava/scripting-renjin]]]
