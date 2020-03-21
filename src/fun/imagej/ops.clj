@@ -37,7 +37,7 @@
                 :else
                 (str classname)))))))
 
-(def infos-ignore #{"eval" "help" "identity" "info" "infos" "join" "loop" "map" "module" "op" "ops" "parent" "namespace" "run" "slice"})
+(def infos-ignore #{"eval" "help" "identity" "info" "infos" "join" "loop" "map" "module" "op" "ops" "parent" "namespace" "run" "slice" "stats.leastSquares" "math.randomUniform"})
 
 (def valid-ops (into #{} (.ops (.op (ij/get-ij)))))
 
@@ -60,13 +60,13 @@
             function-name (last (string/split op-name #"\."))     ; We should adjust the function signature based on whether it is a function or computer
 
             fn-defs (doall
-                      (for [op-info op-infos]
-                        (let [cinfo (.cInfo op-info)                            
+                      (for [op-info (keep identity op-infos)]
+                        (let [cinfo (.cInfo op-info)
                               required-inputs (filter #(.isRequired %) (seq (.inputs cinfo)))
                               optional-inputs (filter #(not (.isRequired %)) (seq (.inputs cinfo)))
                               arg-list (string/join
                                          " "
-                                         (map #(str (let [tpe (guess-type (.getType %)) ]
+                                         (map #(str (let [tpe (guess-type (.getType %))]
                                                       (if (empty? tpe)
                                                         ""
                                                         (str "^"tpe))) 
@@ -99,8 +99,8 @@
         ; This doesnt need to be captured anymore
         {:function-name function-name
          :expression expr
-         :namespace op-namespace
-         }))))
+         :namespace op-namespace}))))
+
 
 ;(def +
 ;  ((fn [x]

@@ -10,29 +10,32 @@
                  [random-forests-clj "0.2.0"]
 
                  ; Java libs
-                 [net.imglib2/imglib2-algorithm "0.11.0"]
-                 [net.imglib2/imglib2-roi "0.6.1"]
-                 [net.imglib2/imglib2-ij "2.0.0-beta-43"]
-                 [net.imagej/imagej "2.0.0-rc-68" :exclusions [com.github.jnr/jffi
+                 [net.imglib2/imglib2-algorithm "0.11.2"]
+                 [net.imglib2/imglib2-roi "0.10.0"]
+                 [net.imglib2/imglib2-ij "2.0.0-beta-45"]
+                 [net.imagej/imagej "2.0.0-rc-72" :exclusions [com.github.jnr/jffi
                                                                com.github.jnr/jnr-x86asm
                                                                org.scijava/scripting-renjin]]
-                 [ome/bioformats_package "6.2.1"]
-                 [net.imagej/imagej-ops "0.43.0"]
-                 [net.imagej/imagej-mesh "0.7.1"]
+                 [ome/bioformats_package "6.4.0" :exclusions [ch.qos.logback/logback-classic
+                                                              ch.qos.logback:logback-core]]
+                 [net.imagej/imagej-ops "0.45.2"]
+                 [net.imagej/imagej-mesh "0.8.0"]
                  [net.imagej/imagej-mesh-io "0.1.2"]
 
                  [com.github.saalfeldlab/n5 "a3f0406"]
                  [com.github.saalfeldlab/n5-ij "a5517c8"]
                  [com.github.saalfeldlab/n5-imglib2 "2a211a3"]
 
-                 [org.ojalgo/ojalgo "46.3.0"]
+                 [org.ojalgo/ojalgo "48.1.0"]
 
                  [sc.fiji/Auto_Threshold "1.17.1"]
 
-                 [org.scijava/scijava-common "2.76.0"]
+                 [org.scijava/scijava-common "2.82.0"]
 
-                 [sc.iview/sciview "964da48" :exclusions [com.github.jnr/jffi
+                 [ch.qos.logback/logback-classic "1.2.3"]
+                 [sc.iview/sciview "982da29" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
+                                                          ch.qos.logback/logback-classic
                                                           org.scijava/scripting-renjin]]]
   :resource-paths ["src/main/resource"]
   :java-source-paths ["java"]
