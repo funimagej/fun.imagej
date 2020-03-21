@@ -1,4 +1,4 @@
-(defproject fun.imagej/fun.imagej "0.4.1"
+(defproject fun.imagej/fun.imagej "0.4.2-SNAPSHOT"
   :description "Functional Image Processing with ImageJ/FIJI"
   :url "https://github.com/funimagej/fun.imagel"
   :license {:name "Apache v2.0"
