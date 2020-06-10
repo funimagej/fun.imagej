@@ -9,7 +9,10 @@
 
                  [random-forests-clj "0.2.0"]
 
+                 [com.kephale/sema-cost "0.0.1-SNAPSHOT"]
+
                  ; Java libs
+                 [net.imglib2/imglib2 "b33186a"]
                  [net.imglib2/imglib2-algorithm "0.11.2"]
                  [net.imglib2/imglib2-roi "0.10.2"]
                  [net.imglib2/imglib2-ij "2.0.0-beta-46"]
@@ -27,8 +30,11 @@
                  ;[com.github.saalfeldlab/n5-ij "a5517c8"]
                  ;[com.github.saalfeldlab/n5-imglib2 "2a211a3"]
 
+                 [de.mpicbg.scf/MinCostZSurface_ "1.1.6-beta-1-SNAPSHOT"]
+
                  [org.janelia.saalfeldlab/n5 "2.2.1"]
-                 [com.github.saalfeldlab/n5-ij "31ad719"]
+                 ;[com.github.saalfeldlab/n5-ij ""]
+                 ;[org.janelia.saalfeldlab/n5-ij "0.0.2-SNAPSHOT"]
                  [org.janelia.saalfeldlab/n5-imglib2 "3.5.1"]
 
                  [org.ojalgo/ojalgo "48.1.0"]
@@ -38,7 +44,10 @@
                  [org.scijava/scijava-common "2.83.3"]
 
                  [ch.qos.logback/logback-classic "1.2.3"]
-                 [sc.iview/sciview "39768d6" :exclusions [com.github.jnr/jffi
+
+                 [graphics.scenery/scenery "c80aa00b"]
+
+                 [sc.iview/sciview "45b5bb3" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
                                                           ch.qos.logback/logback-classic
                                                           org.scijava/scripting-renjin]]]
