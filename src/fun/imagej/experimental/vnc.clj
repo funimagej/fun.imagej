@@ -69,10 +69,13 @@
   "Return a rai interval of block size for block index idx"
   [cost-column block-size idx]
   (Views/interval cost-column
-                  (FinalInterval. (long-array [0 0 idx])
-                                  (long-array [(first block-size)
-                                               (second block-size)
-                                               (* idx (last block-size))]))))
+                  (FinalInterval. (long-array [0
+                                               (* idx (second block-size))
+                                               0])
+                                  (long-array [(dec (first block-size))
+                                               (dec (* (inc idx)
+                                                       (second block-size)))
+                                               (dec (last block-size))]))))
 
 (defn demo
   "An example demo"
@@ -142,7 +145,10 @@
                                (println :step x :of (nth block-size 2))
                                (let [column-slice (img/hyperslice column 2 x)]
                                  (DagmarCost/computeResin column-slice ops 1 log)))
-                             (range (nth block-size 2))))]
+                             (range (nth block-size 2))))
+          _ (def pre-global-cost-column cost-column)
+          _ (println cost-column)
+          cost-column (CostUtils/initializeCost (CostUtils/doubleAsUnsignedByte cost-column))]
 
       ; now everything is loaded to compute the corresponding cost volume
 
@@ -160,8 +166,6 @@
       ; now write cost
 
       (def global-cost cost-column)
-      ;(def cost-column global-cost)
-      (def global-initialized-cost (CostUtils/initializeCost (CostUtils/doubleAsUnsignedByte cost-column)))
 
       (when-not (.exists n5 cost-dataset)
         (let [attributes (DatasetAttributes. (Intervals/dimensionsAsLongArray cost-column)
@@ -170,32 +174,51 @@
                                              (GzipCompression.))]
           (.createDataset n5-writer cost-dataset attributes)))
 
-      (doseq [idx (range 0 (Math/ceil (/ (nth dimensions 2) (nth block-size 2))))]
-        (let [block (rai-block-by-index (CostUtils/doubleAsUnsignedByte cost-column) block-size idx)
-              grid-offset (long-array [0 0 idx])]
+      (do
+        (def dimensions dimensions)
+        (def block-size block-size)
+        (def cost-column pre-global-cost-column)
+        (def n5-writer n5-writer)
+        (def cost-dataset cost-dataset)
+        (def heightfield-dataset heightfield-dataset))
+
+      (doseq [idx (range 0 (Math/ceil (/ (nth dimensions 1) (nth block-size 1))))]
+        (println :cost-column cost-column)
+        (let [block (rai-block-by-index (CostUtils/floatAsUnsignedByte cost-column) block-size idx)
+              grid-offset (long-array [0 idx 0])]
+          (println :block block)
+          (println :save-block idx (Math/ceil (/ (nth dimensions 1) (nth block-size 1))))
           (N5Utils/saveBlock block
                              n5-writer
                              cost-dataset
                              grid-offset)))
 
       ;; Now compute and save the heightfields
-      (let [heightmap (Test/process2 cost-column 1 15 3)]
+      (let [cost-interval (Views/zeroMin (Views/interval cost-column
+                                                         (FinalInterval. (long-array [0 2700 0])
+                                                                         (long-array [24 2800 24]))
+                                                         #_(FinalInterval. (long-array [0 2500 0])
+                                                                           (long-array [127 2900 127]))))
+            heightmap (Test/process2 (Views/permute cost-interval 1 2)
+                                     1
+                                     15
+                                     3)]
         (ij/show heightmap)
 
-        (when-not (.exists n5 heightfield-dataset)
-          (let [attributes (DatasetAttributes. (long-array [(first cost-column)
-                                                            (last cost-column)])
-                                               (int-array [(first block-size)
-                                                           (last block-size)])
-                                               (N5Utils/dataType (Util/getTypeFromInterval column))
-                                               (GzipCompression.))]
-            (.createDataset n5-writer heightfield-dataset attributes)))
+        #_(when-not (.exists n5-writer heightfield-dataset)
+            (let [attributes (DatasetAttributes. (long-array [(first cost-column)
+                                                              (last cost-column)])
+                                                 (int-array [(first block-size)
+                                                             (last block-size)])
+                                                 (N5Utils/dataType (Util/getTypeFromInterval heightmap))
+                                                 (GzipCompression.))]
+              (.createDataset n5-writer heightfield-dataset attributes)))
 
-        (let [grid-offset (long-array 0 0)]
-          (N5Utils/saveBlock heightmap
-                             n5-writer
-                             heightfield-dataset
-                             grid-offset))))))
+        #_(let [grid-offset (long-array 0 0)]
+            (N5Utils/saveBlock heightmap
+                               n5-writer
+                               heightfield-dataset
+                               grid-offset))))))
 
 ; To consider:
 ;
