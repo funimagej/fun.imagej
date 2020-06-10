@@ -226,14 +226,7 @@
                              grid-offset))
         (println "Total time of whole block column calculation: " (- (System/currentTimeMillis) first-start-time))))))
 
-; To consider:
-;
-; random forest to classify surface voxels?
-;
-; Could we even flatten w.r.t these columns of blocks?
-;   Solve for the surface while everything is in memory
-;   Once we have these representations we can start to solve the inverse problem of surface detection directly
-;     from pixel data
+
 
 (defn -main
   [& args]
