@@ -90,6 +90,7 @@
         dimensions (seq (dimensions n5 dataset))
         cost-dimension 1
         ; bc == block column
+        first-start-time (System/currentTimeMillis)
         bc-dimension (map #(Math/ceil (/ %1 %2)) dimensions block-size)]
 
     (println :block-size block-size
@@ -195,30 +196,35 @@
 
       ;; Now compute and save the heightfields
       (let [cost-interval (Views/zeroMin (Views/interval cost-column
-                                                         (FinalInterval. (long-array [0 2700 0])
-                                                                         (long-array [24 2800 24]))
-                                                         #_(FinalInterval. (long-array [0 2500 0])
-                                                                           (long-array [127 2900 127]))))
+                                                         #_(FinalInterval. (long-array [0 2700 0])
+                                                                           (long-array [24 2800 24]))
+                                                         (FinalInterval. (long-array [0 2500 0])
+                                                                         (long-array [127 2900 127]))))
+            start-time (System/currentTimeMillis)
             heightmap (Test/process2 (Views/permute cost-interval 1 2)
                                      1
                                      15
                                      3)]
+        (println "Heightfield took: " (- (System/currentTimeMillis) start-time) "ms")
         (ij/show heightmap)
 
-        #_(when-not (.exists n5-writer heightfield-dataset)
-            (let [attributes (DatasetAttributes. (long-array [(first cost-column)
-                                                              (last cost-column)])
-                                                 (int-array [(first block-size)
-                                                             (last block-size)])
-                                                 (N5Utils/dataType (Util/getTypeFromInterval heightmap))
-                                                 (GzipCompression.))]
-              (.createDataset n5-writer heightfield-dataset attributes)))
+        (def heightmap heightmap)
 
-        #_(let [grid-offset (long-array 0 0)]
-            (N5Utils/saveBlock heightmap
-                               n5-writer
-                               heightfield-dataset
-                               grid-offset))))))
+        (when-not (.exists n5-writer heightfield-dataset)
+          (let [attributes (DatasetAttributes. (long-array [(first dimensions)
+                                                            (last dimensions)])
+                                               (int-array [(first block-size)
+                                                           (last block-size)])
+                                               (N5Utils/dataType (Util/getTypeFromInterval heightmap))
+                                               (GzipCompression.))]
+            (.createDataset n5-writer heightfield-dataset attributes)))
+
+        (let [grid-offset (long-array [0 0])]
+          (N5Utils/saveBlock heightmap
+                             n5-writer
+                             heightfield-dataset
+                             grid-offset))
+        (println "Total time of whole block column calculation: " (- (System/currentTimeMillis) first-start-time))))))
 
 ; To consider:
 ;
