@@ -1,6 +1,7 @@
 (ns fun.imagej.experimental.vnc
   (:require [fun.imagej.core :as ij]
-            [fun.imagej.img :as img])
+            [fun.imagej.img :as img]
+            [fun.imagej.fu.n5 :as n5])
   (:import (org.janelia.saalfeldlab.n5 N5FSReader N5FSWriter DatasetAttributes GzipCompression)
            (org.janelia.saalfeldlab.n5.imglib2 N5Utils N5CellLoader)
            (net.imglib2.img.array ArrayImgs)
@@ -18,23 +19,6 @@
            (net.imglib2 FinalInterval)
            (net.preibisch.surface Test)))
 
-(defn block-size
-  "Return the block size of a dataset in a n5"
-  [n5 dataset]
-  (.getAttribute
-    n5
-    dataset
-    "blockSize"
-    (class (long-array 0))))
-
-(defn dimensions
-  "Return the dimensions of a dataset in a n5"
-  [n5 dataset]
-  (.getAttribute
-    n5
-    dataset
-    "dimensions"
-    (class (long-array 0))))
 
 #_(defn block-offsets
     "Return all offsets of 1 interval with respect to another. Doesnt use imglib2 structures tho, or max/min"
@@ -80,14 +64,14 @@
 (defn demo
   "An example demo"
   []
-  (let [n5-path "/Users/kharrington/Dropbox/portableVNC.n5"
+  (let [n5-path "/home/kharrington/Dropbox/portableVNC.n5"
         dataset "/zcorr/Sec19___20200203_085722/s0"
         cost-dataset "/cost/Sec19___20200203_085722/s0"
         heightfield-dataset "/heightfields/Sec19___20200203_085722/s0"
         n5 (N5FSReader. n5-path)
         n5-writer (N5FSWriter. n5-path)
-        block-size (seq (block-size n5 dataset))
-        dimensions (seq (dimensions n5 dataset))
+        block-size (seq (n5/block-size n5 dataset))
+        dimensions (seq (n5/dimensions n5 dataset))
         cost-dimension 1
         ; bc == block column
         first-start-time (System/currentTimeMillis)
