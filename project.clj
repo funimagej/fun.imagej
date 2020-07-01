@@ -10,16 +10,17 @@
                  [random-forests-clj "0.2.0"]
 
                  ; Java libs
-                 [net.imglib2/imglib2 "b33186a" :exclusions [com.github.jnr/jffi]]
+                 ;[net.imglib2/imglib2 "b33186a" :exclusions [com.github.jnr/jffi]]
+                 [net.imglib2/imglib2 "5.9.2" :exclusions [com.github.jnr/jffi]]
                  [net.imglib2/imglib2-algorithm "0.11.2"]
-                 [net.imglib2/imglib2-roi "0.10.2"]
                  [net.imglib2/imglib2-ij "2.0.0-beta-46"]
                  [net.imglib2/imglib2-cache "1.0.0-beta-13"]
+                 [net.imglib2/imglib2-roi "0.10.2"]
                  [net.imagej/imagej "2.0.0-rc-72" :exclusions [com.github.jnr/jffi
                                                                com.github.jnr/jnr-x86asm
                                                                org.scijava/scripting-renjin]]
                  [net.imagej/imagej-legacy "0.37.4"]
-                 [ome/bioformats_package "6.4.0" :exclusions [ch.qos.logback/logback-classic
+                 [ome/bioformats_package "6.5.0" :exclusions [ch.qos.logback/logback-classic
                                                               ch.qos.logback:logback-core]]
                  [net.imagej/imagej-ops "0.45.5"]
                  [net.imagej/imagej-mesh "0.8.0"]
