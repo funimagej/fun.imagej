@@ -3,7 +3,26 @@
             [clojure.string :as string])
   (:import [org.janelia.saalfeldlab.n5.imglib2 N5Utils]
            [org.janelia.saalfeldlab.n5 N5FSReader N5FSWriter GzipCompression]
-           (java.util.concurrent Executors)))
+           (java.util.concurrent Executors)
+           (net.imglib2.view Views)))
+
+(defn block-size
+  "Return the block size of a dataset in a n5"
+  [n5 dataset]
+  (.getAttribute
+    n5
+    dataset
+    "blockSize"
+    (class (long-array 0))))
+
+(defn dimensions
+  "Return the dimensions of a dataset in a n5"
+  [n5 dataset]
+  (.getAttribute
+    n5
+    dataset
+    "dimensions"
+    (class (long-array 0))))
 
 (defn open-with-disk-cache
   "Open a N5 dataset with a disk cache"
@@ -93,3 +112,15 @@
         (swap! (:memory n5-cache)
                assoc (get-memory-key im) (args-to-n5-path n5-cache f args))
         im))))
+
+(defn copy-crop
+  "Copy a crop of source-dataset in source-n5 into destination-dataset of destination-n5"
+  [source-n5 source-dataset interval destination-n5 destination-dataset]
+  (let [source (N5Utils/open source-n5 source-dataset)
+        crop (Views/interval source interval)
+        block-size (block-size source-n5 source-dataset)]
+    (N5Utils/save crop
+                  destination-n5
+                  destination-dataset
+                  block-size
+                  (GzipCompression.))))
