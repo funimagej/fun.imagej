@@ -24,8 +24,8 @@
                                                               ch.qos.logback:logback-core]]
 
                  [org.joml/joml "1.9.25"]
-                 [graphics.scenery/scenery "954e766"]
-                 [sc.iview/sciview "1312c73" :exclusions [com.github.jnr/jffi
+                 [graphics.scenery/scenery "b5c63ad"]
+                 [sc.iview/sciview "6b4079e" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
                                                           ch.qos.logback/logback-classic
                                                           org.scijava/scripting-renjin]]
