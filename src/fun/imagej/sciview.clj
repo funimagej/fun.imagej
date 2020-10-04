@@ -1,10 +1,10 @@
 (ns fun.imagej.sciview
   (:require [fun.imagej.core :as ij])
   (:import (graphics.scenery Node Material HasGeometry BufferUtils PointCloud Sphere)
-           (cleargl GLVector)
            (java.nio FloatBuffer)
            (sc.iview SciView)
-           (sc.iview.vector Vector3 ClearGLVector3)))
+           (sc.iview.vector Vector3 JOMLVector3)
+           (org.joml Vector3f)))
 
 (defn get-sciview
   "Return a SciView instance if it exists or create one"
@@ -70,7 +70,7 @@
 
 (defn set-diffuse-color
   "Set the diffuse color of a material."
-  [^Material mat ^GLVector new-color]
+  [^Material mat ^Vector3 new-color]
   (.setDiffuse mat new-color))
 
 (defn get-specular-color
@@ -80,7 +80,7 @@
 
 (defn set-specular-color
   "Set the specular color of a material."
-  [^Material mat ^GLVector new-color]
+  [^Material mat ^Vector3 new-color]
   (.setSpecular mat new-color))
 
 (defn get-ambient-color
@@ -90,12 +90,12 @@
 
 (defn set-ambient-color
   "Set the ambient color of a material."
-  [^Material mat ^GLVector new-color]
+  [^Material mat ^Vector3 new-color]
   (.setAmbient mat new-color))
 
 (defn set-color
   "Set all colors (diffuse, specular, ambient) of a Node"
-  [^Material mat ^GLVector new-color]
+  [^Material mat ^Vector3 new-color]
   (set-diffuse-color mat new-color)
   (set-specular-color mat new-color)
   (set-ambient-color mat new-color))
@@ -112,7 +112,7 @@
 
 ;; Core Node types
 
-(let [zero-vec (cleargl.GLVector. (float-array [0 0 0]))]
+(let [zero-vec (Vector3f. (float-array [0 0 0]))]
   (defn move-line
     "Move a line to new start/stop points"
     [line start stop]
@@ -134,12 +134,7 @@
      (let [line (graphics.scenery.Line. 4)]
        (.setEdgeWidth line 0.3)
        (move-line line start stop)
-       (.addNode sv line)))
-    #_([sv start stop color width]
-       (let [points (into-array sc.iview.vector.Vector3
-                                #_[(sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop)]
-                                [(sc.iview.vector.ClearGLVector3. zero-vec) (sc.iview.vector.ClearGLVector3. start) (sc.iview.vector.ClearGLVector3. stop) (sc.iview.vector.ClearGLVector3. zero-vec)])]
-         (.addLine sv points color width)))))
+       (.addNode sv line)))))
 
 (defn add-node
   "Add a node to the scene"
@@ -154,7 +149,7 @@
    (.addSphere sv position radius))
   ([^SciView sv ^Vector3 position radius active-publish]
    (let [sphere ^Node (Sphere. radius 25)]
-     (.setPosition sphere ^GLVector (ClearGLVector3/convert position))
+     (.setPosition sphere ^Vector3f (JOMLVector3/convert position))
      (add-node sv sphere active-publish))))
 
 (defn add-box
@@ -213,9 +208,9 @@
     (.setIndices point-cloud (.allocateInt BufferUtils 0))
     (.setupPointCloud point-cloud)
 
-    (set-color mat (GLVector. (float-array [1 1 1])))
+    (set-color mat (Vector3f. (float-array [1 1 1])))
     (set-material point-cloud mat)
-    (set-position point-cloud (GLVector. (float-array [0 0 0])))
+    (set-position point-cloud (Vector3f. (float-array [0 0 0])))
 
     (.addNode sv point-cloud)))
 
@@ -278,7 +273,7 @@
   (let [sv (get-sciview)]
     (println "Initial sleep")
     (Thread/sleep 5000)
-    (toggle-floor sv)
+    ;(toggle-floor sv)
     (println "Adding spheres")
     (loop [spheres []
            i 200]
