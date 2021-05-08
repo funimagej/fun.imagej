@@ -8,34 +8,34 @@ FunImageJ is a Lisp/Clojure framework for scientific image processing built upon
 
 Note to functional programming folks: many FunImageJ functions treat data as mutable. Images are large and take up lots of memory, we try not to duplicate data unless necessary. If you want to do something non-destructively, then you may need to explicitly use `copy` functions.
 
-[API Documentation](https://kephale.github.io/fun.imagej/)
+[API Documentation](https://funimagej.github.io/fun.imagej/)
 
-Example code for both standalone and Fiji usage is provided in the [*test* directory](https://github.com/kephale/fun.imagej/tree/master/test/fun/imagej/test) of this repository.
+Example code for both standalone and Fiji usage is provided in the [*test* directory](https://github.com/funimagej/fun.imagej/tree/master/test/fun/imagej/test) of this repository.
 
 ---
 
-## Citing:
+## Citing
 
 Kyle I S Harrington, Curtis T Rueden, Kevin W Eliceiri; FunImageJ: a Lisp framework for scientific image processing, Bioinformatics, btx710, https://doi.org/10.1093/bioinformatics/btx710
 
 ---
 
-## Usage within ImageJ:
+## Usage within ImageJ
 
-Add an update site like you would usually (see https://fiji.sc/List_of_update_sites)   
+Add an update site like you would usually (see https://imagej.net/list-of-update-sites)   
 
 where the update site is: https://sites.imagej.net/FunImageJ/  
 
 ---
 
-## Usage within Clojure projects:
+## Usage within Clojure projects
 
 Add the following repositories to your `project.clj`
 
 ```
-  :repositories [["imagej-releases"       
-                 "https://maven.imagej.net/content/repositories/releases/"]
-                 ["imagej-snapshots" "https://maven.imagej.net/content/repositories/snapshots/"]]
+  :repositories [["scijava-releases"
+                 "https://maven.scijava.org/content/repositories/releases/"]
+                 ["scijava-snapshots" "https://maven.scijava.org/content/repositories/snapshots/"]]
 
 ```
 
@@ -47,14 +47,14 @@ Then add the fun.imagej dependency:
 
 ---
 
-## Usage within Maven projects:
+## Usage within Maven projects
 
 Add the following repositories to your `pom.xml`
 
 ```
 <repository>
-	<id>imagej.public</id>
-	<url>https://maven.imagej.net/content/groups/public</url>
+	<id>scijava.public</id>
+	<url>https://maven.scijava.org/content/groups/public</url>
 </repository>
 ```
 
@@ -75,4 +75,4 @@ License:
 
 Apache V2.0
 
-Copyright 2014-2019 Kyle Harrington.
+Copyright 2014-2021 Kyle Harrington.
