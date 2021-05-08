@@ -3,7 +3,8 @@
   :url "https://github.com/funimagej/fun.imagel"
   :license {:name "Apache v2.0"
             :url "https://github.com/funimagej/fun.imagej/LICENSE"}
-  :pom-addition ([:developers [:developer {:id "kephale"}
+  :pom-addition ([:developers [:developer
+                               [:id "kephale"]
                                [:name "Kyle Harrington"]
                                [:roles [:role "founder"]
                                 [:role "lead"]
@@ -11,8 +12,9 @@
                                 [:role "reviewer"]
                                 [:role "support"]
                                 [:role "maintainer"]]]]
-                 [:contributors [:contributor {:id "ctrueden"}
-                                 [:name "Curtis Rueden"]]])
+                 [:contributors [:contributor
+                                 [:name "Curtis Rueden"]
+                                 [:properties [:id "ctrueden"]]]])
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [seesaw "1.4.4"]
                  [clj-random "0.1.8"]
