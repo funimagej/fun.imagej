@@ -13,8 +13,8 @@
                                 [:role "support"]
                                 [:role "maintainer"]]]]
                  [:contributors [:contributor
-                                 [:id "ctrueden"]
-                                 [:name "Curtis Rueden"]]])
+                                 [:name "Curtis Rueden"]
+                                 [:properties [:id "ctrueden"]]]])
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [seesaw "1.4.4"]
                  [clj-random "0.1.8"]
