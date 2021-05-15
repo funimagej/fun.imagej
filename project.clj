@@ -15,7 +15,7 @@
                  [:contributors [:contributor
                                  [:name "Curtis Rueden"]
                                  [:properties [:id "ctrueden"]]]])
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.10.1"]
                  [seesaw "1.4.4"]
                  [clj-random "0.1.8"]
 
@@ -23,21 +23,21 @@
 
                  ; Java libs
                  ;[net.imglib2/imglib2 "b33186a" :exclusions [com.github.jnr/jffi]]
-                 [net.imglib2/imglib2 "5.10.0" :exclusions [com.github.jnr/jffi]]
+                 [net.imglib2/imglib2 "5.12.0" :exclusions [com.github.jnr/jffi]]
                  [net.imglib2/imglib2-algorithm "0.11.2"]
                  [net.imglib2/imglib2-ij "2.0.0-beta-46"]
-                 [net.imglib2/imglib2-cache "1.0.0-beta-13"]
-                 [net.imglib2/imglib2-roi "0.10.3"]
-                 [net.imagej/imagej "2.1.0" :exclusions [com.github.jnr/jffi
+                 [net.imglib2/imglib2-cache "1.0.0-beta-16"]
+                 [net.imglib2/imglib2-roi "0.11.0"]
+                 [net.imagej/imagej "2.2.0" :exclusions [com.github.jnr/jffi
                                                          com.github.jnr/jnr-x86asm
                                                          org.scijava/scripting-renjin]]
                  [net.imagej/imagej-legacy "0.37.4"]
-                 [ome/bioformats_package "6.5.0" :exclusions [ch.qos.logback/logback-classic
+                 [ome/bioformats_package "6.6.1" :exclusions [ch.qos.logback/logback-classic
                                                               ch.qos.logback:logback-core]]
 
                  [org.joml/joml "1.9.25"]
-                 [graphics.scenery/scenery "b5c63ad"]
-                 [sc.iview/sciview "6b4079e" :exclusions [com.github.jnr/jffi
+                 [graphics.scenery/scenery "96e8a96"]
+                 [sc.iview/sciview "31b4e6d" :exclusions [com.github.jnr/jffi
                                                           com.github.jnr/jnr-x86asm
                                                           ch.qos.logback/logback-classic
                                                           org.scijava/scripting-renjin]]
@@ -50,16 +50,16 @@
                  ;[com.github.saalfeldlab/n5-ij "a5517c8"]
                  ;[com.github.saalfeldlab/n5-imglib2 "2a211a3"]
 
-                 [org.janelia.saalfeldlab/n5 "2.2.1"]
+                 [org.janelia.saalfeldlab/n5 "2.5.0"]
                  ;[com.github.saalfeldlab/n5-ij ""]
                  ;[org.org.janelia.saalfeldlab/n5-ij "0.0.2-SNAPSHOT"]
-                 [org.janelia.saalfeldlab/n5-imglib2 "3.5.1"]
+                 [org.janelia.saalfeldlab/n5-imglib2 "4.0.0"]
 
                  [org.ojalgo/ojalgo "48.1.0"]
 
                  [sc.fiji/Auto_Threshold "1.17.1"]
 
-                 [org.scijava/scijava-common "2.83.3"]
+                 [org.scijava/scijava-common "2.85.0"]
 
                  [ch.qos.logback/logback-classic "1.2.3"]]
 
