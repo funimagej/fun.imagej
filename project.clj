@@ -32,9 +32,13 @@
                                                          com.github.jnr/jnr-x86asm
                                                          org.scijava/scripting-renjin]]
                  [net.imagej/imagej-legacy "0.37.4"]
-                 [ome/bioformats_package "6.6.1" :exclusions [ch.qos.logback/logback-classic
-                                                              ch.qos.logback:logback-core]]
-
+                 
+                 [org.json/json "20201115"]
+                 
+                 [ome/formats-bsd "6.6.1"]
+                 [ome/formats-gpl "6.6.1"]
+                 [ome/formats-api "6.6.1"]
+                 
                  [org.joml/joml "1.9.25"]
                  [graphics.scenery/scenery "96e8a96"]
                  [sc.iview/sciview "31b4e6d" :exclusions [com.github.jnr/jffi
@@ -61,7 +65,9 @@
 
                  [org.scijava/scijava-common "2.85.0"]
 
-                 [ch.qos.logback/logback-classic "1.2.3"]]
+                 [ch.qos.logback/logback-classic "1.2.3"]
+
+                 [org.morphonets/SNT "2b3b50c"]]
 
 
   :resource-paths ["src/main/resource"]
