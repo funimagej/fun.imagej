@@ -19,7 +19,7 @@
                  [seesaw "1.4.4"]
                  [clj-random "0.1.8"]
 
-                 [random-forests-clj "0.2.0"]
+                 [com.kephale/random-forests-clj "8278de0"]
 
                  ; Java libs
                  ;[net.imglib2/imglib2 "b33186a" :exclusions [com.github.jnr/jffi]]
@@ -38,6 +38,7 @@
                  [ome/formats-bsd "6.6.1"]
                  [ome/formats-gpl "6.6.1"]
                  [ome/formats-api "6.6.1"]
+                 [ome/bio-formats_plugins "6.6.1"]
                  
                  [org.joml/joml "1.9.25"]
                  [graphics.scenery/scenery "96e8a96"]
