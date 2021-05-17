@@ -8,6 +8,9 @@ script:
 - lein test
 - chmod a+x funimagej_deploy.sh
 - bash funimagej_deploy.sh
+cache:
+  directories:
+  - "~/.m2/repository"
 env:
   global:
   - secure: J9+BIg669YvVvr4vw9XC1Oo6UVHHKUl1Z0UridQGnpD4w0tPFc+uL8KscBSw6DEf0EI1a78H/6z4QJirgKqI4S83abPQFhBRpEeoMsvoVeby1si6iuIqk738xrMMsg/5XTHuEtVhn+CFx7XatcJ0fJTzzU8sbDrRT7VWS+plC+n8xyLTPvyBl418lqCXXBKag+BvoAJsZn0NTA8VzUDzLM/+ozCFMhqINjIo6VZxno+iiCqlqBVP+lOAYVwDfrmOFkSde3nx/VRgoHAobVES+Qf7zkEiXeAiAMawU8kv1PfssevqOb4irYoHoCDJuFPymXf6yRV8tez86Hs/KuxnBhARj8J2vYEL5aQ4PbDRMV89zemjDKPtUJTusZYM61d3ysZxY4dXVlG2fxW/zMhKdY2BCFUKwz4s6n2FVvAZr8KYzyLOxEZPxxu7RnIwup443OwhtRyVFeDy1KgI6qXhZubvNxNFv9/pX5yP0+gj/432+wUyrUtawxwbM+OSWEaA26I3T34Sv7OFjXV6sIPgkTuuaQVclrLvFRVWghIoGKMYx4BY3QLjwvc4XEM+Ut1JfoeYf2qW+zzk9V6QJAhjamd9pQ4M2f/PNdoQBnrZtgMNRMI2zC1j1f+N7hN5YiYQED1Tzz+5sxgNNp/KL/cvX3PPXmrI5YBGJyv+xeg1bh4=
