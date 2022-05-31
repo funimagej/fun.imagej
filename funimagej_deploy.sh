@@ -20,7 +20,8 @@ chmod a+x upload-site-simple.sh
 
 # Only upload to update site if on master
 if [[ $TRAVIS_BRANCH == 'master' ]]
-then   
+then
+    echo "Uploading update site"
    ./upload-site-simple.sh FunImageJ FunImageJ
 #   fi
 fi
