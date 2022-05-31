@@ -68,7 +68,8 @@
 
                  [ch.qos.logback/logback-classic "1.2.3"]
 
-                 [org.morphonets/SNT "2d8af5b6a0"]]
+                 ;[org.morphonets/SNT "2d8af5b6a0"]
+                 ]
 
 
   :resource-paths ["src/main/resource"]
