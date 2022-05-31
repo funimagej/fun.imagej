@@ -1,0 +1,16 @@
+name: update_site
+
+on: [ push ]
+
+jobs:
+  linux:
+    name: 'Linux'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3        
+      - run: curl -O https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+      - run: chmod a+x lein
+      - run: lein test
+      - run: chmod a+x funimagej_deploy.sh
+      - run: bash funimagej_deploy.sh
+
