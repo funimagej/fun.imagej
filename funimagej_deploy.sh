@@ -10,8 +10,8 @@ mv target/fun.imagej*jar Fiji.app/jars/
 ls Fiji.app/jars/*.jar
 cp -r src/plugins/* Fiji.app/plugins/
 # Handle dependency fetching manually
-cp ~/.m2/repository/net/imagej/imagej-mesh/$(ls ~/.m2/repository/net/imagej/imagej-mesh/ | tail -1)/*.jar Fiji.app/jars/
-cp ~/.m2/repository/random-forests-clj/random-forests-clj/$(ls ~/.m2/repository/random-forests-clj/random-forests-clj/ | tail -1)/*.jar Fiji.app/jars/
+# cp ~/.m2/repository/net/imagej/imagej-mesh/$(ls ~/.m2/repository/net/imagej/imagej-mesh/ | tail -1)/*.jar Fiji.app/jars/
+# cp ~/.m2/repository/random-forests-clj/random-forests-clj/$(ls ~/.m2/repository/random-forests-clj/random-forests-clj/ | tail -1)/*.jar Fiji.app/jars/
 cp ~/.m2/repository/clj-random/clj-random/$(ls ~/.m2/repository/clj-random/clj-random/ | tail -1)/*.jar Fiji.app/jars/
 cp ~/.m2/repository/seesaw/seesaw/$(ls ~/.m2/repository/seesaw/seesaw/ | tail -1)/*.jar Fiji.app/jars/
 cd Fiji.app
@@ -19,7 +19,7 @@ curl -O https://raw.githubusercontent.com/fiji/fiji/7f13f66968a9d4622e519c8aae04
 chmod a+x upload-site-simple.sh
 
 # Only upload to update site if on master
-if [[ $TRAVIS_BRANCH == 'master' ]]
+if [[ $GITHUB_REF_NAME == 'master' ]]
 then
     echo "Uploading update site"
    ./upload-site-simple.sh FunImageJ FunImageJ
