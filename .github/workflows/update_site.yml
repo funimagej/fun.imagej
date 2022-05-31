@@ -8,15 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - run: curl -O https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+      - run: chmod a+x lein
+      - run: lein test
+      - run: chmod a+x funimagej_deploy.sh
+      - run: lein pom
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
           java-version: '8'
           distribution: 'zulu'
-          cache: 'maven'        
-      - run: curl -O https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
-      - run: chmod a+x lein
-      - run: lein test
-      - run: chmod a+x funimagej_deploy.sh
+          cache: 'maven'                
       - run: bash funimagej_deploy.sh
 
