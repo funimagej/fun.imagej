@@ -22,7 +22,7 @@
 (ij/setup-context (ns-resolve 'user 'ctxt) 'user)
 
 #_(do ; Bindings for testing
-  (def mesh-filename "/Users/kharrington/git/brevis/resources/obj/sphere.stl")
+  (def mesh-filename (java.io.File. "Cute_Little_Elephant.stl"))
   (def width 100)
   (def height 100)
   (def depth 100))

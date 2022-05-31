@@ -30,13 +30,22 @@
 ; Deprecated
 (def write-mesh-as-stl save)
 
+; Use SciJava IOService to resolve filetype
 (defn open
   "Open a mesh from file."
   [filename]
   (.open (.io (ij/get-ij))
          filename))
 
-(def read-stl-mesh open)
+(defn open-stl
+  "Open a STL mesh by directly calling imagej-mesh-io"
+  [filename]
+  (let [mesh (net.imagej.mesh.naive.NaiveFloatMesh.)
+        stlmeshio (net.imagej.mesh.io.stl.STLMeshIO.)]
+    (.read stlmeshio mesh (java.io.File. filename))
+    mesh))
+
+(def read-stl-mesh open-stl)
 
 (defn slurp-bytes
   "Slurp the bytes from a slurpable thing"
@@ -45,7 +54,7 @@
     (clojure.java.io/copy (clojure.java.io/input-stream x) out)
     (.toByteArray out)))
 
-(def read-stl open)
+(def read-stl open-stl)
 
 #_(defn read-stl-vertices
    "Read a mesh from a STL file."
